@@ -91,8 +91,9 @@ Every build must move us toward these six points. The game must let players:
   `"source": "PLACEHOLDER"`.
 - Ask before downloading anything or adding an outside asset. When we use an outside
   image, sound, model, or code file, add it to `REFERENCES.md` with its link.
-- Git is not installed on Holden's computer, so there are no commits for now. If git
-  is added later, commit after each step that passes its self-check.
+- This folder is our saved final draft (2026-11-15). It is the copy pushed to
+  github.com/amyjia1212/why_are_we_here_space_apps_challenge. Do not change it, commit
+  or push from it unless Holden asks. New changes go in "How did we get here final".
 - Explain each step in short, simple English. Holden is learning Godot and shows this
   work to the team.
 
