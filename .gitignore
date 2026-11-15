@@ -1,0 +1,18 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+/build/
+
+# Mac Finder files
+.DS_Store
+
+# Local settings and secrets
+.claude/settings.local.json
+.env
+
+# Temporary files
+*.tmp
+
+# Big reference videos (too large for GitHub; kept on the team's computers)
+Refrences/*.mov
+Refrences/*.mp4

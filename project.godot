@@ -1,0 +1,53 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="How did we get here"
+run/main_scene="res://scenes/start_menu.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+run/disable_stdout.web=true
+
+[autoload]
+
+Data="*uid://c5mjc0lsbwxuy"
+GameState="*uid://ll45y8qeli1w"
+Textures="*res://scripts/autoload/Textures.gd"
+StageManager="*res://scripts/autoload/StageManager.gd"
+AudioManager="*res://scripts/autoload/AudioManager.gd"
+Sfx="*res://scripts/autoload/Sfx.gd"
+Controls="*res://scripts/autoload/Controls.gd"
+Leaderboard="*res://scripts/autoload/Leaderboard.gd"
+Portraits="*res://scripts/autoload/Portraits.gd"
+Bots="*res://scripts/autoload/Bots.gd"
+Hud="*res://scripts/autoload/Hud.gd"
+Notebook="*res://scripts/autoload/Notebook.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[gui]
+
+theme/custom="res://theme/game_theme.tres"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

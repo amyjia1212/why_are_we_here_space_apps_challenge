@@ -1,0 +1,771 @@
+{
+  "_readme": "Everything the inner voice says. Writers can change any sentence. Keep the key names (left of the colons). Words in {curly braces} are filled in by the game: {value} = the player's total, {limit} = the mission limit, {unit} = the unit.",
+  "speaker_name": "Your inner voice",
+  "minigames": {
+    "_readme": "What the inner voice says on each minigame's results screen (TASKS.md step 14). good / ok / bad depends on the team average (data/minigames.json, \"voice\"). Hammering has only good and bad: the line is the launch's structure check (data/timing.json, structure_check). One line per level: easy = the scientist, medium = the janitor, hard = the student. The voice says what the score will change later, so the player sees the link.",
+    "assembly": {
+      "good": {
+        "easy": "Clean assembly. High build quality means small problems in flight can fix themselves.",
+        "medium": "Every bolt where it belongs. I think. Good builds hold up better out there.",
+        "hard": "We built a whole spacecraft! It's like LEGO, but it costs millions."
+      },
+      "ok": {
+        "easy": "Decent assembly. Not perfect, so small problems in flight won't fix themselves.",
+        "medium": "Mostly put together. A few parts look... wobbly.",
+        "hard": "Some pieces are on. Some pieces are maybe on. It's fine. Probably."
+      },
+      "bad": {
+        "easy": "Rushed assembly. Low build quality: any problem in flight will cost us reserve money.",
+        "medium": "Uh oh. I see leftover screws. That's never good.",
+        "hard": "Why are there extra pieces? There are NEVER supposed to be extra pieces."
+      }
+    },
+    "hammer": {
+      "good": {
+        "easy": "A strong structure. It will take the shaking of the launch without loosening anything.",
+        "medium": "Solid! That frame won't rattle apart on the way up.",
+        "hard": "Bonk bonk bonk! Every nail in. That rocket is NOT falling apart."
+      },
+      "bad": {
+        "easy": "A weak structure. The launch will shake it hard, and a part may come loose.",
+        "medium": "Lots of loose nails. The launch is going to rattle something off.",
+        "hard": "Is it supposed to wobble when I poke it? It's wobbling."
+      }
+    },
+    "fuel": {
+      "good": {
+        "easy": "Tanks loaded right. If the launch doesn't spill any, we have enough for the burn that slows us into orbit.",
+        "medium": "Fueled up! As long as the launch goes smoothly, we won't run dry when it's time to brake.",
+        "hard": "Full tank! Like at the gas station, but SO much more."
+      },
+      "ok": {
+        "easy": "Fuel is a bit short. The arrival burn might be tight.",
+        "medium": "Almost full. I hope almost is enough.",
+        "hard": "The fuel thing says 'kind of full'. Is that a real number?"
+      },
+      "bad": {
+        "easy": "Not enough fuel. The burn at arrival will be rough, and that costs mission lifetime.",
+        "medium": "That's way off. We might not have enough fuel to slow down.",
+        "hard": "Oops. I think I turned it the wrong way. A lot."
+      }
+    }
+  },
+  "setup": {
+    "_readme": "What the inner voice says after each setup answer. {name} = the name the player typed. It is never wrong: it only knows what the player's character knows (easy = the scientist, an expert; medium = the janitor, an everyday adult; hard = the student, a kid).",
+    "name": "{name}. Okay. That's my name. Please don't forget it, brain.",
+    "goal": {
+      "_readme": "What the inner voice says after the player picks a mission on the Choose a mission screen. One entry per mission id in data/destinations.json.",
+      "mars": {
+        "easy": "Mars. We land, drill, and measure the ice under the soil. Then the data has to get all the way back to Earth, and Mars is far away, so the radio matters.",
+        "medium": "Mars. The red one. We land and dig for ice, so future astronauts have water. I heard the scientists say the signal home is weak out there.",
+        "hard": "Mars! There's ice on Mars? Maybe a frozen alien is in there. Okay, probably not. But we're digging anyway."
+      },
+      "moon": {
+        "easy": "The Moon. We place three seismometers far apart and listen for moonquakes. The hard part is the lunar night: about two Earth weeks with no sunlight, so batteries and heat control matter.",
+        "medium": "The Moon. We set up machines that feel moonquakes. I heard the nights there are super long and super cold.",
+        "hard": "The Moon! Does the Moon even shake? I guess we're about to find out."
+      },
+      "venus": {
+        "easy": "Venus. Nobody lands: the surface is hot enough to melt lead, and the air would crush a lander. We study the storms from orbit and drop a balloon into the clouds.",
+        "medium": "Venus. I heard nobody can land there. Way too hot, way too heavy air. So we stay up top and watch the clouds.",
+        "hard": "Venus! We're not landing? Good. I heard it's hotter than a pizza oven down there."
+      }
+    },
+    "rocket": {
+      "small": {
+        "easy": "Falcon 9. The cheapest, because its booster can land and be used again. But the launch moments are tighter. A fair trade if I stay sharp.",
+        "medium": "Falcon 9. The one that lands itself! Cheap, I think. Probably harder to launch, too.",
+        "hard": "Falcon 9. The rocket that lands on a boat! Cheap. Gulp."
+      },
+      "medium": {
+        "easy": "Atlas V 401, the rocket that launched MRO. Fair timing, but it lifts the least of the three, so the orbit fuel has to fit.",
+        "medium": "Atlas V 401. Middle price. Not too big, not too small. Like porridge.",
+        "hard": "The middle one. Middle is the safe pick, right?"
+      },
+      "large": {
+        "easy": "Atlas V 541, the Curiosity rover's rocket. It costs the most, but its launch moments are fewer and easier to hit. The forgiving option.",
+        "medium": "Atlas V 541. Big rocket. Big price. Fewer scary moments, I hope.",
+        "hard": "The big one! It costs more, but bigger has to be easier. Right?"
+      }
+    },
+    "orbit": {
+      "_readme": "What the inner voice says after the player picks an orbit. One group per mission id, then one line per orbit and level.",
+      "mars": {
+        "low": {
+          "easy": "Low orbit. Sharper pictures, but slowing down into it burns more fuel, and that fuel counts against what the rocket can lift.",
+          "medium": "Low and close. I heard the scientists say getting close costs more fuel. Fuel is heavy, right?",
+          "hard": "Low orbit! We'll fly so low we can wave at the Martians. If there are any. There probably aren't."
+        },
+        "high": {
+          "easy": "High orbit. Less fuel to get there, so the spacecraft is lighter at launch. The pictures will show less detail, though.",
+          "medium": "High up. Less fuel, I think. But things look smaller from far away. Makes sense.",
+          "hard": "High orbit. Way up there. Like a bird. A space bird. Okay, moving on."
+        },
+        "polar": {
+          "easy": "Polar orbit. It passes over both poles, where much of the ice is. It's low, so it needs the same extra fuel as a low orbit.",
+          "medium": "Over the poles. That's where the ice is, I'm pretty sure. Still takes lots of fuel, though.",
+          "hard": "The poles! Like Santa, but on Mars. I'm sure that's how it works. It's not."
+        }
+      },
+      "moon": {
+        "low": {
+          "easy": "Low lunar orbit. A short trip down to land, but slowing into it takes more fuel, and that fuel counts against the rocket.",
+          "medium": "Low and close to the Moon. More fuel, I think. Fuel is heavy.",
+          "hard": "Low orbit. So close I could almost touch the Moon. I can't. Space doesn't work like that."
+        },
+        "high": {
+          "easy": "High orbit. Less fuel to get into, so the launch is lighter. The lander has farther to go down, though.",
+          "medium": "High up. Less fuel, probably. A longer way down to land.",
+          "hard": "Way up high. The Moon looks like a big gray ball from here. Because it is one."
+        },
+        "polar": {
+          "easy": "Polar orbit. Over the poles, so in time we pass over the whole Moon. It's low, so it needs the extra fuel.",
+          "medium": "Over the top and bottom of the Moon. Low, so lots of fuel.",
+          "hard": "The Moon has poles? Like a North Pole? Huh. Okay."
+        }
+      },
+      "venus": {
+        "low": {
+          "easy": "Low orbit, just above the clouds. Sharp views of the storms, but slowing into it burns more fuel, and fuel counts against the rocket.",
+          "medium": "Low and close to the clouds. More fuel, I think. Fuel is heavy.",
+          "hard": "Low orbit! Close enough to smell the clouds. You can't smell clouds from space. I checked."
+        },
+        "high": {
+          "easy": "High orbit. Less fuel, so the launch is lighter, and we see whole storms at once. Less detail, though.",
+          "medium": "High up. Less fuel, probably. The storms look smaller from far away.",
+          "hard": "Way up high. Venus looks like a big yellow marble. Neat."
+        },
+        "polar": {
+          "easy": "Polar orbit. Venus has giant swirling storms over its poles. It's a low orbit, so it needs the extra fuel.",
+          "medium": "Over the poles. I heard there are huge storms there. Lots of fuel, though.",
+          "hard": "Poles on Venus? Are they made of ice? No. Definitely not. Way too hot."
+        }
+      }
+    },
+    "player_count": {
+      "_readme": "What the inner voice says after the player picks how many players. One line per number.",
+      "1": "Just me. Every build job is mine. No pressure. Lots of pressure.",
+      "2": "Two of us. We take turns, and our scores get averaged. Teamwork!",
+      "3": "Three of us. Everybody gets a turn at every job.",
+      "4": "A team of four. That's a real mission crew."
+    },
+    "character": {
+      "scientist": "Right. I'm the scientist. I actually know this stuff. Please let me remember it under pressure.",
+      "janitor": "I'm the janitor. I know where every mop is. I don't know where Mars is. Okay, I do, it's up there.",
+      "student": "I'm a student. I have homework due tomorrow, and now a spacecraft. Great."
+    }
+  },
+  "review": {
+    "all_good": "Huh. Everything is inside the limits. Did I... do that right?",
+    "some_over": "Something is in the red. The general is going to ask about that.",
+    "missing_key": "Wait. We didn't pack the {instrument}. That's the whole point of this mission!"
+  },
+  "arrival": {
+    "_readme": "What the inner voice says during the arrival walk, one group per mission. tasks = lines for each task id: ok = done, early / late = a hold let go too early or too late, missing = the instrument is not packed (said when you reach the spot), start = a send begins. slow_send is added when the signal is weak.",
+    "mars": {
+      "start": "We landed on Mars! Okay. Walk to the glowing dig spot out there.",
+      "slow_send": "The signal is weak, so this is slow. A bigger antenna would send it faster.",
+      "all_done": "Every task done. Press Enter when you're ready to leave Mars.",
+      "cant_finish": "That's all we can do here. Press Enter to leave Mars.",
+      "tasks": {
+        "reach": { "ok": "This is the dig spot. Hold E to run the drill, and let go when the bar is in the green." },
+        "drill": {
+          "ok": "Got it! An ice sample. Now take it to the analyzer next to the lander.",
+          "early": "Too early! The drill didn't reach the ice. Hold E and try again.",
+          "late": "Too far! The drill went past the ice. Try again.",
+          "missing": "The dig spot. But we didn't pack an ice drill. We can't take a sample. That was the whole point of the mission."
+        },
+        "analyze": {
+          "start": "Sample in the analyzer. Now the data goes home to Earth.",
+          "ok": "The data is on its way to Earth!"
+        }
+      }
+    },
+    "moon": {
+      "start": "We landed on the Moon! I feel so light. Place the three seismometers at the glowing spots, far apart.",
+      "slow_send": "The signal is weak, so this is slow. A bigger antenna or better pointing would help.",
+      "all_done": "Every task done. Press Enter when you're ready to leave the Moon.",
+      "cant_finish": "That's all we can do here. Press Enter to leave the Moon.",
+      "tasks": {
+        "place_1": { "ok": "Seismometer 1 is down and listening.", "missing": "This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network." },
+        "place_2": { "ok": "Seismometer 2 is listening. Far apart is better: it helps find where a quake starts.", "missing": "This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network." },
+        "place_3": { "ok": "Seismometer 3 is listening. That's the whole network!", "missing": "This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network." },
+        "point_antenna": {
+          "ok": "The antenna points at Earth. Now we can send data home.",
+          "early": "Not far enough. Earth is up there. Hold E and try again.",
+          "late": "Too far! It swung past Earth. Try again."
+        },
+        "send_quakes": {
+          "start": "The ground is shaking a tiny bit. A moonquake! The wiggles go home to Earth now.",
+          "ok": "The quake data is on its way to Earth!"
+        }
+      }
+    },
+    "venus": {
+      "start": "We're in orbit around Venus. Nobody lands here: the surface would melt lead and crush a lander. So we work from up here. Look at those clouds!",
+      "slow_send": "The signal is weak, so this is slow. A bigger antenna would send it faster.",
+      "all_done": "Every task done. Press Enter when you're ready to leave Venus.",
+      "cant_finish": "That's all we can do here. Press Enter to leave Venus.",
+      "tasks": {
+        "release_balloon": {
+          "ok": "The balloon drops into the clouds and floats. It's measuring the wind!",
+          "missing": "This is the airlock for the balloon. But we didn't pack a balloon probe. No balloon, no wind data."
+        },
+        "aim_camera": {
+          "ok": "Got it! The camera is pointed right at a storm.",
+          "early": "Not far enough. The storm is still out of view. Try again.",
+          "late": "Too far! It swung past the storm. Try again.",
+          "missing": "This is the camera console. But we didn't pack a cloud camera. We can't watch the storms."
+        },
+        "send_wind": {
+          "start": "Wind data from the balloon, pictures from the camera. Sending it all home to Earth.",
+          "ok": "The storm data is on its way to Earth!"
+        }
+      }
+    }
+  },
+  "resource_failures": {
+    "arrival_no_drill": {
+      "title": "No ice sample",
+      "what": "We landed on Mars, but we could not take an ice sample, so there was no ice data to send home.",
+      "why": "The ice drill was not packed. It is the key instrument for this mission.",
+      "fix": "On the Build screen, open the Instruments tab and pack the ice drill."
+    },
+    "arrival_no_seismometer": {
+      "title": "No moonquake network",
+      "what": "We landed on the Moon, but we could not place any seismometers, so there was no quake data to send home.",
+      "why": "The seismometer was not packed. It is the key instrument for this mission.",
+      "fix": "On the Build screen, open the Instruments tab and pack the seismometer."
+    },
+    "arrival_place_seismometers": {
+      "title": "Network not finished",
+      "what": "We left the Moon before all three seismometers were placed.",
+      "why": "The seismometer tasks were not finished.",
+      "fix": "Walk to all three glowing spots and press E at each one."
+    },
+    "arrival_send_quake_data": {
+      "title": "Quake data not sent",
+      "what": "The moonquake data never made it home to Earth.",
+      "why": "The quake data was not sent before we left.",
+      "fix": "Place all 3 seismometers, point the antenna at Earth, then press E at the quake screen."
+    },
+    "arrival_no_balloon": {
+      "title": "No cloud balloon",
+      "what": "We reached Venus, but we could not release a balloon, so there was no wind data to send home.",
+      "why": "The balloon probe was not packed. It is a key instrument for this mission.",
+      "fix": "On the Build screen, open the Instruments tab and pack the balloon probe."
+    },
+    "arrival_no_cloud_camera": {
+      "title": "No storm pictures",
+      "what": "We reached Venus, but we could not watch the storms.",
+      "why": "The cloud camera was not packed. It is a key instrument for this mission.",
+      "fix": "On the Build screen, open the Instruments tab and pack the cloud camera."
+    },
+    "arrival_release_balloon": {
+      "title": "Balloon not released",
+      "what": "We left Venus without releasing the cloud balloon.",
+      "why": "The balloon task was not finished.",
+      "fix": "Walk to the airlock and press E."
+    },
+    "arrival_send_storm_data": {
+      "title": "Storm data not sent",
+      "what": "The storm and wind data never made it home to Earth.",
+      "why": "The data was not sent from the comms console before we left.",
+      "fix": "Release the balloon and aim the camera, then press E at the comms console."
+    },
+    "return_depart": {
+      "title": "Rough lift-off",
+      "what": "Leaving was a struggle: there was very little fuel left.",
+      "why": "The tanks were not filled well in Fueling, or the launch burned extra fuel.",
+      "fix": "Stop the valve on the orange mark in Fueling, and hit the launch moments."
+    },
+    "return_home": {
+      "title": "Rough landing at home",
+      "what": "The ride home shook parts loose, and the landing was rough.",
+      "why": "The structure was weak: too many missed nails in Hammering.",
+      "fix": "Hit more nails in Hammering, or pick a stronger frame."
+    },
+    "arrival_map_storms": {
+      "title": "Storms not mapped",
+      "what": "We never got a good look at the storms.",
+      "why": "The cloud camera was not aimed at a storm before we left.",
+      "fix": "Hold E at the camera console and let go in the green zone."
+    },
+    "flight_heat_near_sun": {
+      "title": "Too hot near the Sun",
+      "what": "On the way to Venus, it got too hot, and an instrument had to be switched off.",
+      "why": "Heaters only can make things warmer, but they cannot get rid of extra heat.",
+      "fix": "Pick louvers or radiators for heat control."
+    },
+    "flight_lunar_night": {
+      "title": "Frozen in the lunar night",
+      "what": "In the long lunar night, a seismometer froze, so the mission will not last as long.",
+      "why": "There was no sunlight for days, and the battery and heat control were too small to keep things warm.",
+      "fix": "Pick a medium or large battery AND better heat control than heaters only."
+    },
+    "arrival_sample_ice": {
+      "title": "No ice sample",
+      "what": "We left Mars without taking an ice sample.",
+      "why": "The drill task was not finished.",
+      "fix": "At the dig spot, hold E and let go when the bar is in the green zone."
+    },
+    "arrival_send_data": {
+      "title": "Data not sent",
+      "what": "The ice data never made it home to Earth.",
+      "why": "The sample was not analyzed and sent before we left.",
+      "fix": "Take the sample to the analyzer next to the lander, and wait for the send to finish."
+    },
+    "flight_solar_flare": {
+      "title": "Solar flare",
+      "what": "A solar flare reset the computer during the flight, and some data was lost.",
+      "why": "The simple computer has no protection against radiation from the Sun.",
+      "fix": "Pick a better computer, or build more carefully in the Assembly job."
+    },
+    "flight_far_from_earth": {
+      "title": "Weak radio",
+      "what": "Far from Earth, the data rate had to be cut.",
+      "why": "The antenna was too weak (or damaged at launch) for such a long distance from Earth.",
+      "fix": "Pick a bigger antenna or better pointing, and build a strong structure so nothing shakes loose."
+    },
+    "flight_dust_on_panels": {
+      "title": "Dust on the panels",
+      "what": "Dust covered the solar panels, and an instrument had to be switched off.",
+      "why": "There was not enough spare power to keep everything running.",
+      "fix": "Pick a bigger solar panel, or parts that use less power."
+    },
+    "flight_arrival_burn": {
+      "title": "Rough arrival",
+      "what": "The arrival burn ran short of fuel, so the mission will not last as long.",
+      "why": "Not enough fuel was loaded in the Fueling job, or fuel was lost at launch.",
+      "fix": "Get closer to the target angle in Fueling, and time the launch presses well."
+    },
+    "budget": {
+      "what": "Budget: we spent {value} {unit}. The limit is {limit}.",
+      "why": "NASA can't pay for a mission that costs more than its budget. It gets cancelled before launch.",
+      "fix": "Pick cheaper parts. The high resolution camera and the large solar panel cost the most."
+    },
+    "mass": {
+      "what": "Mass: the spacecraft weighs {value} {unit}. The limit is {limit}.",
+      "why": "The rocket can only lift so much. Too heavy, and we never leave Earth.",
+      "fix": "Swap a big part for a smaller one."
+    },
+    "power": {
+      "what": "Power: we have {value} {unit}. We need at least {limit}.",
+      "why": "The parts use more power than the solar panel makes. Things start shutting down.",
+      "fix": "Use a bigger solar panel, or parts that use less power."
+    },
+    "communications": {
+      "what": "Communications: the antenna sends {value} {unit}. We need at least {limit}.",
+      "why": "Mars gets far from Earth. A small antenna is too slow to send our pictures.",
+      "fix": "Use a bigger antenna."
+    },
+    "data": {
+      "what": "Data: the camera collects {value} {unit}. We need at least {limit}.",
+      "why": "Not enough pictures to make a useful ice map.",
+      "fix": "Use a better camera."
+    },
+    "mission_lifetime": {
+      "what": "Mission lifetime: the spacecraft lasts {value} {unit}. We need at least {limit}.",
+      "why": "The spacecraft wears out before the map is finished.",
+      "fix": "A bigger solar panel keeps the batteries healthy longer."
+    },
+    "data_live": {
+      "what": "Data: by the end we had {value} {unit}. We needed at least {limit}.",
+      "why": "The camera was turned off, so the data stopped coming in. The ice map has holes in it.",
+      "fix": "Leave the camera on: it uses too little power to help in the shadow. The basic camera has no spare data. Watch the Data row on your wrist."
+    },
+    "communications_live": {
+      "what": "Communications: at the end we had {value} {unit}. We needed at least {limit}.",
+      "why": "The antenna was switched off, so no messages reached Earth.",
+      "fix": "Switch the antenna back on at the power panel as soon as there is enough power. Watch the Communications row on your wrist."
+    },
+    "mission_lifetime_live": {
+      "what": "Mission lifetime: at the end we had {value} {unit}. We needed at least {limit}.",
+      "why": "The heater was off too long. The cold wore out the parts, and the mission got shorter.",
+      "fix": "Switch the heater back on as soon as we're out of the shadow. Every second it is off takes months off the mission lifetime."
+    },
+    "power_event": {
+      "title": "Power alarm",
+      "what": "Power: the batteries ran out during the mission.",
+      "why": "We flew into Mars' shadow. The solar panels got no sun, the batteries couldn't run everything, and power stayed in the red.",
+      "fix": "When the alarm sounds, go to the power panel and switch off the heater or the antenna. The camera uses too little to help. Real NASA teams turn the heaters down before every shadow."
+    },
+    "food_empty": {
+      "title": "Food ran out",
+      "what": "Food: the crew ran out of food.",
+      "why": "The crew eats every day, about 1.8 kg of food and packaging each. The food store emptied before the trip was over.",
+      "fix": "Go to the Food station in Life Support and press E to start rationing early. Rationing makes the food last longer."
+    },
+    "water_empty": {
+      "title": "Water ran out",
+      "what": "Water: the crew ran out of water.",
+      "why": "The crew drinks every day, and a leak pours water out fast if nobody stops it.",
+      "fix": "When the voice warns about a leak, run to the Water station in Life Support and press E to stop it."
+    },
+    "air_empty": {
+      "title": "Air ran out",
+      "what": "Air: the crew ran out of air to breathe.",
+      "why": "Breathing uses up the air every day. The oxygen generator makes more oxygen, and nobody ran it in time.",
+      "fix": "Go to the Air station in Life Support and press E to run the oxygen generator. Press E again when the ring closes on the target."
+    },
+    "food_low": {
+      "title": "Food too low",
+      "what": "Food: the store was almost empty at the end.",
+      "why": "The crew eats every day, and the food was not rationed, so it ran too low.",
+      "fix": "Go to the Food station in Life Support and press E to start rationing. Rationing makes the food last longer."
+    },
+    "water_low": {
+      "title": "Water too low",
+      "what": "Water: the tank was almost empty at the end.",
+      "why": "The crew drinks every day. A leak that is fixed late loses a lot of water.",
+      "fix": "When the voice warns about a leak, run to the Water station in Life Support and press E at once."
+    },
+    "air_low": {
+      "title": "Air too low",
+      "what": "Air: the air was almost gone at the end.",
+      "why": "Breathing uses up the air every day, and the oxygen generator was not run (or was run badly).",
+      "fix": "Go to the Air station in Life Support and press E to run the oxygen generator. A press close to the target makes more oxygen."
+    }
+  },
+  "parts": {
+    "solar_panel": {
+      "small": "The small solar panel. Cheap and light, but it adds no spare months, so the heater can't stay off long.",
+      "medium": "The medium solar panel. A middle choice for power, cost, and weight.",
+      "large": "The large solar panel. Lots of power, but heavy and costly, and in Mars' shadow it makes none."
+    },
+    "camera": {
+      "basic": "The basic camera. Maps all of Mars, but with no data to spare.",
+      "high_res": "The high resolution camera. Super sharp, but heavy and expensive."
+    },
+    "antenna": {
+      "small": "The small antenna. Light and cheap, but too slow when Mars is far.",
+      "medium": "The medium antenna. A middle size dish with a middle speed.",
+      "large": "The large antenna. Fast to Earth, but heavy. Same power as the small one."
+    }
+  },
+  "walk": {
+    "start": "Okay. This is the ship. I start on the Bridge. Walk around the rooms. Press E to use things.",
+    "press_e_hint": "Press E",
+    "numbers_intro": "Its numbers:",
+    "alarm": "Uh oh. We just flew into Mars' shadow! No sun on the solar panels, only batteries. POWER LOW! Get to the power panel and switch something off!",
+    "alarm_banner": "POWER LOW! Go to the power panel: {seconds}",
+    "alarm_again": "Too much power again! We're still in the shadow. Switch something off!",
+    "alarm_fixed": "It fits. Phew. But everything I switched off is costing me something. I'd better check my wrist.",
+    "alarm_failed": "Too late. The batteries are empty.",
+    "mission_complete": "That's it. Two years of mapping Mars, done. Time to report to the general.",
+    "storm_ok": "We're in Mars' shadow. No sun on the solar panels, but the batteries can run everything. Huh. Good planning?",
+    "storm_over": "Out of the shadow! The sun is back on the solar panels. I can switch everything back on at the power panel. That shadow stood for every real 40-minute shadow, sped up. The real orbiter goes through one every two hours!",
+    "storm_over_all_on": "Out of the shadow. The sun is back on the solar panels.",
+    "panel_name": "Power panel",
+    "panel_sign": "POWER"
+  },
+  "flight": {
+    "_readme": "What the inner voice says during Flight (Stage 3). The voice is never wrong. The levels do not change these lines yet.",
+    "start": "We are on our way to Mars! This leg of the trip stands for {days} real days of flying, sped up so I can play it. The crew eats, drinks and breathes every day. Press Tab to look at the Crew supplies on my wrist, and visit the Life Support room.",
+    "leg_end": "The leg is over. Mars is getting close! Now for the work at Mars.",
+    "ration_explain": "This is the Food station. If we ration, the crew eats a little less every day. They get hungry, but the food lasts longer. Smart. I think.",
+    "ration_on": "Rations on! The food will last longer now. Everyone is a little hungry, but everyone is alive.",
+    "ration_already": "We are already rationing. The food is lasting longer.",
+    "generator_start": "This is the oxygen generator. It makes oxygen for the crew to breathe, like the real one on the Space Station. Run it! Press E when the ring closes on the target.",
+    "generator_perfect": "Perfect! The oxygen generator is running smoothly and making lots of oxygen. I did that. Me!",
+    "generator_good": "Good! The oxygen generator is running and making a good amount of oxygen.",
+    "generator_miss": "Missed the timing. The oxygen generator still starts, but it runs rough, so it makes less oxygen. A Miss still runs it, just not as well.",
+    "generator_already": "The oxygen generator is already running. That is enough for now.",
+    "leak_warning": "Uh oh. A pipe broke! The water tank is leaking and the water meter is falling fast. Run to the Water station in Life Support and press E to stop it!",
+    "leak_fixed": "Leak stopped! We lost some water, but not all of it. That is why we keep an eye on the meters.",
+    "no_leak": "The water pipes look fine. No leak right now.",
+    "empty_food": "The food is gone. Zero. The crew is very hungry, and that is a big problem.",
+    "empty_water": "The water tank is empty. Zero. A leak pours water out fast if nobody stops it.",
+    "empty_air": "The air is gone. Zero. The oxygen generator makes oxygen, and we needed it running."
+  },
+  "reroute": {
+    "_readme": "The words on the power panel (Reroute Power mini-game).",
+    "title": "POWER PANEL",
+    "close_hint": "E or Esc = close",
+    "countdown": "POWER LOW! {seconds} s left",
+    "available_label": "Power available (sun, or batteries in shadow)",
+    "body_label": "Spacecraft body (always on)",
+    "used_label": "Power used",
+    "of_word": "of",
+    "on_word": "ON",
+    "off_word": "OFF",
+    "fits": "It fits. Power used is not more than power available.",
+    "too_much": "Too much! Turn something off.",
+    "heater_name": "Heater",
+    "instruments_name": "Science instruments",
+    "watt_unit": "W",
+    "off_costs": {
+      "instruments": "Off: no new science data",
+      "antenna": "Off: no messages to Earth",
+      "heater": "Off: the cold wears out parts (less mission lifetime)"
+    }
+  },
+  "debrief": {
+    "success_title": "Mission success",
+    "success_text": "The ice map is coming in. The general nods. Just once. That's a lot, for the general.",
+    "failed_title": "Mission failed",
+    "failed_intro": "Let's figure out what happened.",
+    "report_label": "MISSION REPORT",
+    "designer_label": "Mission designer:",
+    "time_label": "Mission time:",
+    "findings_label": "FINDINGS",
+    "finding_word": "Finding",
+    "readings_label": "FINAL READINGS",
+    "header_resource": "Resource",
+    "header_end": "At the end",
+    "header_limit": "Limit",
+    "header_result": "Result",
+    "success_note": "All six readings stayed inside their limits. No problems to report.",
+    "what_label": "What failed",
+    "why_label": "Why it failed",
+    "fix_label": "How to fix it",
+    "try_again": "Try again",
+    "redesign_button": "Redesign and fly again",
+    "new_mission_button": "New mission",
+    "flight_label": "Flight:",
+    "flight_value": "{days} days",
+    "lifetime_label": "Mission lifetime:",
+    "score_label": "Score",
+    "score_value": "{score} / {max}",
+    "score_parts": {
+      "goals": "Goals met",
+      "data": "Science data returned",
+      "resources": "Resources used well",
+      "build_quality": "Build quality",
+      "teamwork": "Teamwork average",
+      "teamwork_solo": "Build jobs average",
+      "dictionary": "Space Dictionary full set (bonus)"
+    },
+    "score_line": "{name}: {points} / {max}",
+    "checklist_label": "Checklist",
+    "went_well_label": "WHAT WENT WELL",
+    "fix_next_label": "FIX NEXT TIME",
+    "fix_line": "{title}: {fix}",
+    "went_well_none": "Not much this time. Every mission teaches something.",
+    "fix_none": "Nothing to fix! Try it as a harder character, or with a cheaper design.",
+    "went_well": {
+      "_readme": "One line per thing that went well. {computer} = the picked computer's name.",
+      "solar_flare": "Your {computer} shrugged off the solar flare.",
+      "solar_flare_saved": "Careful assembly saved the data when the solar flare hit.",
+      "solar_flare_fixed": "You sounded the flare alarm in time on the ship. (A better computer would not need it.)",
+      "far_from_earth_fixed": "You re-aimed the dish in time and saved the signal. (A bigger antenna would not need it.)",
+      "dust_on_panels_fixed": "You turned the dusty panels to the Sun in time. (More spare power would not need it.)",
+      "arrival_burn_fixed": "Your careful burn saved fuel for the arrival. (More fuel loaded would not need it.)",
+      "heat_near_sun_fixed": "You reset the hot breaker in time. (Better heat control would not need it.)",
+      "lunar_night_fixed": "You switched to battery saver in time for the lunar night. (A bigger battery and better heat control would not need it.)",
+      "far_from_earth": "Your antenna kept a strong signal all the way there.",
+      "dust_on_panels": "Your solar panels had power to spare when the dust came.",
+      "dust_on_panels_saved": "Well-built solar panels kept going under the dust.",
+      "arrival_burn": "Your team loaded enough fuel for a smooth arrival.",
+      "sample_ice": "The ice drill worked: we have an ice sample.",
+      "send_data": "The ice data made it home to Earth.",
+      "place_seismometers": "All three seismometers are listening: a real moonquake network.",
+      "send_quake_data": "The moonquake data made it home to Earth.",
+      "lunar_night": "Your battery and heat control got the seismometers through the lunar night.",
+      "heat_near_sun": "Your heat control kept everything cool near the Sun.",
+      "release_balloon": "The cloud balloon floated through the clouds of Venus.",
+      "map_storms": "The storm pictures and wind data made it home to Earth.",
+      "resources": "Every resource was inside its limit at Review.",
+      "teamwork": "Great teamwork in the build jobs ({score} average).",
+      "teamwork_solo": "Great work in the build jobs ({score} average)."
+    },
+    "general_speaker": "General",
+    "general_success": "Mission complete. Good work, {name}. The data is on my desk.",
+    "general_failed": "Not every mission works the first time, {name}. Read the report. Then fix it and fly again.",
+    "general_default_name": "designer"
+  },
+  "office_hours": {
+    "_readme": "Office Hours (NASA_RESOURCES_PLAN.md N3): the hint key O in the Design Room and the button on the Equipment List. It looks at the six resources and talks about the first problem. Hint detail per level (AGENT_SOURCE.md): easy names the problem AND the parts that change it, medium names the problem, hard only warns. {warning} = the dashboard warning line for that resource, {parts} = the part names that change it (from the part data). Hints never give the answer.",
+    "all_good": {
+      "easy": "Office Hours: every resource is inside its limit. Now the trade-offs are yours.",
+      "medium": "Office Hours: everything looks inside the limits. I think.",
+      "hard": "Office Hours: nothing is red. Is that good? That's good."
+    },
+    "problem": {
+      "easy": "Office Hours: {warning} These parts change it: {parts}.",
+      "medium": "Office Hours: {warning}",
+      "hard": "Office Hours: something on the dashboard isn't happy. Look for yellow or red."
+    }
+  },
+  "dashboard_warnings": {
+    "_readme": "What the inner voice says when a dashboard row turns yellow (warning) or red (danger) during the walk.",
+    "budget": {
+      "warning": "Budget is getting close to the limit.",
+      "danger": "Budget is over the limit!"
+    },
+    "mass": {
+      "warning": "Mass is getting close to the limit.",
+      "danger": "Too heavy! Mass is over the limit."
+    },
+    "power": {
+      "warning": "Spare power is getting low.",
+      "danger": "Power is in the red! We're using more than we make."
+    },
+    "communications": {
+      "warning": "The antenna is barely fast enough.",
+      "danger": "Communications are too slow! Earth can't hear us."
+    },
+    "data": {
+      "warning": "Data is barely keeping up with the plan.",
+      "danger": "Data is falling behind! We're not collecting enough."
+    },
+    "mission_lifetime": {
+      "warning": "No spare months. The spacecraft will barely last.",
+      "danger": "The spacecraft won't last long enough!"
+    },
+    "food": {
+      "warning": "The food is running low. The crew gets hungry.",
+      "danger": "The food is almost gone! The crew is in trouble."
+    },
+    "water": {
+      "warning": "The water is running low. Everyone is thirsty.",
+      "danger": "The water is almost gone! The crew is in trouble."
+    },
+    "air": {
+      "warning": "The air is getting stale. The meter is low.",
+      "danger": "The air is almost gone! The crew can barely breathe."
+    }
+  },
+  "launch": {
+    "_readme": "What the inner voice says during Launch. start = when the screen opens. results = one short line per moment result (the game takes them in turn). summary_clean / summary_costs = after the last moment. The voice is never wrong. The levels do not change these lines yet.",
+    "start": "A rocket launch. First the go / no-go poll: is everything ready? Then a ring closes on a target, and I press Space when they line up. Easy. Probably.",
+    "results": {
+      "Perfect": [
+        "Perfect! Right on the target. I have no idea how I did that.",
+        "Bullseye! I will pretend I planned that.",
+        "Perfect again! My thumb is a genius."
+      ],
+      "Good": [
+        "Good! Close to the target. Close counts.",
+        "Not perfect, but good. Good is fine. Good is great, really.",
+        "Good enough! Our rocket is still happy."
+      ],
+      "Miss": [
+        "Missed it! That will cost us something. But the mission is not over.",
+        "Too early or too late. Oops. Something got hurt, but we keep flying.",
+        "Miss. The ring has to line up with the target. Next time!"
+      ]
+    },
+    "summary_clean": "Nothing lost at all! A perfect launch. I may have just been lucky.",
+    "summary_costs": "Some misses. The list shows what they cost us. But we are still flying! Next, the long trip."
+  },
+  "extras": {
+    "_readme": "Inner voice lines for the extra features added on 2026-11-14 (numbers: data/extras.json). The NASA sources for the real facts are in data/extras.json and story.json extras.",
+    "signal_delay": "Real radio from {planet} takes about {delay} to reach Earth. We skip the wait here!",
+    "footprints_moon": "Look back: my footprints will stay here for millions of years. There's no wind on the Moon.",
+    "footprints_mars": "My footprints are already fading. The Martian wind covers them with dust.",
+    "ice_start": "Got the ice! Quick, to the analyzer: in this thin air the ice turns straight into gas.",
+    "ice_share": "We saved {percent}% of the ice sample.",
+    "ice_gone": "The ice vanished before we got there. We only have a little data from it.",
+    "clean_halfway": "Halfway! Dust floats around in zero-g and lands on everything. I should clean the instruments in the Science Bay.",
+    "zero_g": "Look, the little plush is floating! Crews carry one so they can see the moment they reach zero gravity.",
+    "quick_fix": "Quick fix done. It will cost us later, but it bought us time.",
+    "proper_fix": "Fixed properly. No surprises later.",
+    "weather_wait": "We wait one day. It costs money, but the winds calm down.",
+    "weather_go": "Launching into the wind. Stay sharp: the timing will be tighter.",
+    "gravity_moon": "Whoa, I'm light! The Moon pulls about one sixth as hard as Earth. Try jumping!",
+    "gravity_mars": "Mars pulls about a third as hard as Earth. My jumps are almost three times higher!",
+    "minigame_good": "Spotless! No Earth germs will hitch a ride on this one.",
+    "minigame_ok": "Mostly clean. A few specks got away, but it should be fine.",
+    "minigame_bad": "That's a lot of dust left. Earth germs could travel along with us."
+  },
+  "character_hints": {
+    "_readme": "Three voices, one decision (INNOVATION.md Feature A). Keyed by decision (the Design Lab station) and by character. scientist = the real term plus a real number with its unit; janitor = everyday comparison, no technical terms; student = a question about the trade-off, never the answer. Two sentences, about 25 words. {blanks} are filled by the game from the data files (Notebook.gd hint_values), so the numbers always match the screen. learned = what the voice says once that character has earned the word in the Notebook (Feature B): the newest earned word of the list wins. learned_only stations say nothing until a word is earned. Writers: change the words freely, keep the {blanks}.",
+    "rocket": {
+      "scientist": "Payload capacity is the most mass a launch vehicle can lift. Our spacecraft is {mass} kg, and the {low_name} lifts only {low_lift} kg.",
+      "janitor": "You can't fit a couch in a tiny car. Make sure the rocket can carry everything we packed before we pay for it.",
+      "student": "The cheapest rocket saves money, but what could it cost us in other ways? When is a pricier rocket worth it?",
+      "learned": {
+        "payload_capacity": {
+          "scientist": "I learned it the hard way: check the payload capacity first. We are at {mass} kg, and the {low_name} lifts {low_lift} kg.",
+          "janitor": "Now I know the word: payload capacity, the most a rocket can lift. We're at {mass} kg, so pick one that lifts more.",
+          "student": "Last time we went over the payload capacity. Is {mass} kg under what this rocket can lift?"
+        },
+        "launch_vehicle": {
+          "scientist": "The launch vehicle sets our mass limit and a big part of the cost. The {cheap_name} costs {cheap_cost} million $ and lifts {cheap_lift} kg.",
+          "janitor": "Now I know: the rocket is called the launch vehicle. The {cheap_name} costs {cheap_cost} million $ and lifts {cheap_lift} kg.",
+          "student": "Which launch vehicle fits a {mass} kg spacecraft? Is the cheapest one still enough?"
+        },
+        "trade_off": {
+          "scientist": "Every rocket is a trade-off between cost and lift. The {cheap_name} is {cheap_cost} million $; the {big_name} lifts {big_lift} kg.",
+          "janitor": "Now I know the word: a trade-off, where you gain one thing and lose another. A bigger rocket lifts more but eats the budget.",
+          "student": "This is a trade-off: money against lift. What do we lose if we pay for the {big_name}?"
+        }
+      }
+    },
+    "orbit": {
+      "scientist": "Orbital altitude is how high we circle {planet}. The {low_orbit} needs {low_fuel} kg of fuel to reach, the {high_orbit} only {high_fuel} kg.",
+      "janitor": "Parking right by the store gives a great look, but stopping fast burns more gas. Up high is easier to reach, but everything looks smaller.",
+      "student": "Do we want sharp close-up pictures, or do we want to save fuel? Which one matters more for our goal at {planet}?",
+      "learned": {
+        "orbit": {
+          "scientist": "Getting into orbit failed us before. The {low_orbit} needs {low_fuel} kg of fuel; the {high_orbit} needs {high_fuel} kg.",
+          "janitor": "Now I know the word orbit: the path we circle on. The {low_orbit} needs {low_fuel} kg of fuel, the {high_orbit} {high_fuel} kg.",
+          "student": "We had trouble reaching our orbit last time. Is a close look worth {low_fuel} kg of fuel instead of {high_fuel}?"
+        },
+        "orbital_altitude": {
+          "scientist": "Remember the orbital altitude lesson: the {low_orbit} costs {low_fuel} kg of fuel, the {high_orbit} {high_fuel} kg. Pick on purpose.",
+          "janitor": "Now I know orbital altitude: how high we circle. Low means sharp pictures but {low_fuel} kg of fuel; high needs {high_fuel} kg.",
+          "student": "Which orbital altitude fits our goal? Is the sharper view worth the extra fuel?"
+        }
+      }
+    },
+    "instruments": {
+      "scientist": "The payload is the science instruments we carry. Our goal needs the {key_name}, which uses {key_power} W of power.",
+      "janitor": "Bring the right tool for the job, like a shovel for digging. Every extra gadget is more to carry and more to plug in.",
+      "student": "Which instrument does our goal truly need? If we pack extra cameras, what runs out first: power, money or mass?",
+      "learned": {
+        "payload": {
+          "scientist": "Payload first: the {key_name} is the instrument our goal needs. It uses {key_power} W, so leave power for it.",
+          "janitor": "Now I know the word payload: the science instruments. Our goal needs the {key_name}, so pack it first.",
+          "student": "Our payload let us down last time. Which instrument here makes the goal possible?"
+        },
+        "power_consumption": {
+          "scientist": "Watch the power consumption: the {key_name} alone uses {key_power} W. Every instrument we add needs its share.",
+          "janitor": "Now I know power consumption: how much power the parts use. The {key_name} uses {key_power} W by itself.",
+          "student": "We ran out of power last time. Can our panels feed every instrument we pack?"
+        },
+        "data_rate": {
+          "scientist": "Data is only useful if the data rate gets it home. Our signal needs at least {comms_need} Mb/s, so don't pack more than we can send.",
+          "janitor": "Now I know data rate: how fast we can send data home. We need at least {comms_need} Mb/s, so check the antenna too.",
+          "student": "More instruments make more data. But can our antenna send it home fast enough?"
+        }
+      }
+    },
+    "learned_only": {
+      "solar_panel": {
+        "power_consumption": {
+          "scientist": "Power consumption must stay below what the panels make. Right now we have {power_spare} W to spare.",
+          "janitor": "Now I know power consumption: what our parts use. We have {power_spare} W to spare, so bigger panels might help.",
+          "student": "Last time we ran out of power. Do we have enough spare power for the dark parts of the trip?"
+        }
+      },
+      "antenna": {
+        "data_rate": {
+          "scientist": "The data rate has to beat {comms_need} Mb/s. Right now our signal is {comms} Mb/s.",
+          "janitor": "Now I know data rate: how fast we talk to home. We have {comms} Mb/s and need {comms_need} Mb/s.",
+          "student": "Our data rate was too low last time. Is a bigger antenna worth its mass and power?"
+        },
+        "attitude_control": {
+          "scientist": "Attitude control keeps the antenna pointed at Earth. A bigger antenna only helps if we can point it.",
+          "janitor": "Now I know attitude control: what turns and points the spacecraft. Point the antenna right, and home hears us.",
+          "student": "What good is a big antenna if we can't point it at Earth?"
+        }
+      },
+      "attitude_control": {
+        "attitude_control": {
+          "scientist": "Attitude control points our antenna and panels. Better wheels point more exactly, but cost money and power.",
+          "janitor": "Now I know attitude control: the part that turns the spacecraft. Better wheels point straighter.",
+          "student": "How exactly do we need to point? Is the better system worth its cost?"
+        }
+      },
+      "battery": {
+        "mission_lifetime": {
+          "scientist": "Mission lifetime has to reach {lifetime_need} months. Right now we are at {lifetime} months.",
+          "janitor": "Now I know mission lifetime: how long the spacecraft keeps working. We have {lifetime} months and need {lifetime_need}.",
+          "student": "Our mission ended too soon last time. What would make it last longer, and what would it cost?"
+        }
+      }
+    }
+  }
+}

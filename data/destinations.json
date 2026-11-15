@@ -1,0 +1,414 @@
+{
+  "_readme": "The three missions the player can choose: Moon, Mars and Venus (PLAN.md section 5). Each one is a place AND a goal. Every fact is written as { \"value\": ..., \"source\": ... } so you can see where it came from. A source is a link to NASA, a written game-design choice, or the word PLACEHOLDER (made up for now; a student replaces it before the final submission). locked = true means the card shows but cannot be picked yet. arrival_type = how the trip ends: \"orbit\" (circle the planet) or \"surface\" (land). crew = true if people travel with the spacecraft you build. goals = the ids of the success checklist; the sentences for each id are in data/story.json. limits_from = which mission in game_data.json (\"missions\") holds the budget, mass and other limits. The words on the screen (names, goals, descriptions) are in data/story.json. The card order on screen is the order in this file.",
+  "destinations": {
+    "moon": {
+      "locked": {
+        "value": false,
+        "source": "Game-design choice (PLAN.md section 15, step 10): the Moon unlocks in Phase 2."
+      },
+      "arrival_type": {
+        "value": "surface",
+        "source": "Game-design choice (PLAN.md section 5): the crew lands and places seismometers."
+      },
+      "crew": {
+        "value": true,
+        "source": "Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Moon and Mars carry a crew on a lander."
+      },
+      "goals": {
+        "value": ["launch_safely", "cruise_safely", "enter_orbit", "land_safely", "place_seismometers", "send_quake_data", "lift_off", "land_home"],
+        "source": "Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14)."
+      },
+      "goal_phases": {
+        "_readme": "UPGRADE_PLAN_V3 A3: the mission phase of each checklist item (phase names: story.json checklist > phases). Who ticks each item: launch_safely = the launch at STABLE; cruise_safely = the flight's end; the 'arrive' item = the orbit burn event in the flight (arrival_burn); the land, science and data items = the arrival (arrival > goals below); the depart and home items = the return, by the rule in game_data.json report > return_rules.",
+        "launch_safely": "launch", "cruise_safely": "cruise", "enter_orbit": "arrive", "land_safely": "land",
+        "place_seismometers": "science", "send_quake_data": "data", "lift_off": "depart", "land_home": "home"
+      },
+      "orbits": {
+        "_readme": "The orbit choices around the Moon, in screen order. fuel_mass = kg of fuel to slow down into this orbit (added to the Mass total). The words are in data/story.json, \"orbits\".",
+        "low": { "fuel_mass": { "value": 600, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Less than Mars: a game-design guess with no source." } },
+        "high": { "fuel_mass": { "value": 400, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel." } },
+        "polar": { "fuel_mass": { "value": 600, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a low orbit that passes over the poles." } }
+      },
+      "instruments": {
+        "_readme": "The science instruments for the Moon, in card order. effects = what one instrument adds to the six totals when packed. The words are in data/story.json, \"instruments\".",
+        "seismometer": {
+          "effects": { "budget": 30, "mass": 11.5, "power": -7.1, "communications": 0, "data": 0.06, "mission_lifetime": 0 },
+          "source": "Apollo 15 Passive Seismic Experiment (Step 11b, 2026-11-13). mass 11.5 kg, power 7.1 W average, data 0.712 kbps (= 0.06 Gb/day): https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01; budget: no public source (game value)"
+        },
+        "camera_basic": {
+          "effects": { "budget": 40, "mass": 3, "power": -7, "communications": 0, "data": 4.8, "mission_lifetime": 0 },
+          "source": "Same camera as the Mars basic camera (MRO Context Camera, CTX): see destinations.json > mars > instruments > camera_basic for the sources. Using it at the Moon is a game-design choice."
+        },
+        "heat_flow_probe": {
+          "effects": { "budget": 35, "mass": 5.5, "power": -3.9, "communications": 0, "data": 0.5, "mission_lifetime": 0 },
+          "source": "Apollo 15 Heat Flow Experiment (Step 11b, 2026-11-13). mass 5.5 kg, power 3.9 W: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-06; budget: no public source (game value); data: game-design choice"
+        },
+        "laser_reflector": {
+          "effects": { "budget": 10, "mass": 5, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "Apollo Laser Ranging Retroreflector (Step 11b, 2026-11-13). power 0 and data 0: it is a mirror, it needs no power and sends nothing (lasers from Earth bounce off it). mass: PLACEHOLDER, kept at 5 kg until the Science & Data Lead checks NSSDC's 77 kg, which looks high: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1969-059C-04; budget: no public source (game value)"
+        }
+      },
+      "key_instruments": {
+        "value": ["seismometer"],
+        "source": "Team decision, PLAN.md section 5 (2026-11-11): the seismometer is the Moon key instrument."
+      },
+      "default_instruments": {
+        "value": ["camera_basic"],
+        "source": "Game-design choice (2026-11-12): like Mars, the start build packs only the basic camera, so a new player sees the key instrument blocker at Review."
+      },
+      "arrival": {
+        "_readme": "The Moon arrival walk. See the _readme in mars > arrival for what each setting means. Earth hangs in the black sky (sky_planet: color, radius, position). craters = low rings on the ground.",
+        "area": "plain",
+        "fog_enabled": false,
+        "gravity_scale": 0.165,
+        "ground_size": [90, 90],
+        "ground_color": "#8d8f93",
+        "sky_color": "#000000",
+        "fog_density": 0.0,
+        "sun_energy": 1.6,
+        "ambient_energy": 0.35,
+        "rock_color": "#5f6166",
+        "rock_count": 25,
+        "rock_seed": 11,
+        "rock_size_min": 0.3,
+        "rock_size_max": 1.4,
+        "rock_spread": 35,
+        "rock_keep_clear": 5,
+        "crater_color": "#74767b",
+        "crater_count": 14,
+        "crater_seed": 5,
+        "crater_size_min": 1.5,
+        "crater_size_max": 4.0,
+        "sky_planet": { "color": "#4f8de0", "radius": 7, "position": [-35, 45, -80] },
+        "lander": { "position": [0, 0, 0], "size": [3, 2.6, 3], "color": "#b9bcc2", "leg_height": 0.9, "foil_color": "#c9a227", "leg_color": "#7a8290", "dish_color": "#eeeeee" },
+        "round_rocks": true,
+        "hills": { "count": 12, "seed": 4, "color": "#76787d", "distance_min": 48, "distance_max": 70, "size_min": 10, "size_max": 22 },
+        "stars": { "count": 350, "seed": 2, "distance": 160, "size": 0.35, "color": "#ffffff" },
+        "spot_props": [ { "spot": "antenna", "kind": "dish", "offset": [-1.8, 0, 0] }, { "spot": "screen", "kind": "console", "offset": [1.8, 0, 0] } ],
+        "done_props": { "place_1": "seismometer", "place_2": "seismometer", "place_3": "seismometer" },
+        "player_start": [0, 0, 4],
+        "player_color": "#e8e8e8",
+        "marker_color": "#ff9933",
+        "marker_radius": 1.3,
+        "marker_glow": 2.0,
+        "spots": {
+          "seis_1": [-14, 0, -12],
+          "seis_2": [14, 0, -12],
+          "seis_3": [0, 0, -26],
+          "antenna": [-4, 0, 2],
+          "screen": [4, 0, 1]
+        },
+        "tasks": [
+          { "id": "place_1", "type": "press", "spot": "seis_1", "needs_instrument": "seismometer", "missing_finding": "arrival_no_seismometer" },
+          { "id": "place_2", "type": "press", "spot": "seis_2", "needs_instrument": "seismometer", "missing_finding": "arrival_no_seismometer" },
+          { "id": "place_3", "type": "press", "spot": "seis_3", "needs_instrument": "seismometer", "missing_finding": "arrival_no_seismometer" },
+          { "id": "point_antenna", "type": "hold", "spot": "antenna", "fill_seconds": 2.0, "green_start": 0.45, "green_end": 0.62 },
+          { "id": "send_quakes", "type": "send", "spot": "screen", "needs_tasks": ["place_1", "place_2", "place_3", "point_antenna"], "data_gb": 10 }
+        ],
+        "send": { "base_seconds": 3, "max_seconds": 15 },
+        "goals": { "land_safely": "arrive", "place_seismometers": ["place_1", "place_2", "place_3"], "send_quake_data": ["send_quakes"] },
+        "source": "Game-design choice (layout and look). gravity_scale = the real Moon's gravity, 0.165 of Earth's: \"1.62 m/sec² = .165 Earth gravity\", https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/moon/ (team decision 2026-11-14, Real gravity jumps: a jump is about six times higher and lasts about 5 seconds; before that the game used 0.35). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass."
+      },
+      "report": {
+        "_readme": "Numbers for this mission's report score. data_target_gb = science data sent home for the full data points.",
+        "data_target_gb": 25,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      },
+      "not_possible": {
+        "_readme": "Options that CANNOT work for this mission (NASA_RESOURCES_PLAN.md N4, the telescope game's idea). Each stands on a dim pedestal in that Design Room station with its reason, and cannot be picked. Options that are only a bad idea stay pickable (failing still teaches). Keys = Design Room categories (orbit, instruments...).",
+        "instruments": [ { "name": "Cloud camera", "reason": "The Moon has almost no air, so there are no clouds to watch.", "source": "NASA: the Moon's exosphere \"is much too thin to produce weather as we know it on Earth\": https://science.nasa.gov/moon/weather-on-the-moon/" } ]
+      },
+      "twins": {
+        "_readme": "Your mission twin on the report (N5): the real mission most like the player's design. The first entry whose when_packed instrument is packed wins; the last entry (no when_packed) is the fallback. Real missions from PLAN.md section 5. text = one sentence. source: the NASA page for each sentence (links added 2026-11-15).",
+        "list": [
+          { "when_packed": "heat_flow_probe", "name": "Apollo Heat Flow Experiment", "text": "Apollo 15 and 17 astronauts put probes into the Moon to measure the heat flowing out of it.", "source": "NASA NSSDCA, Apollo 17 Heat Flow experiment: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1972-096C-01; Apollo 15 and 17 results: https://ntrs.nasa.gov/citations/20120013627" },
+          { "when_packed": "laser_reflector", "name": "Apollo laser reflectors", "text": "Apollo astronauts left mirrors on the Moon; scientists still bounce lasers off them.", "source": "NASA ILRS, Lunar laser ranging to the Apollo 11, 14 and 15 reflectors, still done today: https://ilrs.gsfc.nasa.gov/science/scienceContributions/lunar.html" },
+          { "name": "Apollo Passive Seismic Experiment", "text": "Apollo astronauts left seismometers that recorded moonquakes until 1977.", "source": "NASA NSSDCA: the Apollo 15 Passive Seismic Experiment was turned off on 30 September 1977 as part of the ALSEP station shutdown: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01" }
+        ]
+      },
+      "default_orbit": {
+        "value": "high",
+        "source": "Game-design choice (2026-11-12): the orbit used if you press Play on a later screen without picking one."
+      },
+      "limits_from": {
+        "value": "moon_quakes",
+        "source": "Game-design choice (2026-11-12): the Moon's limits are moon_quakes in game_data.json."
+      },
+      "trip_days": {
+        "value": 3,
+        "source": "Apollo 8 (Step 11b, 2026-11-13): \"The fastest of these was Apollo 8, which took just under three days to go from Earth orbit to orbit around the Moon.\" https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/"
+      },
+      "signal_delay_minutes": {
+        "start": 0,
+        "end": 0.0217,
+        "source": "Apollo 12 radio delay, 1.3 seconds (= 0.0217 minutes) (Step 11b, 2026-11-13): \"In the following, we use 1.3 seconds.\" https://www.nasa.gov/history/alsj/a12/A12Audio_Moon_Houston.html; start 0: game-design choice (next to Earth)"
+      }
+    },
+    "mars": {
+      "locked": {
+        "value": false,
+        "source": "Game-design choice (PLAN.md section 15): Mars is built first."
+      },
+      "arrival_type": {
+        "value": "surface",
+        "source": "Game-design choice (PLAN.md section 5): the crew lands, drills and samples ice."
+      },
+      "crew": {
+        "value": true,
+        "source": "Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Moon and Mars carry a crew on a lander."
+      },
+      "goals": {
+        "value": ["launch_safely", "cruise_safely", "enter_orbit", "land_safely", "sample_ice", "send_data", "lift_off", "land_home"],
+        "source": "Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14)."
+      },
+      "goal_phases": {
+        "_readme": "See moon > goal_phases.",
+        "launch_safely": "launch", "cruise_safely": "cruise", "enter_orbit": "arrive", "land_safely": "land",
+        "sample_ice": "science", "send_data": "data", "lift_off": "depart", "land_home": "home"
+      },
+      "orbits": {
+        "_readme": "The orbit choices on the Choose an orbit screen, in screen order. fuel_mass = the kg of fuel the spacecraft must carry to slow down into this orbit at Mars. It is added to the Mass total. A lower orbit needs more fuel than a higher one (true for Mars). The polar orbit is a low orbit over the poles, so it needs low-orbit fuel. The words are in data/story.json, \"orbits\".",
+        "low": {
+          "fuel_mass": { "value": 1149, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Low orbit uses MRO's real 1,149 kg (MRO really ended in a low orbit)." }
+        },
+        "high": {
+          "fuel_mass": { "value": 800, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel than MRO's low one." }
+        },
+        "polar": {
+          "fuel_mass": { "value": 1149, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a polar orbit here is a low orbit that passes over the poles." }
+        }
+      },
+      "instruments": {
+        "_readme": "The science instruments (the payload) for this mission, in card order on the Build screen's Instruments tab. The player packs as many as they like (on/off cards). effects = what one instrument adds to the six totals when packed. The words are in data/story.json, \"instruments\".",
+        "ice_drill": {
+          "effects": { "budget": 60, "mass": 40, "power": -100, "communications": 0, "data": 0.5, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        },
+        "camera_basic": {
+          "effects": { "budget": 40, "mass": 3, "power": -7, "communications": 0, "data": 4.8, "mission_lifetime": 0 },
+          "source": "MRO Context Camera (CTX). mass (\"3 kilograms\") and power (\"7 watts (imaging)\"): https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/; data (\"approximately 3.5 Tb\" in the primary mission: 3,500 Gb / about 730 days = 4.8 Gb/day): https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf; budget: no public source. (Moved here from the camera part in game_data.json on 2026-11-12.)"
+        },
+        "camera_high_res": {
+          "effects": { "budget": 110, "mass": 65, "power": -60, "communications": 0, "data": 16.4, "mission_lifetime": 0 },
+          "source": "MRO HiRISE camera. mass (\"65 kilograms\") and power (\"60 watts\"): https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/; data (\"more than 12 Tb of HiRISE data during the 2-year\" primary mission: 12,000 Gb / 730 days = 16.4 Gb/day; science paper by the HiRISE team, McEwen et al. 2007, JGR): https://boris.unibe.ch/25369/1/2005JE002605.pdf; budget: no public source. (Moved here from the camera part in game_data.json on 2026-11-12.)"
+        },
+        "ground_radar": {
+          "effects": { "budget": 50, "mass": 20, "power": -50, "communications": 0, "data": 2, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      },
+      "key_instruments": {
+        "value": ["ice_drill"],
+        "source": "Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker (AGENT_SOURCE.md, 2026-11-12)."
+      },
+      "default_instruments": {
+        "value": ["camera_basic"],
+        "source": "Game-design choice (2026-11-12): the start build packs the basic camera only (the same as the old default camera), so a new player sees the drill blocker at Review."
+      },
+      "arrival": {
+        "_readme": "The arrival walk (PLAN.md section 10). area = \"plain\" (walk on the ground) or \"ship\" (inside a ship). Sizes and positions are in meters: [x, y, z]; the player starts at player_start and looks toward -z. Colors are web color codes. fog_enabled / fog_density = the haze. gravity_scale = how strong gravity is compared with the game's normal (1 = normal). rock_* = random gray-box rocks (rock_seed = which random layout; rocks stay rock_keep_clear meters away from the lander and the spots). marker_* = the glowing floor marker on each spot. spots = the task places. tasks = the tasks in list order. Each task: type = reach (step on the spot), press (press E), hold (hold E, let go between green_start and green_end; the bar fills in fill_seconds; full is too far) or send (press E, then data goes home); needs_instrument = an instrument that must be packed; needs_tasks = tasks that must be done first; missing_finding = the report card when the instrument was not packed; data_gb = data a send task adds to the report. send = how long sending takes: base_seconds with a signal at the mission's communications limit, longer with a weaker one, at most max_seconds. goals = which tasks tick each checklist goal (\"arrive\" = ticked as soon as you arrive). Art pass (Step 13): lander leg_height / foil_color / leg_color / dish_color = legs, gold foil band and a dish; round_rocks = lumpy stones instead of boxes; hills = big low hills far away; stars = dots in the sky; spot_props = a prop next to a spot (kind console or dish, offset in meters); done_props = a prop that appears on the spot when that task is done (seismometer, drill_rig). Prop colors: game_data.json \"arrival_props\". Layout and look: game-design choices. hold, send and data_gb: PLACEHOLDER.",
+        "area": "plain",
+        "fog_enabled": true,
+        "gravity_scale": 0.38,
+        "_gravity_source": "Real gravity jumps (team decision 2026-11-14): Mars' surface gravity is 3.73 m/s², Earth's 9.80 m/s²: 3.73 / 9.80 = 0.38. NASA Mars Fact Sheet: https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+        "ground_size": [90, 90],
+        "ground_color": "#b5562b",
+        "sky_color": "#d8a47f",
+        "fog_density": 0.025,
+        "sun_energy": 1.3,
+        "ambient_energy": 0.7,
+        "rock_color": "#6e4535",
+        "rock_count": 30,
+        "rock_seed": 3,
+        "rock_size_min": 0.4,
+        "rock_size_max": 1.8,
+        "rock_spread": 35,
+        "rock_keep_clear": 5,
+        "lander": { "position": [0, 0, 0], "size": [3, 2.6, 3], "color": "#9aa0a8", "leg_height": 0.9, "foil_color": "#c9a227", "leg_color": "#7a8290", "dish_color": "#eeeeee" },
+        "round_rocks": true,
+        "hills": { "count": 12, "seed": 9, "color": "#a04a24", "distance_min": 45, "distance_max": 65, "size_min": 10, "size_max": 24 },
+        "spot_props": [ { "spot": "analyzer", "kind": "console", "offset": [1.8, 0, 0] } ],
+        "done_props": { "drill": "drill_rig" },
+        "player_start": [0, 0, 4],
+        "player_color": "#e8e8e8",
+        "marker_color": "#ff9933",
+        "marker_radius": 1.3,
+        "marker_glow": 2.0,
+        "spots": {
+          "dig": [0, 0, -16],
+          "analyzer": [4, 0, 1]
+        },
+        "tasks": [
+          { "id": "reach", "type": "reach", "spot": "dig" },
+          { "id": "drill", "type": "hold", "spot": "dig", "needs_instrument": "ice_drill", "needs_tasks": ["reach"], "missing_finding": "arrival_no_drill", "fill_seconds": 2.0, "green_start": 0.7, "green_end": 0.86 },
+          { "id": "analyze", "type": "send", "spot": "analyzer", "needs_tasks": ["drill"], "data_gb": 25 }
+        ],
+        "send": { "base_seconds": 3, "max_seconds": 15 },
+        "goals": { "land_safely": "arrive", "sample_ice": ["drill"], "send_data": ["analyze"] },
+        "source": "Game-design choice (layout and look). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass."
+      },
+      "report": {
+        "_readme": "Numbers for this mission's report score. data_target_gb = science data sent home for the full data points (the arrival's send task adds its data_gb).",
+        "data_target_gb": 150,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      },
+      "not_possible": {
+        "_readme": "Options that CANNOT work for this mission (NASA_RESOURCES_PLAN.md N4, the telescope game's idea). Each stands on a dim pedestal in that Design Room station with its reason, and cannot be picked. Options that are only a bad idea stay pickable (failing still teaches). Keys = Design Room categories (orbit, instruments...).",
+        "_none": "Nothing on Mars is impossible in this game, only harder."
+      },
+      "twins": {
+        "_readme": "Your mission twin on the report (N5): the real mission most like the player's design. The first entry whose when_packed instrument is packed wins; the last entry (no when_packed) is the fallback. Real missions from PLAN.md section 5. text = one sentence. source: the NASA page for each sentence (links added 2026-11-15).",
+        "list": [
+          { "when_packed": "camera_high_res", "name": "Mars Reconnaissance Orbiter (HiRISE)", "text": "MRO's HiRISE camera takes very sharp pictures of Mars from orbit.", "source": "NASA/JPL: HiRISE \"is the most powerful telescopic camera ever sent to another planet\": https://www.jpl.nasa.gov/images/pia12112-polygons-crater-layers-and-defrosting-dunes/" },
+          { "when_packed": "ground_radar", "name": "Mars Reconnaissance Orbiter (SHARAD)", "text": "MRO's SHARAD radar looks under the surface of Mars for buried ice.", "source": "NASA: MRO's ground-penetrating radar found buried ice under Utopia Planitia: https://science.nasa.gov/photojournal/scalloped-terrain-led-to-finding-of-buried-ice-on-mars/" },
+          { "name": "Phoenix lander", "text": "In 2008 the Phoenix lander dug into the soil near Mars's north pole and found water ice.", "source": "NASA JPL, NASA Phoenix Mars Lander Confirms Frozen Water (2008): https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/" }
+        ]
+      },
+      "default_orbit": {
+        "value": "high",
+        "source": "Game-design choice (2026-11-11): the orbit used if you press Play on a later screen without picking one."
+      },
+      "limits_from": {
+        "value": "mars_ice",
+        "source": "Game-design choice (2026-11-11): for now Mars uses the mars_ice limits in game_data.json (the MRO orbiter numbers). Steps 3 and 4 in TASKS.md change them."
+      },
+      "trip_days": {
+        "value": 210,
+        "source": "MRO, 12 Aug 2005 to 10 Mar 2006 = 210 days (Step 11b, 2026-11-13): \"Launch Date: 2005-08-12\" ... \"Mars Reconnaissance Orbiter reached Mars and went into orbit on 10 March 2006.\" https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A"
+      },
+      "signal_delay_minutes": {
+        "start": 0.1,
+        "end": 11.4,
+        "source": "Mars radio delay (Step 11b, 2026-11-13). It is 3 to 22 minutes depending on where the planets are (\"it takes between 3 and 22 minutes for commands to reach Perseverance\": https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/). end 11.4 = Perseverance's real landing day, 11 minutes 22 seconds: https://science.nasa.gov/blogs/perseverance-mars-rover/2021/02/18/perseverance-will-land-on-mars-today/; start 0.1: game-design choice (next to Earth)"
+      },
+      "flight_legs": {
+        "value": 3,
+        "source": "GAME_PLAN.md section 6b DEFAULT (3 legs). Game-design choice, not a NASA number."
+      },
+      "flight_leg_seconds": {
+        "value": 45,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (how many real seconds one Flight leg lasts)"
+      }
+    },
+    "venus": {
+      "locked": {
+        "value": false,
+        "source": "Game-design choice (PLAN.md section 15, step 10): Venus unlocks in Phase 2."
+      },
+      "orbits": {
+        "_readme": "The orbit choices around Venus, in screen order. fuel_mass = kg of fuel to slow down into this orbit (added to the Mass total). The words are in data/story.json, \"orbits\".",
+        "low": { "fuel_mass": { "value": 1300, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). More than Mars: a game-design guess with no source." } },
+        "high": { "fuel_mass": { "value": 900, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel." } },
+        "polar": { "fuel_mass": { "value": 1300, "source": "PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: \"The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants\" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a low orbit that passes over the poles." } }
+      },
+      "instruments": {
+        "_readme": "The science instruments for Venus, in card order. effects = what one instrument adds to the six totals when packed. The words are in data/story.json, \"instruments\".",
+        "cloud_camera": {
+          "effects": { "budget": 50, "mass": 5, "power": -5.4, "communications": 0, "data": 3, "mission_lifetime": 0 },
+          "source": "Pioneer Venus Orbiter Cloud Photopolarimeter (Step 11b, 2026-11-13). mass 5 kg, power 5.4 W: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1978-051A-06; budget: no public source (game value); data: game-design choice"
+        },
+        "balloon_probe": {
+          "effects": { "budget": 70, "mass": 21.5, "power": 0, "communications": 0, "data": 1, "mission_lifetime": 0 },
+          "source": "Vega 1 balloon (Step 11b, 2026-11-13). mass 21.5 kg total (12.5 kg balloon and tether, 6.9 kg gondola, 2.1 kg helium): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F; power 0: it ran on its own batteries, not the ship's power; budget: no public source (game value); data: game-design choice"
+        },
+        "radar_mapper": {
+          "effects": { "budget": 90, "mass": 154, "power": -210, "communications": 0, "data": 8, "mission_lifetime": 0 },
+          "source": "Magellan radar (Step 11b, 2026-11-13). power 210 W average: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1989-033B-01; mass 154 kg, the whole 17-unit radar from JPL's Magellan guide (NSSDC lists 15.2 kg for one part; the Science & Data Lead picks); budget: no public source (game value); data: game-design choice"
+        },
+        "spectrometer": {
+          "effects": { "budget": 40, "mass": 10, "power": -15, "communications": 0, "data": 1.5, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      },
+      "key_instruments": {
+        "value": ["cloud_camera", "balloon_probe"],
+        "source": "Team decision, PLAN.md section 5 (2026-11-11): the Venus key instruments are the cloud camera and the balloon probe."
+      },
+      "default_instruments": {
+        "value": ["spectrometer"],
+        "source": "Game-design choice (2026-11-12): like the other missions, the start build packs no key instrument, so a new player sees the blockers at Review."
+      },
+      "arrival": {
+        "_readme": "The Venus arrival: nobody lands, so the player walks inside the orbiting ship (area \"ship\"). See the _readme in mars > arrival for the shared settings. room_size = [width x, height, depth z] of the room, centered on 0. window = the big window in the front wall (-z): size [width, height], bottom = its height above the floor, color = the clouds. props = gray-box consoles: position (bottom middle) and size; screen = true puts a glowing screen on top. window bars = how many frame bars cross the window. floor_stripe_color = a walkway stripe. (Step 13 art pass, 2026-11-13.) light_* = the ceiling light.",
+        "area": "ship",
+        "fog_enabled": false,
+        "gravity_scale": 1.0,
+        "sky_color": "#e9d79c",
+        "fog_density": 0.0,
+        "sun_energy": 0.0,
+        "ambient_energy": 0.45,
+        "_ship_readme": "Venus stays on the ship: since UPGRADE_PLAN_V2 step 21 the arrival builds the SAME ship as the flight (game_data.json \"ship\", scripts/ship_builder.gd). sky_color = the yellow clouds seen through every window. The spots are inside the ship's rooms: airlock = Science Bay, camera = by the Bridge window, comms = Comms Room.",
+        "player_start": [0, 0, -8],
+        "player_color": "#e8e8e8",
+        "marker_color": "#ff9933",
+        "marker_radius": 1.2,
+        "marker_glow": 2.0,
+        "spots": {
+          "airlock": [-5.5, 0, -1],
+          "camera": [-3.2, 0, -12.4],
+          "comms": [0, 0, 12.5]
+        },
+        "tasks": [
+          { "id": "release_balloon", "type": "press", "spot": "airlock", "needs_instrument": "balloon_probe", "missing_finding": "arrival_no_balloon" },
+          { "id": "aim_camera", "type": "hold", "spot": "camera", "needs_instrument": "cloud_camera", "missing_finding": "arrival_no_cloud_camera", "fill_seconds": 2.0, "green_start": 0.55, "green_end": 0.7 },
+          { "id": "send_wind", "type": "send", "spot": "comms", "needs_tasks": ["release_balloon", "aim_camera"], "data_gb": 15 }
+        ],
+        "send": { "base_seconds": 3, "max_seconds": 15 },
+        "goals": { "release_balloon": ["release_balloon"], "map_storms": ["aim_camera"], "send_storm_data": ["send_wind"] },
+        "source": "Game-design choice (layout and look). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass."
+      },
+      "report": {
+        "_readme": "Numbers for this mission's report score. data_target_gb = science data sent home for the full data points.",
+        "data_target_gb": 120,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      },
+      "not_possible": {
+        "_readme": "Options that CANNOT work for this mission (NASA_RESOURCES_PLAN.md N4, the telescope game's idea). Each stands on a dim pedestal in that Design Room station with its reason, and cannot be picked. Options that are only a bad idea stay pickable (failing still teaches). Keys = Design Room categories (orbit, instruments...).",
+        "orbit": [ { "name": "Land on the surface", "reason": "Nobody lands on Venus. Too hot: the ground would melt lead.", "source": "NASA Venus facts: the surface is about 872 F (467 C), \"hot enough to melt lead\", and the longest lander survived about two hours: https://science.nasa.gov/venus/venus-facts/" } ],
+        "instruments": [ { "name": "Ice drill", "reason": "No ice to drill: Venus is far too hot for ice.", "source": "NASA Venus facts (surface about 467 C): https://science.nasa.gov/venus/venus-facts/" } ]
+      },
+      "twins": {
+        "_readme": "Your mission twin on the report (N5): the real mission most like the player's design. The first entry whose when_packed instrument is packed wins; the last entry (no when_packed) is the fallback. Real missions from PLAN.md section 5. text = one sentence. source: the NASA page for each sentence (links added 2026-11-15).",
+        "list": [
+          { "when_packed": "radar_mapper", "name": "Magellan", "text": "NASA's Magellan mapped almost all of Venus with radar, right through the clouds.", "source": "NASA NSSDCA: Magellan's radar mapped 98% of the surface: https://nssdc.gsfc.nasa.gov/planetary/magellan.html" },
+          { "when_packed": "spectrometer", "name": "DAVINCI (planned)", "text": "NASA's planned DAVINCI probe will fall through Venus's air and measure what it is made of.", "source": "NASA: DAVINCI will \"measure atmospheric composition throughout the entire descent\": https://science.nasa.gov/mission/davinci/davinci-science/" },
+          { "name": "VEGA balloons", "text": "In 1985 two Soviet VEGA balloons floated in the clouds of Venus.", "source": "NASA NSSDCA, Vega 1 Balloon (released 11 June 1985, floated at about 54 km): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F" }
+        ]
+      },
+      "default_orbit": {
+        "value": "high",
+        "source": "Game-design choice (2026-11-12): the orbit used if you press Play on a later screen without picking one."
+      },
+      "limits_from": {
+        "value": "venus_storms",
+        "source": "Game-design choice (2026-11-12): the Venus limits are venus_storms in game_data.json."
+      },
+      "trip_days": {
+        "value": 198,
+        "source": "Pioneer Venus Orbiter, 20 May to 4 Dec 1978 = 198 days (Step 11b, 2026-11-13): \"May 20, 1978: Launch\" ... \"the spacecraft entered an elliptical orbit around Venus at 15:58 UT Dec. 4, 1978.\" https://science.nasa.gov/mission/pioneer-venus-1/"
+      },
+      "signal_delay_minutes": {
+        "start": 0.1,
+        "end": 6,
+        "source": "Game-design choice inside the real range (Step 11b, 2026-11-13): Venus is 38.2 to 261.0 million km from Earth (https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html), so radio takes about 2.1 to 14.5 minutes one way. 6 minutes sits inside that range. start 0.1: game-design choice"
+      },
+      "arrival_type": {
+        "value": "orbit",
+        "source": "Team decision, PLAN.md sections 2 and 5 (2026-11-11): nobody lands on Venus. The crew ship stays in orbit and releases a cloud balloon."
+      },
+      "crew": {
+        "value": true,
+        "source": "Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Venus has a crew ship in orbit."
+      },
+      "goals": {
+        "value": ["launch_safely", "cruise_safely", "reach_orbit", "release_balloon", "map_storms", "send_storm_data", "leave_orbit", "land_home"],
+        "source": "Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14). Venus has no land item: nobody lands on Venus."
+      },
+      "goal_phases": {
+        "_readme": "See moon > goal_phases. Venus has two science items and no land item.",
+        "launch_safely": "launch", "cruise_safely": "cruise", "reach_orbit": "arrive", "release_balloon": "science",
+        "map_storms": "science", "send_storm_data": "data", "leave_orbit": "depart", "land_home": "home"
+      }
+    }
+  }
+}

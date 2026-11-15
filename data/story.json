@@ -1,0 +1,1441 @@
+{
+  "_readme": "Story text for the screens. Writers can change any sentence. Do not change the names on the left side of the colons (the keys), or the game cannot find the text.",
+  "missing_picture": "Picture goes here:",
+  "did_you_know": {
+    "_readme": "\"Did you know?\" tips on the Build screen (PLAN.md section 6e, TASKS.md step 14): one short REAL fact per part tab, one per mission for the Instruments tab, and one (rockets) shown in the voice bar on the rocket screen. Each fact has its NASA source next to it. Only facts already checked in this project's data files are used. label = the word before the fact.",
+    "label": "Did you know?",
+    "parts": {
+      "structure": { "text": "MRO weighed 2,180 kg at launch, and 1,149 kg of that was fuel. Fuel is often the heaviest thing a spacecraft carries!", "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A" },
+      "solar_panel": { "text": "In a planet's shadow, solar panels make no power at all. MRO flies through Mars' shadow for about 40 minutes of every two-hour orbit.", "source": "https://www.jpl.nasa.gov/news/news.php?feature=7059" },
+      "battery": { "text": "MRO carries a pair of rechargeable batteries to keep it running whenever it flies through the shadow of Mars.", "source": "https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf" },
+      "attitude_control": { "text": "A radio command takes 3 to 22 minutes to reach Mars. Nobody on Earth can steer a spacecraft live, so it has to point itself.", "source": "https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/" },
+      "thermal_control": { "text": "MRO uses as much as 300 watts just to run its heaters. In the shade, space is very, very cold.", "source": "https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/" },
+      "antenna": { "text": "MRO's 3-meter dish can send data home at up to about 6 megabits per second. When Mars is farthest from Earth, that drops to about 0.6.", "source": "https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf and https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf" },
+      "computer": { "text": "MRO's big camera, HiRISE, was planned to send home more than 12 terabits of pictures in its first two years. The computer stores pictures until the next radio contact with Earth.", "source": "McEwen et al. 2007 (HiRISE team paper): https://boris.unibe.ch/25369/1/2005JE002605.pdf" }
+    },
+    "rockets": { "text": "NASA paid about $80 million to launch one mission on a Falcon 9, and $148 million for one on an Atlas V 401. The Falcon 9's booster lands and flies again.", "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/ and https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/ (Team decision 2026-11-13: keep the real rocket numbers and teach why the Falcon 9 is cheap.)" },
+    "instruments": {
+      "mars": { "text": "MRO's Context Camera weighs just 3 kg, yet it was planned to take about 3.5 terabits of pictures of Mars in its first two years.", "source": "https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/ and https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf" },
+      "moon": { "text": "Apollo astronauts left seismometers on the Moon. One weighed about 11.5 kg and used only about 7 watts.", "source": "https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01" },
+      "venus": { "text": "In 1985 the Vega 1 balloon floated in the clouds of Venus. The balloon, its gondola and its helium weighed only 21.5 kg together.", "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F" }
+    }
+  },
+  "setup_next_button": "Next",
+  "name_screen": {
+    "title": "First things first. What is your name?",
+    "placeholder": "Type your name",
+    "button": "Next"
+  },
+  "character_screen": {
+    "title": "Wait. Who are you, again?",
+    "difficulty_word": "Difficulty"
+  },
+  "player_count_screen": {
+    "title": "How many players are on the team?",
+    "cards": {
+      "1": { "name": "1 player", "description": "You do every build job yourself.", "button": "Just me" },
+      "2": { "name": "2 players", "description": "Take turns at each build job. Your scores are averaged.", "button": "Two of us" },
+      "3": { "name": "3 players", "description": "Take turns at each build job. Your scores are averaged.", "button": "Three of us" },
+      "4": { "name": "4 players", "description": "Take turns at each build job. Your scores are averaged.", "button": "Four of us" }
+    }
+  },
+  "minigames": {
+    "_readme": "Words for the three build minigames and the turn screens around them. {player} = the player's name, {score} = a score out of 100, {n} = the player number.",
+    "player_default": "Player {n}",
+    "your_turn": "{player}, your turn!",
+    "start_button": "Start",
+    "time_left": "Time: {seconds}",
+    "your_score": "{player} scored {score} out of 100",
+    "next_player_button": "Next player",
+    "results_button": "See the team results",
+    "results_title": "Team results",
+    "result_line": "{player}: {score}",
+    "average_line": "Team average: {score} out of 100",
+    "becomes_line": "{result} is now {score} out of 100.",
+    "next_button": "On to the next job",
+    "help_button": "?",
+    "back_button": "Back to the game",
+    "press_space": "Press Space to start",
+    "assembly": {
+      "title": "Build job 1: Assembly",
+      "how_to": "Type the name of the part being bolted on. Each finished word snaps that part onto the rocket. A wrong key freezes you for {freeze} seconds.",
+      "steps": ["A part name appears, like FIN or TANK.", "Type its letters in order. Spaces don't count.", "Finish the word and the part snaps onto the rocket behind you."],
+      "example_word": "FIN",
+      "real_step": "Real teams call this integration: putting every part into one spacecraft.",
+      "real_step_source": "NASA CubeSat 101 (integration and testing): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf",
+      "result_name": "Build quality",
+      "placed": "Parts on: {count} of {target}",
+      "bolt_on": "Bolt on the:",
+      "oops": "Wrong key!"
+    },
+    "hammer": {
+      "title": "Build job 2: Hammering",
+      "how_to": "Nails stick out of the rocket panel. Click a nail to hammer it in before it slides back out. Missing hits the panel and dents it.",
+      "steps": ["Nails pop up on the rocket panel.", "Move the hammer over a nail and click to hit it.", "Be quick: a nail you don't hit slides back out and stays loose."],
+      "result_name": "Structure strength",
+      "real_step": "Real teams shake-test a spacecraft so nothing falls off at launch.",
+      "real_step_source": "NASA CubeSat 101 (environmental testing, including vibration): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf",
+      "hits": "Nails in: {hits}",
+      "left": "Nails left: {left}"
+    },
+    "fuel": {
+      "title": "Build job 3: Fueling",
+      "how_to": "Drag the valve wheel's white knob counterclockwise and let go when the fuel gauge reaches the orange mark.",
+      "steps": ["An orange mark shows how far to turn the valve.", "Drag the white knob around counterclockwise. The gauge fills as you turn.", "Let go on the mark. The closer you are, the more points."],
+      "result_name": "Fuel loaded",
+      "real_step": "Real teams load propellant slowly and carefully, one of the last jobs before launch.",
+      "real_step_source": "NASA CubeSat 101 (launch preparation): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf; propellant loading is one of the last steps before launch",
+      "gauge": "FUEL",
+      "target": "Round {round} of {rounds}: turn the valve {angle}° counterclockwise",
+      "start_mark": "Start",
+      "live_angle": "{angle}°",
+      "round_result": "You turned {turned}°. Off by {off}°: {points} points."
+    }
+  },
+  "rocket_screen": {
+    "title": "What kind of rocket?",
+    "cost_word": "Cost",
+    "capacity_word": "Lift toward Mars",
+    "moments_word": "Launch moments",
+    "tightness_word": "Window tightness"
+  },
+  "mission_screen": {
+    "title": "Choose a mission",
+    "goal_heading": "Success if we:",
+    "checklist_mark": "[ ]",
+    "locked_button": "Locked"
+  },
+  "build_screen": {
+    "title": "Build your spacecraft. Pick a card in every tab.",
+    "max_word": "max",
+    "min_word": "need at least",
+    "review_button": "Review my spacecraft",
+    "instruments_tab": "Instruments",
+    "instruments_hint": "Science instruments do the real work of the mission. Pack as many as you can afford, but don't forget the one the goal needs.",
+    "pick_button": "Pick this",
+    "picked_button": "Picked",
+    "picked_word": "YOUR PICK",
+    "pack_button": "Pack it",
+    "unpack_button": "Take it out",
+    "packed_word": "PACKED",
+    "key_instrument_line": "Needed for the mission goal!"
+  },
+  "ripple": {
+    "_readme": "The Ripple effect strip on the Build screen (PLAN.md 6c). It shows what ONE change did to the other numbers. start = the line before any change. arrow = what goes between the steps. swap = a part card change ({part} = category, {new} and {old} = card names). packed / unpacked = an instrument change. change = one number that moved. no_change = when nothing moved. now_bad = a row that just turned red ({rocket} = the rocket's name), followed by its tip. now_ok = a row that just came back inside its limit.",
+    "start": "Change a card to see what else changes.",
+    "arrow": "  →  ",
+    "swap": "{part}: {new} instead of {old}",
+    "packed": "Packed the {name}",
+    "unpacked": "Took out the {name}",
+    "change": "{resource} {amount} {unit}",
+    "no_change": "Nothing else changed.",
+    "now_bad": {
+      "budget": "Over budget now",
+      "mass": "Too heavy for the {rocket} now",
+      "power": "Not enough power now",
+      "communications": "Signal too weak now",
+      "data": "Not enough data now",
+      "mission_lifetime": "Won't last long enough now"
+    },
+    "tips": {
+      "budget": "pick cheaper parts or a cheaper rocket",
+      "mass": "pick a bigger rocket or lighter parts",
+      "power": "pick a bigger solar panel or parts that use less power",
+      "communications": "pick a bigger antenna or better pointing",
+      "data": "pack more instruments or pick a better computer",
+      "mission_lifetime": "pick a stronger frame, a bigger battery or better heat control"
+    },
+    "now_ok": "{resource} is back inside the limit"
+  },
+  "cause_chain": {
+    "_readme": "The cause chain on the Mission Report's finding cards (debrief, 2026-11-14), e.g. \"Heavy Large frame (+120 kg) → more mass (4100 kg) → bigger rocket (Atlas V 541, 243 million $) → budget gone (712 of 671 million $)\". GameState.get_cause_chain() picks the choice that pushed the resource furthest from its best option. label = the heading. arrow = between the steps. first = the first step per resource ({item} = the choice, {amount} {unit} = how much worse it is than the best option). orbit_item / window_item = how the orbit fuel and the launch date are named. more_mass and bigger_rocket = the middle steps when a heavy design forced a pricier rocket. last = the final step per resource ({value} = the total, {limit} = the limit, {rocket} = the rocket's name).",
+    "label": "How it happened",
+    "arrow": "  →  ",
+    "first": {
+      "budget": "Pricey {item} (+{amount} {unit})",
+      "mass": "Heavy {item} (+{amount} {unit})",
+      "power": "Power-hungry {item} (uses {amount} W more)",
+      "communications": "{item} (sends {amount} {unit} less)",
+      "data": "{item} ({amount} {unit} less data)",
+      "mission_lifetime": "{item} ({amount} {unit} shorter life)"
+    },
+    "orbit_item": "fuel for the {name}",
+    "window_item": "extra fuel for the {name}",
+    "more_mass": "more mass ({value} {unit})",
+    "bigger_rocket": "bigger rocket ({rocket}, {cost} million $)",
+    "last": {
+      "budget": "budget gone ({value} of {limit} {unit})",
+      "mass": "too heavy for the {rocket} (lifts {limit} {unit})",
+      "power": "not enough power ({value} {unit})",
+      "communications": "signal too weak ({value} of {limit} {unit})",
+      "data": "not enough data ({value} of {limit} {unit})",
+      "mission_lifetime": "won't last long enough ({value} of {limit} {unit})"
+    }
+  },
+  "parts": {
+    "_readme": "The Build screen tabs and cards. tab = the short word on the tab button. name = the category's full name. hint = one line under the tabs that says what the category does. versions = one card each: name and a one-sentence description. The left-side names must match data/game_data.json (\"parts\").",
+    "structure": {
+      "tab": "Structure",
+      "name": "Structure (frame)",
+      "hint": "The frame holds every part together. A bigger frame is stronger and lasts longer, but it is heavier.",
+      "versions": {
+        "small": { "name": "Small frame", "description": "Light and cheap. Just enough to hold everything." },
+        "medium": { "name": "Medium frame", "description": "Stronger, so the spacecraft lasts a bit longer." },
+        "large": { "name": "Large frame", "description": "The toughest frame. Lasts the longest, weighs the most." }
+      }
+    },
+    "solar_panel": {
+      "tab": "Solar panel",
+      "name": "Solar panel",
+      "hint": "Solar panels turn sunlight into electricity. Every other part needs power.",
+      "versions": {
+        "small": { "name": "Small", "description": "Cheap and light, but makes the least power." },
+        "medium": { "name": "Medium", "description": "A middle choice for power, cost and weight." },
+        "large": { "name": "Large", "description": "Lots of spare power, but heavy and costly." }
+      }
+    },
+    "battery": {
+      "tab": "Battery",
+      "name": "Battery",
+      "hint": "The battery stores power for when the spacecraft is in shadow and the sun can't reach the panels.",
+      "versions": {
+        "small": { "name": "Small battery", "phrase": "small battery", "description": "Light, but it wears out sooner." },
+        "medium": { "name": "Medium battery", "phrase": "medium battery", "description": "Holds more, so the mission can last longer." },
+        "large": { "name": "Large battery", "phrase": "large battery", "description": "Holds the most and lasts the longest. Heavy." }
+      }
+    },
+    "attitude_control": {
+      "tab": "Pointing",
+      "name": "Attitude control (pointing)",
+      "hint": "Pointing keeps the spacecraft facing the right way: panels to the Sun, antenna to Earth, instruments to the target.",
+      "versions": {
+        "simple": { "name": "Small thrusters", "description": "Little puffs of gas turn the spacecraft. Cheap, but not very exact." },
+        "better": { "name": "Spinning wheels", "description": "Spinning wheels turn it smoothly. Aims better, uses more power." },
+        "best": { "name": "Wheels + star tracker", "description": "A camera finds the stars to know exactly where it points." }
+      }
+    },
+    "thermal_control": {
+      "tab": "Heat",
+      "name": "Thermal control (heat)",
+      "hint": "Space is freezing in the shade and boiling in the Sun. Heat control keeps the parts at a safe temperature.",
+      "versions": {
+        "heaters": { "name": "Heaters only", "phrase": "heaters alone", "description": "Electric heaters keep things warm. Simple, but they use a lot of power." },
+        "louvers": { "name": "Heaters + louvers", "phrase": "heaters and louvers", "description": "Little shutters open and close to let heat out, so the heaters work less." },
+        "radiators": { "name": "Radiators + heat pipes", "phrase": "radiators and heat pipes", "description": "Moves heat around the spacecraft on its own. Uses the least power." }
+      }
+    },
+    "antenna": {
+      "tab": "Antenna",
+      "name": "Radio antenna",
+      "hint": "The antenna sends your data home to Earth. A bigger dish sends faster, but it is heavier.",
+      "versions": {
+        "small": { "name": "Small", "description": "Light and cheap, but too slow when Mars is far." },
+        "medium": { "name": "Medium", "description": "A middle size dish, a middle speed." },
+        "large": { "name": "Large", "description": "Fast to Earth, but heavy." }
+      }
+    },
+    "computer": {
+      "tab": "Computer",
+      "name": "Computer",
+      "hint": "The computer runs the spacecraft and packs the science data so more of it fits.",
+      "versions": {
+        "simple": { "name": "Simple computer", "description": "Does the job. Nothing extra." },
+        "better": { "name": "Better computer", "description": "Squeezes more science into the same data." },
+        "best": { "name": "Best computer", "description": "The fastest. Squeezes the most, and is built to last." }
+      }
+    }
+  },
+  "instruments": {
+    "_readme": "The Instruments tab cards, one group per mission id in data/destinations.json. needed_for = finishes the sentence \"without it, you can't ...\" on the Review screen.",
+    "mars": {
+      "ice_drill": { "name": "Ice drill", "description": "Drills into the ground and takes a sample of the ice.", "needed_for": "drill and sample the ice" },
+      "camera_basic": { "name": "Basic camera", "description": "Takes wide pictures of Mars. Light and cheap." },
+      "camera_high_res": { "name": "High resolution camera", "description": "Super sharp pictures, but heavy and expensive." },
+      "ground_radar": { "name": "Ground radar", "description": "Sends radio waves into the ground to look for buried ice." }
+    },
+    "moon": {
+      "seismometer": { "name": "Seismometer", "description": "Feels the ground shake. It listens for moonquakes.", "needed_for": "listen for moonquakes" },
+      "camera_basic": { "name": "Basic camera", "description": "Takes wide pictures of the Moon. Light and cheap." },
+      "heat_flow_probe": { "name": "Heat flow probe", "description": "Pushes into the ground to measure the heat coming up from inside the Moon." },
+      "laser_reflector": { "name": "Laser reflector", "description": "A mirror. Scientists on Earth bounce lasers off it to measure the distance." }
+    },
+    "venus": {
+      "cloud_camera": { "name": "Cloud camera", "description": "Watches the swirling clouds and storms from orbit.", "needed_for": "map the storms" },
+      "balloon_probe": { "name": "Balloon probe", "description": "A balloon that floats in the clouds and measures the wind.", "needed_for": "release a cloud balloon" },
+      "radar_mapper": { "name": "Radar mapper", "description": "Sees through the thick clouds to map the ground. Uses lots of power." },
+      "spectrometer": { "name": "Spectrometer", "description": "Splits light into colors to find out what the clouds are made of." }
+    }
+  },
+  "review_screen": {
+    "title": "Before launch: does it all add up?",
+    "check_line": "{mark} {name}: {value} {unit} ({rule} {limit})",
+    "instrument_ok_line": "{mark} Key instrument packed: {instrument}",
+    "instrument_missing_line": "{mark} Key instrument missing: {instrument}",
+    "ok_mark": "[OK]",
+    "bad_mark": "[X]",
+    "header_resource": "Resource",
+    "header_have": "You have",
+    "header_limit": "Limit",
+    "header_status": "Status",
+    "ok_word": "OK",
+    "over_word": "OVER THE LIMIT",
+    "under_word": "TOO LOW",
+    "back_button": "Back to build",
+    "launch_button": "Launch mission",
+    "launch_anyway_button": "Launch anyway",
+    "blockers_title": "Blockers (you can still launch, but these will cause trouble):",
+    "blockers": {
+      "_readme": "One line for each resource that breaks its limit. {value} = the player's total, {limit} = the limit, {unit} = the unit, {rocket} = the picked rocket's name.",
+      "budget": "Over budget: {value} {unit}, but the limit is {limit}.",
+      "mass": "Too heavy: {value} {unit} with the orbit fuel, but the {rocket} can only lift {limit}.",
+      "power": "Not enough power: {value} {unit}, but it needs at least {limit}.",
+      "communications": "Signal too weak: {value} {unit}, but it needs at least {limit}.",
+      "data": "Not enough data: {value} {unit}, but it needs at least {limit}.",
+      "mission_lifetime": "Won't last long enough: {value} {unit}, but it needs at least {limit}.",
+      "key_instrument": "No {instrument} packed: without it, you can't {needed_for}."
+    }
+  },
+  "orbit_screen": {
+    "title": "Choose an orbit",
+    "fuel_word": "Fuel to get there"
+  },
+  "orbits": {
+    "_readme": "The orbit cards, one group per mission id in data/destinations.json.",
+    "mars": {
+      "low": {
+        "name": "Low orbit",
+        "description": "Close to Mars. Sharper pictures, but it takes more fuel to slow down into it.",
+        "button": "Pick low"
+      },
+      "high": {
+        "name": "High orbit",
+        "description": "Far above Mars. A wide view with less detail, and it takes less fuel to reach.",
+        "button": "Pick high"
+      },
+      "polar": {
+        "name": "Polar orbit",
+        "description": "A low orbit that passes over the north and south poles, where much of the ice on Mars is.",
+        "button": "Pick polar"
+      }
+    },
+    "moon": {
+      "low": {
+        "name": "Low orbit",
+        "description": "Close to the Moon. A short way down to land, but it takes more fuel to slow down into it.",
+        "button": "Pick low"
+      },
+      "high": {
+        "name": "High orbit",
+        "description": "Far above the Moon. Less fuel to reach, but a longer trip down to the surface.",
+        "button": "Pick high"
+      },
+      "polar": {
+        "name": "Polar orbit",
+        "description": "A low orbit over the Moon's poles, so it passes over every part of the Moon in time.",
+        "button": "Pick polar"
+      }
+    },
+    "venus": {
+      "low": {
+        "name": "Low orbit",
+        "description": "Just above the clouds. Close-up views of the storms, but it takes more fuel to slow down into it.",
+        "button": "Pick low"
+      },
+      "high": {
+        "name": "High orbit",
+        "description": "Far above Venus. You see whole storms at once, and it takes less fuel to reach.",
+        "button": "Pick high"
+      },
+      "polar": {
+        "name": "Polar orbit",
+        "description": "A low orbit over the poles, where Venus has giant swirling storms.",
+        "button": "Pick polar"
+      }
+    }
+  },
+  "ship": {
+    "_readme": "Names on the ship. room_names = the sign above each room's doorway (left side of the colon must match the room names in game_data.json). future_stations = the floating label over each glowing floor marker.",
+    "room_names": {
+      "bridge": "BRIDGE",
+      "power_room": "POWER ROOM",
+      "science_bay": "SCIENCE BAY",
+      "comms_room": "COMMS ROOM",
+      "life_support": "LIFE SUPPORT"
+    },
+    "future_stations": {
+      "science_bay": "Future station: Data",
+      "comms_room": "Future station: Comms",
+      "life_support_food": "Food station",
+      "life_support_water": "Water station",
+      "life_support_air": "Air station"
+    }
+  },
+  "walk_screen": {
+    "controls_hint": "WASD = walk    Space = jump    Mouse = look    E = use    Tab = raise arm (dashboard)    Esc = free the mouse"
+  },
+  "characters": {
+    "_staff_card_readme": "UPGRADE_PLAN_V3 B1: staff_card = the Character Room wall card (who, knows, help; the difficulty dots come from levels). Under 30 words per card, and never an inner-voice line. Head Writer: these are drafts from the plan; the janitor's help line is new (PLACEHOLDER wording, check it).",
+    "scientist": {
+      "name": "The Assistant Scientist",
+      "description": "You know spacecraft, orbits and Mars better than anyone in the room. The general just needs you to decide.",
+      "staff_card": { "who": "Assistant Scientist. Works here.", "knows": "Knows the real terms. Has helped on missions.", "help": "Clear hints, every time you ask." },
+      "button": "That's me",
+      "picture": "res://assets/characters/scientist.png"
+    },
+    "janitor": {
+      "name": "The Janitor",
+      "description": "You know every room in this building. You know nothing about spacecraft.",
+      "staff_card": { "who": "Janitor. Twenty years of overhearing scientists.", "knows": "Half-remembers things. Never built a spacecraft.", "help": "Some hints, in plain words." },
+      "button": "That's me",
+      "picture": "res://assets/characters/janitor.png"
+    },
+    "student": {
+      "name": "The Student",
+      "description": "You came on a school tour and took a wrong turn. You know a little from class. The general points at you anyway.",
+      "staff_card": { "who": "Lost Student. Came for a field trip. Took a wrong turn.", "knows": "Not much yet. Has never worked on a mission.", "help": "Almost no hints. You figure it out." },
+      "button": "That's me",
+      "picture": "res://assets/characters/student.png"
+    }
+  },
+  "destinations": {
+    "_readme": "The three mission cards on the Choose a mission screen. goal = the short line under the name. goals = one sentence for each checklist id in data/destinations.json. mission_card = the Mission Room wall card (UPGRADE_PLAN_V3 B2): where, job, why, nasa; under 40 words; the longer story is behind Q on the globe.",
+    "mission_card_source": "Distances: NASA fact sheets. Moon mean distance 384,400 km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html; Mars 54.6 to 401.3 million km from Earth: https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html; Venus 38.2 to 261.0 million km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html (Science & Data Lead: please confirm these three lines). Trip times: destinations.json trip_days (Apollo 8 about 3 days, MRO 210 days, Pioneer Venus 198 days). NASA lines: destinations.json twins sources (Apollo seismometers until 1977, Phoenix ice 2008, MRO SHARAD buried ice, Magellan radar map) and NASA Venus facts (surface hot enough to melt lead).",
+    "moon": {
+      "name": "The Moon",
+      "in_sentence": "the Moon",
+      "goal": "Build a moonquake network",
+      "description": "Land, set up seismometers far apart, and listen for moonquakes. The long lunar night has no sunlight at all.",
+      "mission_card": {
+        "where": "384,400 km away. About 3 days by spacecraft.",
+        "job": "Set up seismometers and listen for moonquakes.",
+        "why": "Quakes show what the Moon is made of inside.",
+        "nasa": "Apollo astronauts left seismometers that worked until 1977."
+      },
+      "button": "Go to the Moon",
+      "goals": {
+        "launch_safely": "Launch safely",
+        "cruise_safely": "Cross to the Moon",
+        "enter_orbit": "Enter lunar orbit",
+        "land_safely": "Land on the Moon",
+        "place_seismometers": "Place 3 seismometers",
+        "send_quake_data": "Send quake data through one lunar night",
+        "lift_off": "Lift off from the Moon",
+        "land_home": "Land safely on Earth"
+      }
+    },
+    "mars": {
+      "name": "Mars",
+      "goal": "Find and measure ice",
+      "description": "Land, drill into the soil, and study the ice under it. Future astronauts will need that water.",
+      "mission_card": {
+        "where": "55 to 401 million km away. About 7 months.",
+        "job": "Land, drill and study the ice under the soil.",
+        "why": "Future astronauts could use that ice for water.",
+        "nasa": "Phoenix dug up ice in 2008. MRO's radar finds buried ice."
+      },
+      "button": "Go to Mars",
+      "goals": {
+        "launch_safely": "Launch safely",
+        "cruise_safely": "Survive the trip to Mars",
+        "enter_orbit": "Enter Mars orbit",
+        "land_safely": "Land on Mars",
+        "sample_ice": "Drill and sample the ice",
+        "send_data": "Send the ice data home",
+        "lift_off": "Lift off from Mars",
+        "land_home": "Land safely on Earth"
+      }
+    },
+    "venus": {
+      "name": "Venus",
+      "goal": "Study the storms and clouds",
+      "description": "Nobody lands here: the surface is hot enough to melt lead, and the air would crush a lander. We study it from orbit.",
+      "mission_card": {
+        "where": "38 to 261 million km away. About 6½ months.",
+        "job": "Study the storms from orbit and drop a cloud balloon.",
+        "why": "A runaway greenhouse made it the hottest planet.",
+        "nasa": "Magellan mapped it by radar. Nobody lands: the ground would melt lead."
+      },
+      "button": "Go to Venus",
+      "goals": {
+        "launch_safely": "Launch safely",
+        "cruise_safely": "Survive the trip to Venus",
+        "reach_orbit": "Enter Venus orbit",
+        "release_balloon": "Release a cloud balloon",
+        "map_storms": "Map the storms",
+        "send_storm_data": "Send the storm data home",
+        "leave_orbit": "Leave Venus orbit",
+        "land_home": "Land safely on Earth"
+      }
+    }
+  },
+  "launch_vehicles": {
+    "_readme": "Real rockets with their real names (Lead Programmer, 2026-11-12; numbers put in at Step 11b, 2026-11-13). The ids small / medium / large stay the same in the data files. Cost and lift are in game_data.json, launch_vehicles.",
+    "small": {
+      "name": "Falcon 9",
+      "description": "The cheapest: its booster lands and flies again. Most launch moments, tight timing.",
+      "button": "Pick Falcon 9"
+    },
+    "medium": {
+      "name": "Atlas V 401",
+      "description": "Launched the real MRO. Middle price, but it lifts the least. Normal timing.",
+      "button": "Pick Atlas V 401"
+    },
+    "large": {
+      "name": "Atlas V 541",
+      "description": "The priciest (it launched Curiosity). Lifts a lot. Fewest moments, easy timing.",
+      "button": "Pick Atlas V 541"
+    }
+  },
+  "missions": {
+    "mars_ice": {
+      "name": "Map the ice on Mars",
+      "description": "Send a spacecraft to orbit Mars and take pictures to find where the ice is. Future astronauts will need that water.",
+      "button": "Start building"
+    }
+  },
+  "crew_supplies": {
+    "_readme": "The Crew supplies group on the arm dashboard (shown in Flight and Arrival only). names and units = the words on each row. of_word = the words between the amount left and the full size, for example \"1250 kg of 1300\".",
+    "title": "Crew supplies",
+    "names": {
+      "food": "Food",
+      "water": "Water",
+      "air": "Air"
+    },
+    "units": {
+      "food": "kg",
+      "water": "L",
+      "air": "kg"
+    },
+    "of_word": "of"
+  },
+  "flight": {
+    "_readme": "Words on the screen during Flight (Stage 3): the Life Support stations. prompts = the line shown near a station (after \"Press E:\"); the _done and _none lines show when there is nothing left to do. ration_panel = the Food station's little screen.",
+    "prompts": {
+      "food": "Food station: ration the food",
+      "food_done": "Food station: rationing is on",
+      "water": "Water station: fix the leak",
+      "water_none": "Water station: no leak",
+      "air": "Air station: run the oxygen generator",
+      "air_done": "Air station: the oxygen generator is running"
+    },
+    "ration_panel": {
+      "title": "FOOD STATION",
+      "body": "Rationing means the crew eats a little less each day, so the food lasts longer. Once it is on, it stays on.",
+      "button": "Start rationing",
+      "close_hint": "E or Esc = close"
+    },
+    "generator_label": "RUN THE OXYGEN GENERATOR",
+    "leak_banner": "WATER LEAK! Go to the Water station"
+  },
+  "dashboard": {
+    "title": "Mission dashboard",
+    "hint_small": "Tab = bigger",
+    "hint_big": "Tab = lower your arm"
+  },
+  "timed_press_test": {
+    "_readme": "Words for the timed-press test bench (scenes/timed_press_test.tscn).",
+    "title": "Timed press test",
+    "label": "PRESS NOW",
+    "start_button": "Start ring",
+    "key_button": "Key: {key} (click to switch)",
+    "key_names": {
+      "space": "Space",
+      "e": "E"
+    },
+    "hint": "Press {key} (or click) when the ring closes on the target.",
+    "result_none": "Result: press Start",
+    "result_line": "Result: {result}",
+    "results": {
+      "Perfect": "Perfect",
+      "Good": "Good",
+      "Miss": "Miss"
+    },
+    "windows_line": "Windows: Perfect {perfect} s, Good {good} s"
+  },
+  "launch_screen": {
+    "_readme": "Words for the Launch screen (Stage 2). moments = the names of the launch moments. cost_kinds = how a Miss cost is written ({amount} is a percent).",
+    "title": "Launch!",
+    "hint": "Press SPACE (or click) when the ring closes on the target.",
+    "get_ready": "Get ready...",
+    "waiting": "...",
+    "moments": {
+      "liftoff": "Liftoff",
+      "max_pressure": "Max pressure",
+      "stage_separation": "Stage separation",
+      "fairing_release": "Fairing release",
+      "engine_cutoff": "Engine cutoff"
+    },
+    "results": {
+      "Perfect": "Perfect",
+      "Good": "Good",
+      "Miss": "Miss"
+    },
+    "summary_title": "Launch summary",
+    "no_losses": "No losses. A clean launch!",
+    "costs_title": "What the misses cost:",
+    "cost_line": "{moment}: {cost}",
+    "cost_kinds": {
+      "fuel": "lost {amount}% of the fuel",
+      "solar_panel": "solar panel {amount}% damaged",
+      "antenna": "antenna {amount}% damaged",
+      "instruments": "science instruments {amount}% damaged"
+    },
+    "next_button": "Start the flight",
+    "poll_title": "Go / no-go poll",
+    "poll_line": "{item}: {detail}",
+    "go_word": "GO",
+    "check_word": "CHECK",
+    "poll_items": {
+      "rocket": "Rocket",
+      "mass": "Mass",
+      "orbit": "Target orbit",
+      "blockers": "Design",
+      "weather": "Weather"
+    },
+    "mass_fits": "{mass} kg, the {rocket} can lift {capacity} kg",
+    "mass_over": "{mass} kg is MORE than the {rocket} can lift ({capacity} kg)",
+    "no_blockers": "no blockers",
+    "some_blockers": "{count} blocker(s) from Review",
+    "weather_clear": "clear skies",
+    "start_button": "Start the countdown",
+    "structure_title": "Structure check (from Hammering):",
+    "structure_ok": "Structure strength {strength}: everything held together.",
+    "structure_shake": "Structure strength {strength} is weak: the shaking loosened the {part} ({cost})."
+  },
+  "flight_screen": {
+    "_readme": "Words for the Flight screen (PLAN.md section 9). {planet} = the mission's place name. Log lines: green = fine, amber = warning, red = loss. events = the lines for each flight event: good = fine, saved = high build quality fixed it, bad = a loss (always says why).",
+    "title": "Flight to {planet}",
+    "clock": "Day {day} of {days}",
+    "speed_button": "Speed: {speed}x",
+    "next_button": "On to the mission report",
+    "earth": "Earth",
+    "tiles": {
+      "phase": "Phase",
+      "signal": "Signal delay",
+      "power": "Power made / used",
+      "reserve": "Cash reserve",
+      "data": "Data sent home"
+    },
+    "phases": {
+      "launch": "Launch",
+      "cruise": "Cruise",
+      "arrival": "Arrival"
+    },
+    "signal_value": "{minutes} min",
+    "power_value": "{made} / {used} W",
+    "reserve_value": "{amount} million $",
+    "data_value": "{amount} Gb",
+    "log_day": "DAY {day}  ",
+    "lines": {
+      "start": "Launch complete. The spacecraft is on its way to {planet}.",
+      "damage": "Launch damage: {what}.",
+      "no_damage": "Launch checks: no damage. All systems working.",
+      "routine": "All systems normal. Cruising.",
+      "low_quality": "Rushed assembly: the fix costs {cost} million $ from the cash reserve.",
+      "arrived": "Arrived at {planet}!",
+      "all_good": "Every system made it through the trip.",
+      "some_bad": "We made it, but {count} problem(s) will show in the mission report."
+    },
+    "events": {
+      "solar_flare": {
+        "good": "Solar flare! The {computer} is protected against radiation. No harm done.",
+        "saved": "Solar flare! The simple computer reset, but the careful assembly kept the data safe.",
+        "bad": "Solar flare! The simple computer has no radiation protection. It reset: {days} day(s) of data lost.",
+        "alert": "Solar flare coming! The simple computer has no radiation protection. Sound the flare alarm on the Bridge so the crew can shut it down safely.",
+        "fixed": "Solar flare! You sounded the alarm in time: the crew shut the simple computer down safely and no data was lost."
+      },
+      "far_from_earth": {
+        "good": "Halfway there. The signal to Earth is strong enough: {comms} Mb/s.",
+        "bad": "Radio too weak for this distance ({comms} Mb/s, needs at least {limit}). Data rate cut to {percent}%.",
+        "alert": "The signal is fading: our radio is too weak for this distance ({comms} Mb/s, needs at least {limit}). Re-aim the dish in the Comms Room.",
+        "fixed": "You re-aimed the dish exactly at Earth in time. The weak radio still gets the data home."
+      },
+      "dust_on_panels": {
+        "good": "Dust on the solar panels. There is spare power ({spare} W), so everything keeps running.",
+        "saved": "Dust on the solar panels. Power is short, but the well-built panels still give enough.",
+        "bad": "Dust on the solar panels. Only {spare} W spare, not enough: the {instrument} is switched off.",
+        "bad_none": "Dust on the solar panels. Only {spare} W spare: everything slows down. Data rate cut to {percent}%.",
+        "alert": "Dust on the solar panels! Only {spare} W spare. Turn the panels to face the Sun in the Power Room before the battery runs low.",
+        "fixed": "You turned the dusty panels straight at the Sun in time. Every instrument stays on."
+      },
+      "arrival_burn": {
+        "good": "Arrival burn: {fuel}% fuel left, enough for a smooth arrival.",
+        "bad": "Arrival burn: only {fuel}% fuel left, not enough. A rough arrival: the mission loses {months} months of lifetime.",
+        "alert": "Only {fuel}% fuel left for the arrival. Fly a careful course-correction burn on the Bridge to save fuel.",
+        "fixed": "Your careful course-correction burn saved enough fuel for a smooth arrival."
+      },
+      "heat_near_sun": {
+        "good": "Closer to the Sun, it gets hot. Our {thermal} get rid of the extra heat.",
+        "bad": "Closer to the Sun, it gets hot. Heaters can't cool anything down: the {instrument} overheats and is switched off.",
+        "bad_none": "Closer to the Sun, it gets hot. Heaters can't cool anything down: everything slows down. Data rate cut to {percent}%.",
+        "alert": "Closer to the Sun, it gets hot, and heaters can't cool anything down. Reset the hot breaker in the Power Room to shut off what is overheating.",
+        "fixed": "You reset the hot breaker in time. Nothing overheated."
+      },
+      "lunar_night": {
+        "good": "Lunar night: no sunlight for about two Earth weeks. Our {battery} and {thermal} keep everything warm.",
+        "bad": "Lunar night: no sunlight for about two Earth weeks. Our {battery} and {thermal} are not enough: a seismometer freezes. The mission loses {months} months of lifetime.",
+        "alert": "Lunar night is coming: no sunlight for about two Earth weeks, and our {battery} and {thermal} are not enough. Switch to battery saver in the Power Room.",
+        "fixed": "You switched to battery saver in time. The seismometers stay warm through the lunar night."
+      }
+    },
+    "signal_seconds": "{seconds} s"
+  },
+  "nasa": {
+    "_readme": "Words for the NASA resources steps (NASA_RESOURCES_PLAN.md). Rules: 20 words or fewer per pop-up; a real word gets its kid meaning once. {level}, {nickname}, {word}, {n}, {total} are filled in by the game.",
+    "cml_up": "CML {level}: {nickname}",
+    "cml_strip": "CML {level} · {nickname}",
+    "cml_none": "CML 0 · No idea yet",
+    "stamp_flash": "Dictionary stamp: {word} · {n} of {total}",
+    "tablet_cml": "Concept maturity: CML {level} of 4 ({nickname})",
+    "tablet_segment": "Mission segment: {name} ({meaning})",
+    "tablet_dictionary_hint": "G: Space Dictionary",
+    "dictionary_title": "Space Dictionary · {n} of {total} stamps",
+    "dictionary_locked": "???",
+    "dictionary_newest": "Newest stamp: {word}. {meaning} Real missions: {real}",
+    "dictionary_close": "G or Tab to close",
+    "dictionary_bonus_line": "Collect every stamp for a +{points} score bonus.",
+    "office_hours_title": "Office Hours",
+    "office_hours_key": "O: Office Hours (a hint)",
+    "office_hours_button": "Office Hours (a hint)",
+    "user_segment_line": "User segment: here is what scientists learned from your data.",
+    "twin_label": "Your mission twin",
+    "twin_line": "{name}: {text}",
+    "real_step_label": "Real teams: ",
+    "map_views": ["Whole trip", "Follow the ship", "Destination"],
+    "map_view_hint": "Bridge map: 1 whole trip · 2 follow the ship · 3 destination",
+    "not_possible_tag": "Won't work here",
+    "not_possible_prompt": "{name} won't work here: {reason}",
+    "end_of_mission_label": "When the mission ends",
+    "conops_title": "ConOps (the plan in pictures)",
+    "conops_steps": ["Launch", "Travel", "Arrive", "Do the science", "Send it home"],
+    "disciplines": {
+      "_readme": "The Mission Design Lab disciplines: each Design Room station is named for one (NASA_RESOURCES_PLAN.md N3).",
+      "rocket": "Launch Vehicle",
+      "orbit": "Mission Design",
+      "launch_window": "Mission Design",
+      "structure": "Structures",
+      "solar_panel": "Power",
+      "battery": "Power",
+      "attitude_control": "Attitude Control",
+      "thermal_control": "Thermal",
+      "antenna": "Communications",
+      "computer": "Avionics",
+      "instruments": "Payload"
+    },
+    "discipline_progress": "{discipline} station · {n} of {total}",
+    "payload_meaning": "Payload: the science tools your spacecraft carries.",
+    "gmat_tip": { "text": "NASA plans real spacecraft paths with free software called GMAT (General Mission Analysis Tool).", "source": "https://software.nasa.gov/software/GSC-19640-1 (NASA Software Catalog: GMAT is open source software for space mission design). Found by web search 2026-11-14: check it matches the challenge Resources tab." },
+    "equipment": {
+      "title": "Verification: does it all add up?",
+      "list_label": "Equipment List",
+      "checks_label": "Checks",
+      "header": ["Item", "Mass (kg)", "Power (W)", "Cost (million $)"],
+      "body": "Spacecraft body",
+      "rocket": "Rocket: {name}",
+      "orbit_fuel": "Orbit fuel: {name}",
+      "instrument": "Payload: {name}",
+      "part": "{discipline}: {card}",
+      "total": "Total",
+      "none": "-"
+    },
+    "end_of_mission": {
+      "moon": { "text": "The seismometers keep listening until their power runs out.", "source": "Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT)." },
+      "mars": { "text": "The orbiter stays in a high orbit, so it never crashes onto Mars.", "source": "Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT)." },
+      "venus": { "text": "The ship heads home; the balloon drifts in the clouds until its batteries run out.", "source": "Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT)." }
+    }
+  },
+  "landing": {
+    "_readme": "Words for the landing animation (scripts/landing.gd). captions = one real fact per destination (source next to it; the Science & Data Lead checks it). {m} = the altitude readout, {percent} = how much speed is left to lose (Venus).",
+    "titles": { "moon": "Landing on the Moon", "mars": "Landing on Mars", "venus": "Arriving at Venus" },
+    "altitude": "Altitude: {m} m",
+    "speed": "Braking burn: {percent}% to go",
+    "touchdown": "TOUCHDOWN!",
+    "in_orbit": "IN ORBIT!",
+    "captions": {
+      "moon": { "title": "No air, no parachute", "text": "The Moon has no air to slow a lander down, so its rocket engine has to brake all the way to the ground.", "source": "NASA: \"The lack of atmosphere on the moon prevents the use of parachutes or aerobrakes to slow the descent\": https://www.nasa.gov/stem-content/lunar-base-supply-egg-drop/" },
+      "mars": { "title": "Parachute, then rockets", "text": "Mars has thin air. The Phoenix lander used a parachute first, then rocket engines for the last part down.", "source": "NASA JPL Phoenix landing press kit (parachute at about 12.6 km, then pulsed descent thrusters to touchdown): https://www.jpl.nasa.gov/news/press_kits/phoenix-landing.pdf" },
+      "venus": { "title": "Slowing into orbit", "text": "Nobody lands on Venus. The ship fires its engine against its motion to slow down, so Venus's gravity can hold it in orbit.", "source": "NASA MAVEN orbit insertion: an engine burn \"to slow the spacecraft so that it can be captured into Martian orbit\": https://www.nasa.gov/image-article/mavens-mars-orbit-insertion/" }
+    }
+  },
+  "flight_ship": {
+    "_readme": "Words for the walkable ship during the flight (UPGRADE_PLAN_V2 step 21, scripts/flight.gd). stations = the floating label over each cyan pad and the calm task done there ({instrument} = the mission's key instrument). emergencies = design problems from the flight events: alert = the red line at the top, task = what E does. crew = emergencies that are not about the design: alert, task, the flight log line when it starts (log), when you fix it (fixed) and when time runs out (missed, says why and what it cost). {cost} = million $.",
+    "day": "Day {day} of {days}",
+    "press": "E: {task}",
+    "all_good": "{label}: all good",
+    "skip": "Enter: skip to arrival",
+    "goal_trip": "Fly to {planet}. Keep the ship running: do the yellow tasks, fix the red alerts.",
+    "goal_fix": "Fix it: {task}",
+    "task_log": "Crew: {task}. Done. Extra science data sent home.",
+    "voice_start": "This is our ship. Walk the rooms with WASD and press E at the glowing pads. The flight log is on the Bridge wall.",
+    "voice_alert": "Alarm! The marker shows where to go. I have {seconds} seconds.",
+    "voice_fixed": "Fixed it. Back to normal.",
+    "voice_missed": "Too late. That one will show up in the report.",
+    "stations": {
+      "bridge_burn": { "label": "Pilot seat", "task": "Check the course" },
+      "bridge_flare": { "label": "Space weather", "task": "Check the space weather report" },
+      "power_breaker": { "label": "Breakers", "task": "Check the breakers" },
+      "power_solar": { "label": "Solar panels", "task": "Turn the solar panels toward the Sun" },
+      "science_calibrate": { "label": "Instruments", "task": "Calibrate the {instrument}" },
+      "science_samples": { "label": "Samples", "task": "Check the sample freezer" },
+      "comms_dish": { "label": "Dish", "task": "Aim the dish at Earth" },
+      "comms_send": { "label": "Data", "task": "Send the data packets" },
+      "life_water": { "label": "Water", "task": "Refill the water tank" },
+      "life_air": { "label": "Air", "task": "Swap the air filter" },
+      "life_food": { "label": "Food", "task": "Hand out food" }
+    },
+    "emergencies": {
+      "solar_flare": { "alert": "SOLAR FLARE WARNING! Go to Space weather on the Bridge", "task": "Sound the flare alarm" },
+      "far_from_earth": { "alert": "SIGNAL FADING! Go to the Dish in the Comms Room", "task": "Re-aim the dish at Earth" },
+      "dust_on_panels": { "alert": "POWER DROP! Go to the Solar panels in the Power Room", "task": "Turn the panels to face the Sun" },
+      "arrival_burn": { "alert": "LOW FUEL! Go to the Pilot seat on the Bridge", "task": "Fly the course-correction burn" },
+      "heat_near_sun": { "alert": "OVERHEATING! Go to the Breakers in the Power Room", "task": "Reset the hot breaker" },
+      "lunar_night": { "alert": "LUNAR NIGHT COMING! Go to the Breakers in the Power Room", "task": "Switch to battery saver" }
+    },
+    "crew": {
+      "water_leak": { "alert": "WATER LEAK! Go to the Water station in Life Support", "task": "Patch the water leak", "log": "A water pipe is leaking in Life Support.", "fixed": "You patched the water leak in time.", "missed": "Nobody patched the water leak: the repair costs {cost} million $ from the cash reserve." },
+      "air_filter": { "alert": "AIR FILTER CLOGGED! Go to the Air station in Life Support", "task": "Swap the air filter", "log": "The air filter is clogged. The air is getting stale.", "fixed": "You swapped the air filter in time. Fresh air.", "missed": "The air filter stayed clogged: cleaning the air system costs {cost} million $ from the cash reserve." },
+      "breaker_trip": { "alert": "BREAKER TRIPPED! Go to the Breakers in the Power Room", "task": "Reset the breaker", "log": "A breaker tripped. Part of the ship lost power.", "fixed": "You reset the breaker in time. Power is back.", "missed": "The breaker stayed off too long: fixing the burnt wiring costs {cost} million $ from the cash reserve." }
+    }
+  },
+  "arrival_screen": {
+    "_readme": "Words for the arrival walk. tasks = the task list, one group per mission (left side must match the task ids in destinations.json > arrival > tasks). marks = what goes before a task or goal: open, done, failed. prompts = the line in the middle of the screen when you stand on a task spot: do = you can do it now, done = already done, missing = an instrument is not packed, waiting = do another task first. sending and leave are shared ({planet} = the place name). The checklist goal names are in \"destinations\" > goals.",
+    "tasks_title": "Tasks",
+    "checklist_title": "Mission checklist",
+    "marks": { "open": "[ ]", "done": "[x]", "failed": "[!]" },
+    "tasks": {
+      "mars": {
+        "reach": "Walk to the dig spot",
+        "drill": "Run the ice drill",
+        "analyze": "Analyze the sample and send the data home"
+      },
+      "moon": {
+        "place_1": "Place seismometer 1",
+        "place_2": "Place seismometer 2",
+        "place_3": "Place seismometer 3",
+        "point_antenna": "Point the antenna at Earth",
+        "send_quakes": "Watch the first quake and send the data home"
+      },
+      "venus": {
+        "release_balloon": "Release the cloud balloon",
+        "aim_camera": "Aim the cloud camera at a storm",
+        "send_wind": "Read the wind data and send it home"
+      }
+    },
+    "prompts": {
+      "sending": "Sending data home... {percent}%",
+      "leave": "Press Enter to leave {planet}",
+      "mars": {
+        "reach": { "done": "The dig spot" },
+        "drill": { "do": "Hold E to drill. Let go in the green zone.", "done": "Ice sample taken!", "missing": "Dig spot: no ice drill packed" },
+        "analyze": { "do": "Press E: put the sample in the analyzer", "done": "Data sent home!", "waiting": "Analyzer: you need an ice sample first" }
+      },
+      "moon": {
+        "place_1": { "do": "Press E: place seismometer 1", "done": "Seismometer 1 is listening", "missing": "No seismometer packed" },
+        "place_2": { "do": "Press E: place seismometer 2", "done": "Seismometer 2 is listening", "missing": "No seismometer packed" },
+        "place_3": { "do": "Press E: place seismometer 3", "done": "Seismometer 3 is listening", "missing": "No seismometer packed" },
+        "point_antenna": { "do": "Hold E to turn the antenna. Let go when it points at Earth (green).", "done": "The antenna points at Earth" },
+        "send_quakes": { "do": "Press E: watch for a quake and send the data", "done": "Quake data sent home!", "waiting": "Quake screen: place all 3 seismometers and point the antenna first" }
+      },
+      "venus": {
+        "release_balloon": { "do": "Press E: release the cloud balloon", "done": "The balloon is floating in the clouds", "missing": "Airlock: no balloon probe packed" },
+        "aim_camera": { "do": "Hold E to turn the camera. Let go when the storm is in view (green).", "done": "The camera is watching the storm", "missing": "Camera console: no cloud camera packed" },
+        "send_wind": { "do": "Press E: read the wind data and send it home", "done": "Wind data sent home!", "waiting": "Comms: release the balloon and aim the camera first" }
+      }
+    },
+    "controls_hint": "WASD = walk    Mouse = look    Space = jump    E = use    Esc = free the mouse"
+  },
+  "cutscene_return": {
+    "_readme": "The return-to-Earth slot (PLAN.md section 11). For now one line of text, then the report. The team makes a real cutscene later. One line per mission id.",
+    "lines": {
+      "mars": "The crew lifts off from Mars and heads home to Earth...",
+      "moon": "The crew lifts off from the Moon. Earth grows bigger in the window...",
+      "venus": "The ship fires its engines, leaves the yellow clouds of Venus behind, and heads home to Earth..."
+    },
+    "skip_hint": "Press Space to skip"
+  },
+  "cutscene_intro": {
+    "_readme": "Words for the intro cutscene in scenes/cutscene_intro.tscn.",
+    "skip_hint": "Press Space to skip",
+    "subtitles": {
+      "_readme": "The subtitle lines at the bottom of the cutscene. Each line has a speaker name (shown in amber) and the words (shown in white). The AnimationPlayer calls show_subtitle with one of these names at the right time.",
+      "commander_quit": {
+        "speaker": "Chief Mission Designer",
+        "text": "I quit!"
+      },
+      "general_who": {
+        "speaker": "General",
+        "text": "This mission launches on schedule. Who will run it?"
+      },
+      "general_need": {
+        "speaker": "General",
+        "text": "I need somebody. Anybody!"
+      },
+      "general_you": {
+        "speaker": "General",
+        "text": "You. I want you."
+      }
+    }
+  },
+  "controls": {
+    "_readme": "UPGRADE_PLAN_V2 step 8. keys = the Controls panel (H). hints = the small line at the top of each screen (by scene name); a screen that is not listed shows hint_default. UPGRADE_PLAN_V3 E: a hint shows three keys at most; H shows the rest.",
+    "title": "Controls",
+    "close": "Close (H)",
+    "muted": "Sound off (M)",
+    "unmuted": "Sound on (M)",
+    "keys": [
+      ["W A S D / arrows", "Walk"],
+      ["Space", "Jump · launch timed press"],
+      ["Shift", "Run"],
+      ["Mouse", "Look around"],
+      ["E", "Use / pick up / preview"],
+      ["1, 2, 3", "Look at option 1, 2, 3 · Bridge map views"],
+      ["O", "Office Hours: a hint (Design Lab)"],
+      ["G", "Space Dictionary (your stamps)"],
+      ["Enter", "Confirm"],
+      ["Q", "Question (when you see Q ?)"],
+      ["Backspace", "Go back one choice"],
+      ["R", "Quick fix on the ship (costs later)"],
+      ["Tab", "Mission tablet (map, resources)"],
+      ["H", "Show controls"],
+      ["M", "Mute"],
+      ["F", "Full screen"],
+      ["Esc", "Pause / free the mouse"]
+    ],
+    "hint_default": "H controls · M mute · Esc pause",
+    "hints": {
+      "start_menu": "",
+      "cutscene_intro": "",
+      "name": "Type your name, then Enter",
+      "character_room": "E look · Enter confirm · H more keys",
+      "mission_room": "E look · Enter confirm · Q question · N notebook",
+      "design_room": "E look · Enter confirm · Q question · N notebook",
+      "mission_school": "Enter next · Q question",
+      "minigame_clean": "",
+      "minigame_assembly": "",
+      "minigame_hammer": "",
+      "minigame_fuel": "",
+      "launch": "Space at the right moment · Q question · H more keys",
+      "flight": "E use · Q question · Tab tablet",
+      "landing": "Space, Enter or click to skip",
+      "arrival": "E use · Q question · Tab tablet"
+    }
+  },
+  "pause": {
+    "title": "Paused",
+    "resume": "Resume",
+    "controls": "Controls",
+    "quit": "Quit to start menu",
+    "volume_title": "Volume",
+    "Music": "Music",
+    "SFX": "Sound effects",
+    "Voice": "Voices",
+    "close": "Close"
+  },
+  "start_menu": {
+    "title": "How Did We Get Here?",
+    "story": [
+      "The chief mission designer just quit.",
+      "The General needs someone. Anyone.",
+      "Somehow, that someone is you."
+    ],
+    "start": "Start",
+    "leaderboard": "Leaderboard",
+    "controls": "Controls",
+    "settings": "Settings",
+    "credits": "Credits",
+    "close": "Close",
+    "team_line": "A NASA Space Apps Challenge 2026 game · Space Mission Design Game"
+  },
+  "credits": {
+    "title": "Credits",
+    "lines": [
+      "Made by the Magikid team for the NASA Space Apps Challenge 2026.",
+      "Lead Programmer · Art Designer · Head Writer · Video Editor · Science & Data Lead",
+      "Coach: the team's coach.",
+      "Launch and build screens inspired by Ms. Libby's game \"Mission Orbit\". Rebuilt in Godot: no code or art copied.",
+      "Real mission numbers from NASA (sources in the game's data files).",
+      "Planet maps: Earth, NASA Earth Observatory (Blue Marble). Mars, NASA / USGS Astrogeology (Viking mosaic). Moon, NASA's Scientific Visualization Studio (LRO). Venus, NASA/JPL (Magellan radar).",
+      "Made with the Godot Engine. All sounds and music are made in code."
+    ]
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "empty": "No missions flown on this computer yet. Be the first!",
+    "headers": ["#", "Name", "Character", "Mission", "Score", "Date"],
+    "note": "Saved on this computer only.",
+    "bot_tag": "(bot)",
+    "you_tag": "< you"
+  },
+  "launch3d": {
+    "_readme": "Words for the 3D launch (UPGRADE_PLAN_V2 step 16). prompts = the round ring buttons, one per launch moment (timing.json moment_ids). captions = the science box in the bottom-left: a title and one or two sentences of real science (see source).",
+    "tiles": { "time": "MISSION TIME", "altitude": "ALTITUDE", "speed": "SPEED", "status": "STATUS", "cabin": "CABIN" },
+    "status": { "pad": "ON PAD", "ascent": "ASCENT", "orbit": "IN ORBIT", "hold": "HOLD", "separated": "SEPARATED", "stable": "STABLE" },
+    "time_format": "T{sign}{minutes}:{seconds}",
+    "altitude_format": "{value} km",
+    "speed_format": "{value} km/h",
+    "site": "Launch site: Cape Canaveral, Florida",
+    "rocket_chip": "Rocket: {rocket}",
+    "scrub": "Scrub - back to design",
+    "skip": "Skip",
+    "poll_title": "Go / No-Go Poll",
+    "go": "GO",
+    "caution": "CAUTION",
+    "poll_items": { "rocket": "Rocket", "mass": "Mass vs capacity", "orbit": "Target orbit", "design": "Design check", "weather": "Weather" },
+    "weather_quiet": "light winds, quiet Sun",
+    "all_go": "All stations GO.",
+    "caution_line": "Caution: {reason}",
+    "timeline_title": "Flight Timeline",
+    "chips": { "countdown": "Countdown", "surprise": "Surprise", "orbit": "Orbit", "burn": "Burn", "release": "Release", "stable": "Stable" },
+    "go_button": "GO FOR LAUNCH",
+    "prompts": { "liftoff": "IGNITION", "max_pressure": "THROTTLE DOWN", "stage_separation": "STAGE", "fairing_release": "FAIRING", "engine_cutoff": "RELEASE", "rebalance": "REBALANCE" },
+    "ring_hint": "Space or click when the ring closes",
+    "results": { "Perfect": "PERFECT!", "Good": "GOOD", "Miss": "MISS" },
+    "computer_took_over": "Computer took over",
+    "engine_out": "ENGINE OUT!",
+    "debris_title": "DEBRIS ALERT",
+    "debris_text": "Space junk ahead! Wait for it to pass, or release the spacecraft now?",
+    "debris_wait": "WAIT",
+    "debris_release": "RELEASE NOW",
+    "hold_detumble": "HOLD SPACE TO DETUMBLE",
+    "spin_line": "Spin: {value}°/s",
+    "stable": "STABLE",
+    "summary_next": "Fly to {planet}",
+    "captions": {
+      "liftoff": { "title": "Liftoff!", "text": "The engines push hot gas down, and the gas pushes the rocket up. That is Newton's third law: every push has an equal push back." },
+      "max_pressure": { "title": "Max Q", "text": "About a minute after liftoff, the air presses hardest on the rocket. Throttling down for a moment keeps it from being damaged." },
+      "stage_separation": { "title": "Staging", "text": "The empty first stage drops away. With less weight to carry, the second stage can go much faster." },
+      "fairing_release": { "title": "Fairing release", "text": "High above most of the air, the nose cone is not needed any more. It splits open and falls away to save weight." },
+      "orbit": { "title": "Orbit", "text": "In orbit you are falling around Earth all the time: you move sideways so fast that you keep missing the ground." },
+      "burn": { "title": "Leaving Earth", "text": "One more burn speeds the spacecraft up enough to escape Earth's pull and head for {planet}." },
+      "detumble": { "title": "Detumble", "text": "After separation the spacecraft can spin. Wheels inside it stop the spin so the antenna can point at Earth." }
+    },
+    "source": "liftoff (Newton's third law): https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html; Max Q: https://www.nasa.gov/blogs/commercialcrew/2026/10/01/rocket-reaches-max-q-5/ and the SLS throttle-down: https://www.nasa.gov/wp-content/uploads/2026/01/sls-5558-artemis-ii-sls-reference-guide-final-review-508-012026.pdf; staging: https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/balloon_staging.html; fairing (protects the satellite from aerodynamic pressure and heating, then jettisoned): https://science.nasa.gov/blogs/pace/2024/02/01/pace-spacecraft-encapsulated-in-payload-fairing/; orbit (continuous free fall): https://science.nasa.gov/learn/basics-of-space-flight/chapter3-4/; detumble (reaction wheels point the spacecraft): https://science.nasa.gov/learn/basics-of-space-flight/chapter11-2/"
+  },
+  "choice_room": {
+    "_readme": "Words for the 3D Choice Room (UPGRADE_PLAN_V2 steps 13-14). titles = the big title on the wall for each choice; room_names = the sign over the screen.",
+    "room_names": { "character": "Who Are You?", "mission": "Mission Room", "design": "Mission Design Lab" },
+    "wall": {
+      "_readme": "The wall screen's small words (UI_POLISH_PLAN_V4 Step 2). short_resources = the six names on the slim strip (short so they fit).",
+      "back": "Backspace · Back",
+      "next": "Enter · Confirm",
+      "next_instruments": "Enter · Done packing",
+      "picked": "Picked",
+      "packed": "Packed",
+      "not_here": "Won't work here",
+      "more_blockers": "(+{n} more)",
+      "steps": "{n} of {total}",
+      "right_title": "Your mission",
+      "right_title_mission": "This mission",
+      "right_title_character": "This person",
+      "short_resources": { "budget": "Budget", "mass": "Mass", "power": "Power", "communications": "Signal", "data": "Data", "mission_lifetime": "Lifetime" }
+    },
+    "titles": {
+      "character": "Who are you?",
+      "mission": "Where are we going?",
+      "rocket": "Pick a rocket",
+      "orbit": "Pick an orbit",
+      "launch_window": "Pick a launch date",
+      "instruments": "Pack the science instruments"
+    },
+    "part_title": "Pick the {part}",
+    "short_names": { "character": "Character", "mission": "Mission", "rocket": "Rocket", "orbit": "Orbit", "launch_window": "Launch window", "instruments": "Instruments" },
+    "progress": "{name} · {n} of {total}",
+    "prompt_preview": "E: look at {name}",
+    "prompt_toggle_on": "E: pack {name}",
+    "prompt_toggle_off": "E: unpack {name}",
+    "prompt_confirm": "E or Enter: CONFIRM {name}",
+    "prompt_confirm_instruments": "E or Enter: CONFIRM these instruments",
+    "prompt_pick_first": "Walk to a pedestal and press E (or press 1, 2, 3)",
+    "prompt_locked": "This mission is locked.",
+    "console_label": "CONFIRM",
+    "previewing": "Looking at: {name}",
+    "nothing_previewed": "Walk to a pedestal and press E, or press 1, 2 or 3.",
+    "view_outside": "Outside",
+    "view_inside": "Inside",
+    "tile": "{before} → {after}",
+    "limit_max": "max {value}",
+    "limit_min": "min {value}",
+    "packed_tag": "PACKED",
+    "key_tag": "Needed for the goal!",
+    "locked_tag": "LOCKED",
+    "cost_line": "Cost: {value} million $",
+    "lift_line": "Lift: {value} kg",
+    "fuel_line": "Fuel to get there: {value} kg",
+    "difficulty_line": "Difficulty: {value}",
+    "mission_labels": { "where": "Where", "job": "The job", "why": "Why it matters", "nasa": "NASA has done this" },
+    "staff_labels": { "who": "Who", "knows": "Knows", "help": "Help you get", "difficulty": "Difficulty" },
+    "difficulty_dots": { "easy": "•    Easy", "medium": "• •    Medium", "hard": "• • •    Hard" },
+    "trip_line": "Trip: about {days} days",
+    "goal_line": "Goal: {goal}",
+    "blockers_title": "Mission blockers:",
+    "no_blockers": "No blockers. This design can fly.",
+    "back_hint": "Backspace: back to {name}",
+    "confirmed": "{name} locked in.",
+    "voice_label": "Inner voice:",
+    "hired_line": "{name}! You're hired. Don't break anything.",
+    "hired_tag": "HIRED: {name}",
+    "hired_stamp": "HIRED",
+    "hired_card": "From now on, you are {character}.",
+    "goal_text": "Choose the {name}",
+    "general_name": "General"
+  },
+  "notebook": {
+    "_readme": "The voice learns (INNOVATION.md Feature B). When a mission or checkpoint fails, the character earns the word for the main cause. terms = the 10 challenge words with a one-sentence meaning. causes = which failure teaches which words (the first word not yet earned is taught, so the same failure twice teaches the next word). run = the line about THIS run; {blanks} come from the run's real numbers. Failures with no run line use their own report sentence (inner_voice.json resource_failures > what).",
+    "title": "{name}'s Notebook",
+    "progress": "{n} of {total} words earned",
+    "locked": "??? (fail a mission to learn this word)",
+    "this_run": "What happened:",
+    "close": "N or Esc to close",
+    "button": "Notebook (N)",
+    "new_word_title": "New word in your notebook: {word}",
+    "new_word_flash": "New notebook word: {word}",
+    "known_word_title": "Notebook word: {word} (already learned)",
+    "terms": [
+      { "id": "payload", "word": "Payload", "meaning": "The science instruments a spacecraft carries to do its job." },
+      { "id": "launch_vehicle", "word": "Launch vehicle", "meaning": "The rocket that carries the spacecraft from the ground into space." },
+      { "id": "orbit", "word": "Orbit", "meaning": "The curved path a spacecraft follows around a planet or moon." },
+      { "id": "orbital_altitude", "word": "Orbital altitude", "meaning": "How high above the surface a spacecraft circles." },
+      { "id": "payload_capacity", "word": "Payload capacity", "meaning": "The most mass a rocket can lift to where it is going." },
+      { "id": "power_consumption", "word": "Power consumption", "meaning": "How much electric power the parts use, measured in watts." },
+      { "id": "data_rate", "word": "Data rate", "meaning": "How fast data can be sent home, measured in megabits per second." },
+      { "id": "attitude_control", "word": "Attitude control", "meaning": "The system that turns and points the spacecraft the right way." },
+      { "id": "mission_lifetime", "word": "Mission lifetime", "meaning": "How long the spacecraft is built to keep working." },
+      { "id": "trade_off", "word": "Trade-off", "meaning": "A choice where you gain one thing and give up another." }
+    ],
+    "causes": {
+      "mass": { "words": ["payload_capacity", "launch_vehicle"], "run": "Your spacecraft was {over} kg over the {rocket}'s payload capacity of {limit} kg." },
+      "budget": { "words": ["trade_off", "launch_vehicle"], "run": "You spent {value} million $, which is {over} million $ over the {limit} million $ budget." },
+      "power": { "words": ["power_consumption"], "run": "Your parts used {over} W more power than the solar panels made." },
+      "power_event": { "words": ["power_consumption"] },
+      "communications": { "words": ["data_rate", "attitude_control"], "run": "Your signal was {value} Mb/s, but the mission needed at least {limit} Mb/s." },
+      "communications_live": { "words": ["data_rate", "attitude_control"], "run": "Your signal dropped to {value} Mb/s, but the mission needed at least {limit} Mb/s." },
+      "data": { "words": ["payload", "trade_off"], "run": "Your instruments made {value} Gb/day, but the goal needed at least {limit} Gb/day." },
+      "data_live": { "words": ["payload", "trade_off"], "run": "Your instruments sent {value} Gb/day, but the goal needed at least {limit} Gb/day." },
+      "mission_lifetime": { "words": ["mission_lifetime"], "run": "Your spacecraft was built for {value} months, but the mission needed {limit}." },
+      "mission_lifetime_live": { "words": ["mission_lifetime"], "run": "Your spacecraft lasted {value} months, but the mission needed {limit}." },
+      "missing_instrument": { "words": ["payload", "trade_off"], "run": "You flew without the {instrument}, so the goal could not happen." },
+      "flight_far_from_earth": { "words": ["data_rate", "attitude_control"] },
+      "flight_dust_on_panels": { "words": ["power_consumption"] },
+      "flight_lunar_night": { "words": ["mission_lifetime"] },
+      "flight_arrival_burn": { "words": ["orbit", "orbital_altitude"] },
+      "return_depart": { "words": ["orbit"] },
+      "arrival_send_data": { "words": ["data_rate"] },
+      "arrival_send_quake_data": { "words": ["data_rate"] },
+      "arrival_send_storm_data": { "words": ["data_rate"] },
+      "arrival_no_drill": { "words": ["payload"] },
+      "arrival_no_seismometer": { "words": ["payload"] },
+      "arrival_no_balloon": { "words": ["payload"] },
+      "arrival_no_cloud_camera": { "words": ["payload"] }
+    }
+  },
+  "bots": {
+    "_readme": "Made-up names for the bot crewmates (UPGRADE_PLAN_V2 step 27). Never use a real person's name here.",
+    "crew": ["Bolt", "Nova", "Pip"]
+  },
+  "tablet": {
+    "title": "Mission tablet",
+    "resources": "Resources",
+    "goal": "Goal",
+    "timers": "Running timers",
+    "no_timers": "No timers running.",
+    "map": "Map",
+    "no_map": "No map on this screen.",
+    "close_hint": "Tab to close",
+    "ok_mark": "[OK]",
+    "bad_mark": "[X]",
+    "value_line": "{name}: {value} {unit}"
+  },
+  "mission_school": {
+    "_readme": "UPGRADE_PLAN_V3 B4: Mission School, the General's lesson after the briefing. One beat per resource: meaning (one sentence) + limit (one sentence, the numbers come from the data files: {value} {unit}, {rocket}). Last beat: the ripple demo. 13 lines in all. Head Writer: these are drafts in the General's gruff-teacher voice; the jokes are his, the facts stay true. The numbers must never be typed in by hand.",
+    "title": "Mission School",
+    "speaker": "General",
+    "beats": {
+      "budget": { "meaning": "Budget is money. Every part costs some, and the rocket costs the most.", "limit": "You get {value} {unit}. Not a dollar more." },
+      "mass": { "meaning": "Mass is weight. A rocket can only lift so much.", "limit": "Your limit is what your rocket lifts. The {rocket} lifts {value} {unit}." },
+      "power": { "meaning": "Power is electricity. Solar panels make it, and every part eats it.", "limit": "Spare power must stay at {value} {unit} or more. Never below." },
+      "communications": { "meaning": "Communications is how fast your radio talks to Earth.", "limit": "You need at least {value} {unit}, or your data stays stuck out there." },
+      "data": { "meaning": "Data is the science your instruments collect every day.", "limit": "Collect at least {value} {unit}. Otherwise, why did we even go?" },
+      "mission_lifetime": { "meaning": "Mission lifetime is how long your spacecraft keeps working.", "limit": "It must last at least {value} {unit}. Don't let it quit early." }
+    },
+    "ripple": "Touch one thing, and everything else moves. That is your whole job.",
+    "ripple_title": "Ripple effect",
+    "trip_line": "Trip: about {days} days",
+    "beat_dots": "{n} of {total}",
+    "enter_hint": "Enter: next",
+    "skip_hint": "Enter: next · S: skip the lesson",
+    "tablet_hint": "L: Mission School again",
+    "replay_close": "Close",
+    "replay_next": "Next"
+  },
+  "checklist": {
+    "_readme": "UPGRADE_PLAN_V3 A3: the success checklist, grouped by mission phase. phases = the phase names. progress = '3 of 8 done'. now_label = the tablet heading for the current phase's items. return = the one line each for Depart and Home on the return screen and the report ({why} = the reason).",
+    "phases": { "launch": "Launch", "cruise": "Cruise", "arrive": "Arrive", "land": "Land", "science": "Science", "data": "Data", "depart": "Depart", "home": "Home" },
+    "phase_line": "{phase}: {items}",
+    "progress": "{done} of {total} done",
+    "now_label": "Checklist now",
+    "return": {
+      "depart_ok": "Smooth lift-off: enough fuel left to leave.",
+      "depart_bad": "Rough lift-off: fuel was low ({fuel}% left), so leaving was a struggle.",
+      "home_ok": "Smooth landing on Earth: the structure held together.",
+      "home_bad": "Rough landing: the structure was weak ({strength}%), so the ride home shook parts loose."
+    }
+  },
+  "question_card": {
+    "_readme": "UPGRADE_PLAN_V3 A2: the Q card. tag = the small sign when there is something to ask about ({word} = the glossary word). The card's own words come from the glossary (data/nasa_resources.json). astronaut_label = the Astronaut fact line (C4) when the card has one.",
+    "tag": "Q ?  {word}",
+    "real_label": "Real missions:",
+    "source_label": "Source:",
+    "astronaut_label": "Astronaut fact:",
+    "close": "Q or Esc to close"
+  },
+  "hud": {
+    "timer_line": "{label}: {seconds} s",
+    "waypoint": "{label} · {meters} m"
+  },
+  "your_file": {
+    "_readme": "UPGRADE_PLAN_V2 step 11: the paper file after the character is chosen.",
+    "folder_label": "PERSONNEL FILE · TOP SECRET",
+    "stamp": "HIRED",
+    "name_label": "Name",
+    "who_label": "Who you are",
+    "difficulty_label": "Difficulty",
+    "job_label": "Your job",
+    "job": "Design a space mission that really works, before the General notices you have never done this before.",
+    "resources_label": "The six things you must keep in balance",
+    "difficulty_words": { "easy": "Easy", "medium": "Medium", "hard": "Hard" },
+    "resource_lines": {
+      "budget": "Budget: the money. Every part and the rocket cost some.",
+      "mass": "Mass: how heavy it all is. The rocket can only lift so much.",
+      "power": "Power: what the solar panels make, minus what the parts use.",
+      "communications": "Communications: how fast the radio can talk to Earth.",
+      "data": "Data: how much science the instruments collect every day.",
+      "mission_lifetime": "Mission lifetime: how many months the spacecraft keeps working."
+    },
+    "next": "Next"
+  },
+  "briefing": {
+    "_readme": "UPGRADE_PLAN_V2 step 11: the Mission Briefing after the mission is chosen. The General reads the first line. Facts here need the Science & Data Lead's check and a link (see source).",
+    "folder_label": "MISSION BRIEFING",
+    "general_name": "General",
+    "purpose_label": "What it is for",
+    "why_label": "Why it matters",
+    "checklist_label": "Success checklist",
+    "start_label": "What you start with",
+    "tradeoff_label": "The main trade-off",
+    "based_on_label": "Based on real missions",
+    "max_line": "{name}: at most {value} {unit}",
+    "min_line": "{name}: at least {value} {unit}",
+    "mass_line": "Mass: whatever your rocket can lift (you pick the rocket next)",
+    "trip_line": "Trip: about {days} days",
+    "checklist_mark": "[ ]",
+    "next": "Start designing",
+    "_cards_readme": "UPGRADE_PLAN_V3 B3: the briefing is four cards that type out one at a time (25 words or fewer each). card_titles = the four headings. cards (per mission) = why, tradeoff, real; card 2 is the checklist by phase, one line at a time. [b]...[/b] = a bold key word; card_questions = the Q card for each card (glossary ids). crew_note = the honest one-liner: no astronaut has been to Mars or Venus. enter_hint / card_dots = the bottom line.",
+    "card_titles": ["Why we are going", "What success looks like", "The big trade-off", "Real missions like this one"],
+    "enter_hint": "Enter: finish the line · Enter again: next card",
+    "card_dots": "Card {n} of {total}",
+    "next_card": "Next",
+    "missions_cards": {
+      "moon": {
+        "why": "We go to the Moon to hear it [b]shake[/b]. Moonquakes show what is deep inside, like an X-ray.",
+        "tradeoff": "The lunar night lasts two weeks with no sun. A bigger [b]battery[/b] keeps you alive, but adds mass and cost.",
+        "real": "Apollo astronauts left [b]seismometers[/b] on the Moon. They heard moonquakes until 1977.",
+        "card_questions": ["moon", "requirement", "battery", "instrument"],
+        "crew_note": ""
+      },
+      "mars": {
+        "why": "We go to Mars to find water [b]ice[/b]. Future astronauts could drink it, breathe it and make rocket fuel.",
+        "tradeoff": "The ice drill is heavy and power-hungry. Every kilogram of [b]mass[/b] must still fit on your rocket.",
+        "real": "MRO mapped Mars from orbit. The [b]Phoenix[/b] lander dug up real water ice in 2008.",
+        "card_questions": ["mars", "requirement", "mass", "mission"],
+        "crew_note": "No astronaut has been to Mars yet. Our crew there is a game-design choice."
+      },
+      "venus": {
+        "why": "We go to Venus to chase its [b]storms[/b]. Learning why it got so hot helps us understand Earth's climate.",
+        "tradeoff": "The balloon and the cloud camera need [b]power[/b] and money, and the radio must be strong enough to send it home.",
+        "real": "Two VEGA balloons floated in Venus's clouds in 1985. NASA's [b]Magellan[/b] mapped Venus with radar.",
+        "card_questions": ["venus", "requirement", "power", "mission"],
+        "crew_note": "No astronaut has been to Venus. Our crew ship there is a game-design choice."
+      }
+    },
+    "missions": {
+      "moon": {
+        "general": "Listen up. We are going to the Moon to hear it shake.",
+        "purpose": "Find out what is inside the Moon by listening to moonquakes.",
+        "why": "Quakes travel through different rock in different ways. A network of seismometers works like an X-ray of the Moon's insides.",
+        "tradeoff": "The lunar night lasts about two Earth weeks with no sunlight. A bigger battery keeps the instruments alive, but it is heavy and costs money.",
+        "based_on": "Apollo astronauts left seismometers on the Moon. They recorded moonquakes until 1977."
+      },
+      "mars": {
+        "general": "Listen up. We are going to Mars to find water ice.",
+        "purpose": "Find water ice under the ground on Mars and send the data home.",
+        "why": "Ice could give future astronauts water, air and rocket fuel. It also tells us how the climate of Mars changed.",
+        "tradeoff": "The ice drill is heavy and uses a lot of power. Every kilogram you add must still fit on the rocket.",
+        "based_on": "Mars Reconnaissance Orbiter (launched 2005) mapped Mars from orbit. The Phoenix lander (2008) dug up real water ice."
+      },
+      "venus": {
+        "general": "Listen up. We are going to Venus to chase its storms.",
+        "purpose": "Study the fast storms in the thick clouds of Venus, from orbit and with a balloon.",
+        "why": "Venus is almost as big as Earth, but a runaway greenhouse effect made it the hottest planet. Learning why helps us understand our own climate.",
+        "tradeoff": "The balloon and the cloud camera both need power and money, and the radio must be strong enough to send it all home.",
+        "based_on": "The Soviet VEGA balloons floated in the clouds of Venus in 1985. NASA's Magellan mapped Venus with radar."
+      }
+    },
+    "source": "moon (Apollo seismometers until 1977, moonquakes show the inside): https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01 and https://www.jpl.nasa.gov/missions/farside-seismic-suite/; lunar night 14 Earth days: https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf; mars (ice for drinking water, air and rocket fuel): https://www.nasa.gov/solar-system/planets/mars/nasa-is-locating-ice-on-mars-with-this-new-map/; MRO launched 2005: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A; Phoenix found water ice: https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/; venus (runaway greenhouse, hottest planet): https://science.nasa.gov/venus/venus-facts/; VEGA balloons 1985: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F; Magellan radar map: https://nssdc.gsfc.nasa.gov/planetary/magellan.html"
+  },
+  "extras": {
+    "_readme": "Words for the extra features added on 2026-11-14 (numbers and their sources: data/extras.json). The Real Mission Moments have their NASA sources in moments > sources.",
+    "source": "Real facts checked against NASA pages on 2026-11-15: see the sources in data/extras.json and in moments > sources below.",
+    "launch_window": {
+      "short_name": "Launch window",
+      "title": "Pick a launch date",
+      "discipline": "Mission Design",
+      "names": { "best": "Best date", "ok": "OK date", "poor": "Poor date" },
+      "descriptions": {
+        "best": "Earth and the target line up just right: the shortest trip and the least fuel. But the window is short, so the launch moments are tighter.",
+        "ok": "A fair date. A normal trip, normal fuel, a normal launch window.",
+        "poor": "The planets are badly placed: a longer trip (more food, water and air used) and extra fuel to carry. The window is wide, so the launch is easier."
+      },
+      "trip_line": "Trip: {days} days",
+      "fuel_line": "Fuel: {sign}{value} kg",
+      "window_line": "Window: {word}",
+      "window_words": { "best": "short", "ok": "normal", "poor": "wide" },
+      "did_you_know": "Earth and Mars line up for a good launch only about every {months} months. Miss it and you wait two years!",
+      "did_you_know_moon": "Moon rockets can only leave about one week in every four, when the Moon is in the right spot. NASA's Artemis II had exactly that pattern.",
+      "confirmed": "Launch date locked in: {name}."
+    },
+    "lineup": {
+      "height_line": "{meters} m tall = {buses} school buses",
+      "bus_tag": "The yellow block is a school bus, to scale."
+    },
+    "tap_part": {
+      "hint": "Click a part to learn its job",
+      "jobs": {
+        "structure": "Frame: holds everything together tightly",
+        "solar_panel": "Solar panels: make power from sunlight",
+        "antenna": "Antenna: sends our data to Earth",
+        "thermal_control": "Heat control: not too hot, cold",
+        "battery": "Battery: power for the dark",
+        "computer": "Computer: the spacecraft's thinking brain",
+        "tanks": "Fuel tanks: fuel for engine burns",
+        "attitude_control": "Pointing wheels: turn the spacecraft around",
+        "instruments": "Instruments: do the mission's real science"
+      }
+    },
+    "patch": {
+      "title": "Design your mission patch",
+      "subtitle": "Every NASA mission has a patch. The crew wears it, and it flies on the rocket.",
+      "shape_title": "Shape",
+      "color_title": "Color",
+      "icon_title": "Icon",
+      "shapes": { "circle": "Circle", "shield": "Shield", "hexagon": "Hexagon" },
+      "icons": { "rocket": "Rocket", "planet": "Planet", "star": "Star", "moon": "Moon" },
+      "next": "Fly this patch",
+      "report_title": "Mission patch",
+      "where": "It will be on your rocket, your suit, your report and the leaderboard."
+    },
+    "peanuts": {
+      "jar": "Lucky peanuts: {count}  (E or click the jar)",
+      "empty": "The jar is empty",
+      "ate": "+1 lucky peanut (it changes nothing!)",
+      "fact": "Since {year}, the team at NASA's Jet Propulsion Laboratory has eaten lucky peanuts before big moments. It changes nothing, but it is a fun tradition."
+    },
+    "weather": {
+      "amber": "strong winds high up",
+      "green_after_wait": "calm again (you waited a day)",
+      "ask_title": "WEATHER IS AMBER",
+      "ask_text": "Strong winds high above the pad will shake the rocket. Launch now and the launch moments get tighter, or wait one day for {cost} million $. Real launches are often delayed for winds like these.",
+      "go_now": "Launch now",
+      "wait": "Wait a day ({cost} M$)",
+      "waited_log": "We waited one day for better weather: {cost} million $."
+    },
+    "two_way_fix": {
+      "prompt": "Hold E: proper fix ({seconds} s)   ·   R: quick fix (costs later)",
+      "holding": "Fixing properly... {percent}%",
+      "quick_done": "Quick fix done. It will cost us later.",
+      "quick_log_event": "Quick fix on day {day} cost {amount} Gb of data later.",
+      "quick_log_crew": "Quick fix on day {day} cost {amount} million $ in repairs later.",
+      "quick_note": "Quick patch: costs us later."
+    },
+    "moments": {
+      "title": "Real Mission Moment:",
+      "solar_flare": "In 2003 huge solar storms hit spacecraft all over the solar system, and one science instrument on Mars Odyssey stopped working.",
+      "far_from_earth": "Voyager 1 is so far away that its radio signal takes almost a whole day to reach Earth.",
+      "dust_on_panels": "Dust on its solar panels ended NASA's InSight lander on Mars in 2022.",
+      "arrival_burn": "In 1999 Mars Climate Orbiter was lost at arrival because one team used pounds and another used metric units.",
+      "heat_near_sun": "Parker Solar Probe hides behind a heat shield that gets almost 1,400 degrees Celsius hot, while the instruments behind it stay cool.",
+      "lunar_night": "A night on the Moon lasts about 14 Earth days, so landers need heaters and batteries to survive it.",
+      "water_leak": "In 2013 water leaked into an astronaut's helmet during a spacewalk outside the space station.",
+      "air_filter": "On Apollo 13 the crew built an air filter out of a box, tape and plastic bags to stay alive.",
+      "breaker_trip": "Apollo 12 was hit by lightning twice during launch. One switch flip, SCE to AUX, brought its data back.",
+      "sources": {
+        "solar_flare": "Mars Odyssey MARIE failed during the 28 October 2003 solar storm: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=2001-013A-03",
+        "far_from_earth": "\"a radio signal takes about 22 1/2 hours to reach Voyager 1\": https://www.jpl.nasa.gov/news/nasas-voyager-1-resumes-sending-engineering-updates-to-earth/",
+        "dust_on_panels": "InSight retired in December 2022 after dust on its solar panels drained its power: https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/",
+        "arrival_burn": "Mars Climate Orbiter: data in pound-seconds instead of Newton-seconds (Mishap Investigation Board): https://llis.nasa.gov/llis_lib/pdf/1009464main1_0641-mr.pdf",
+        "heat_near_sun": "The heat shield reaches nearly 2,500 F (about 1,377 C): https://www.nasa.gov/solar-system/traveling-to-the-sun-why-wont-parker-solar-probe-melt/",
+        "lunar_night": "\"a lunar night lasts 14 Earth days\": https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf",
+        "water_leak": "EVA 23, 16 July 2013: water filled an astronaut's helmet: https://www.nasa.gov/general/10-years-ago-eva-23-how-a-high-visibility-close-call-cut-short-a-spacewalk/",
+        "air_filter": "Apollo 13 CO2 adapter from canisters, plastic bags, cardboard and tape: https://www.nasa.gov/history/afj/ap13fj/15day4-mailbox.html",
+        "breaker_trip": "Apollo 12 lightning and \"SCE to Aux\": https://www.nasa.gov/history/50-years-ago-return-to-the-moon/"
+      }
+    },
+    "zero_g": {
+      "tag": "Zero-g indicator"
+    },
+    "spotting": {
+      "prompt": "E: snap a photo of {name}",
+      "names": { "earth": "Earth", "moon": "the Moon", "sun": "the Sun", "mars": "Mars", "venus": "Venus" },
+      "got": "Spotted {name}! ({count} of {total} sightings)",
+      "got_again": "Another photo of {name}.",
+      "report_title": "Window postcards",
+      "sightings_line": "Sightings: {list}",
+      "none": "No postcards this time. Next trip, look out a window and press E!"
+    },
+    "ask_crew": {
+      "prompt": "E: ask the crew",
+      "speaker": "Crew",
+      "rooms": {
+        "bridge": "This is the Bridge. We steer, and we plan the big engine burns here.",
+        "power_room": "The Power Room. Solar panels and batteries keep every system awake.",
+        "science_bay": "The Science Bay. Our instruments get tested here on the way.",
+        "comms_room": "The Comms Room. The big dish sends our data home to Earth.",
+        "life_support": "Life Support. Food, water and air for everyone on board.",
+        "hallway": "This hallway joins every room. Follow the glowing pads when there is a job.",
+        "character": "Welcome! Pick who you are. Each one makes the game easier or harder.",
+        "mission": "Each globe is a mission. The goal decides everything you build after.",
+        "design": "Every part changes the six numbers. Watch the wall screen when you preview one."
+      }
+    },
+    "part_jobs": {
+      "FIN": "keeps it straight", "TANK": "holds the fuel", "BOLT": "holds parts together", "LEG": "stands it up",
+      "DISH": "talks to Earth", "WIRE": "carries the power", "VENT": "lets gas out", "CAMERA": "takes the pictures",
+      "ANTENNA": "talks to Earth", "BATTERY": "power for darkness", "THRUSTER": "small steering pushes", "NOSE CONE": "cuts through air",
+      "COMPUTER": "the spacecraft's brain", "RADIATOR": "throws heat away", "ENGINE BELL": "aims the push",
+      "SOLAR PANEL": "power from sunlight", "HEAT SHIELD": "blocks burning heat", "STAR TRACKER": "steers by stars",
+      "REACTION WHEEL": "spins to turn", "FUEL TANK": "holds the fuel", "SPECTROMETER": "finds what's inside", "LANDING LEG": "soft touchdown legs"
+    },
+    "mostly_fuel": "Fuel = {percent}% of the rocket's weight on the pad",
+    "signal_delay": {
+      "seconds": "{value} seconds",
+      "minutes": "{value} minutes"
+    },
+    "ice_race": {
+      "timer": "Ice sample turning to gas"
+    },
+    "clean": {
+      "title": "Clean Room",
+      "how_to": "Hold the mouse button and wipe the dust specks off the instrument before time runs out.",
+      "steps": ["Dust specks land on the instrument.", "Hold the mouse button and move over them to wipe them off.", "Wipe as many as you can before the timer ends."],
+      "real_step": "Real teams call this Planetary Protection: spacecraft are built in clean rooms so Earth germs don't travel to Mars. On a crewed ship, keeping dust and germs off the gear goes on all trip long.",
+      "result_name": "CLEANLINESS",
+      "flight_task": "Wipe the dust off the instruments",
+      "flight_goal": "Halfway there! Go to Instruments in the Science Bay and clean them",
+      "flight_log": "Halfway there. Dust is floating onto the instruments in the Science Bay.",
+      "flight_done": "Instruments cleaned. CLEANLINESS: {score}.",
+      "flight_missed": "Nobody cleaned the instruments on the way. CLEANLINESS: {score}.",
+      "status": "Wiped: {count} of {total}",
+      "instrument": "INSTRUMENT",
+      "example_word": "WIPE"
+    }
+  }
+}
