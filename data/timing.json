@@ -1,0 +1,118 @@
+{
+  "_readme": "How the launch is timed. Each rocket has a number of launch moments (times you must press a key at the right time) and a window tightness. window_tightness: 1.0 = normal. A bigger number means a TIGHTER window (harder to hit). A smaller number means a looser window (easier). A cheaper rocket has more moments and tighter windows. Every value has a source: a link, a written game-design choice, or PLACEHOLDER (made up for now; a student replaces it before the final submission). TIMED PRESS (the ring that closes on a target): base_speed 1.0 = the ring takes close_seconds to close; speed 2.0 closes twice as fast. The windows are a share of the ring's trip, so a faster ring gives less time to press. perfect_window and good_window are that share (0.06 = 6% of the trip, before and after the target). Bigger window_tightness makes both windows smaller. The levels do NOT change any of this: timing is the same for every character. LAUNCH: each rocket lists its moment_ids in order. Each moment has a miss_cost: a Miss costs fuel (percent lost) or damages a part (percent damaged). The cost is stored in GameState.damage and never ends the mission. Perfect or Good costs nothing. The Flight screen uses the damage: fuel = less fuel for the arrival burn, solar_panel = less power made, antenna = weaker signal, instruments = less data.",
+  "launch_vehicles": {
+    "small": {
+      "moments": 5,
+      "window_tightness": 1.3,
+      "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass",
+      "moment_ids": [
+        "liftoff",
+        "max_pressure",
+        "stage_separation",
+        "fairing_release",
+        "engine_cutoff"
+      ]
+    },
+    "medium": {
+      "moments": 3,
+      "window_tightness": 1.0,
+      "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass",
+      "moment_ids": [
+        "liftoff",
+        "stage_separation",
+        "engine_cutoff"
+      ]
+    },
+    "large": {
+      "moments": 2,
+      "window_tightness": 0.8,
+      "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass",
+      "moment_ids": [
+        "liftoff",
+        "engine_cutoff"
+      ]
+    }
+  },
+  "timed_press": {
+    "base_speed": 1.0,
+    "close_seconds": 1.6,
+    "perfect_window": 0.06,
+    "good_window": 0.32,
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass. good_window doubled from 0.16 to 0.32 at Upgrade Step 5 (2026-11-14): playtesters found GOOD too narrow (UPGRADE_PLAN_V2 DEFAULT: GOOD twice as wide, PERFECT the same)."
+  },
+  "launch": {
+    "ready_seconds": 1.5,
+    "between_seconds": 2.2,
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (game-design timing, a student can change it)"
+  },
+  "launch3d": {
+    "_readme": "The 3D launch (UPGRADE_PLAN_V2 step 16), beat by beat. Times in seconds. countdown_from = the big numbers count down from here; countdown_step_seconds = time per number. climb_height = how high (in game meters) the rocket climbs before the view cuts to space; pitch_degrees = how far it tips over while climbing. prompt_speed = how fast the in-flight rings close (1 = the same as the ignition ring); rebalance_speed = the ENGINE OUT ring. hold_detumble_seconds = how long you must hold Space to stop the spin; start_spin_degrees = how fast the spacecraft spins after release (degrees per second). telemetry = the numbers on the tiles (display only).",
+    "pad_mission_time": 20,
+    "countdown_from": 10,
+    "countdown_step_seconds": 0.75,
+    "liftoff_seconds": 4.0,
+    "between_prompts_seconds": 2.4,
+    "climb_height": 320,
+    "climb_acceleration": 6.0,
+    "pitch_degrees": 40,
+    "space_beat_seconds": 3.5,
+    "burn_seconds": 3.5,
+    "prompt_speed": 1.0,
+    "rebalance_speed": 1.25,
+    "hold_detumble_seconds": 2.2,
+    "start_spin_degrees": 200,
+    "float_text_seconds": 1.1,
+    "fade_seconds": 0.5,
+    "telemetry": {
+      "orbit_altitude_km": 200,
+      "orbit_speed_kmh": 28000,
+      "escape_speed_kmh": 40000,
+      "source": "Display only (Upgrade step 16, 2026-11-14). NASA Glenn Rocket Principles: low Earth orbit needs more than 28,000 km/h, and escape from Earth about 40,250 km/h: https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html (the 200 km height is a game-design choice inside low Earth orbit)."
+    },
+    "source": "Game-design choice (timing and look), Upgrade step 16 (2026-11-14). The timing windows themselves are in timed_press above."
+  },
+  "structure_check": {
+    "_readme": "Structure strength (the Hammering team score, 0-100) is checked after the launch presses (PLAN.md section 8). Below min_strength, the rocket's shaking loosens shake_part: it gets shake_damage_percent damage (like a launch Miss). The damage kinds are the same as miss_cost kinds.",
+    "min_strength": 60,
+    "shake_part": "antenna",
+    "shake_damage_percent": 30,
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+  },
+  "launch_moments": {
+    "liftoff": {
+      "miss_cost": {
+        "kind": "fuel",
+        "amount": 10,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      }
+    },
+    "max_pressure": {
+      "miss_cost": {
+        "kind": "solar_panel",
+        "amount": 15,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      }
+    },
+    "stage_separation": {
+      "miss_cost": {
+        "kind": "antenna",
+        "amount": 15,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      }
+    },
+    "fairing_release": {
+      "miss_cost": {
+        "kind": "instruments",
+        "amount": 15,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      }
+    },
+    "engine_cutoff": {
+      "miss_cost": {
+        "kind": "fuel",
+        "amount": 15,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "_readme": "Sound and music settings for scripts/autoload/AudioManager.gd (UPGRADE_PLAN_V2 steps 9, 25, 26). There are NO downloaded sound files: every sound and every music track is made in code, so they are free to use (made by the team). sfx: a sound name -> a file path. Leave \"file\" empty to use the code-made recipe of the same name in game_data.json \"sounds\" (a missing name plays a simple beep). music: one recipe per situation (state). voices: the beep-talk pitch for each speaker. buses: the starting volume of each volume slider (0 = silent, 1 = full).",
+  "buses": { "Music": 0.55, "SFX": 0.8, "Voice": 0.7 },
+  "sfx": {
+    "_readme": "Put a real sound file path here later (for example res://assets/sounds/door.ogg) and it is used instead of the code-made one. Write its source in AGENT_SOURCE.md.",
+    "click": { "file": "" },
+    "hover": { "file": "" }
+  },
+  "music": {
+    "_readme": "Each state is a short loop made in code. bpm = beats per minute; root_hz = the key note; progression = the chords, each a list of notes in semitones above the root; beats_per_chord = how long each chord lasts; pad / arp / bass / drums = how loud each layer is (0 = off); arp_pattern = which chord notes the arpeggio plays, one per eighth note; arp_octave = 1 plays the arpeggio one octave up; wave = sine (soft) or triangle (brighter). crossfade_seconds = how long one track fades into the next. chunk_samples = how many samples are made per frame (bigger = ready sooner, but can stutter in the browser).",
+    "mix_rate": 16000,
+    "crossfade_seconds": 1.0,
+    "chunk_samples": 3000,
+    "volume_db": -6,
+    "states": {
+      "menu":    { "bpm": 72,  "root_hz": 196.0, "progression": [[0, 4, 7], [-3, 0, 4], [5, 9, 12], [7, 11, 14]], "beats_per_chord": 4, "pad": 0.22, "arp": 0.14, "bass": 0.16, "drums": 0.0,  "arp_pattern": [0, 1, 2, 1, 0, 1, 2, 1], "arp_octave": 1, "wave": "sine" },
+      "calm":    { "bpm": 84,  "root_hz": 220.0, "progression": [[0, 4, 7], [5, 9, 12], [-3, 0, 4], [7, 11, 14]], "beats_per_chord": 4, "pad": 0.18, "arp": 0.12, "bass": 0.14, "drums": 0.0,  "arp_pattern": [0, 2, 1, 2, 0, 2, 1, 2], "arp_octave": 1, "wave": "sine" },
+      "build":   { "bpm": 112, "root_hz": 233.1, "progression": [[0, 4, 7], [0, 5, 9], [-2, 2, 5], [0, 4, 7]],  "beats_per_chord": 4, "pad": 0.12, "arp": 0.15, "bass": 0.18, "drums": 0.18, "arp_pattern": [0, 1, 2, 3, 2, 1, 0, 1], "arp_octave": 1, "wave": "triangle" },
+      "tension": { "bpm": 120, "root_hz": 207.7, "progression": [[0, 3, 7], [1, 4, 8], [0, 3, 7], [-1, 3, 6]],  "beats_per_chord": 4, "pad": 0.14, "arp": 0.16, "bass": 0.2,  "drums": 0.12, "arp_pattern": [0, 0, 1, 0, 2, 0, 1, 0], "arp_octave": 1, "wave": "triangle" },
+      "launch":  { "bpm": 128, "root_hz": 196.0, "progression": [[0, 4, 7], [2, 5, 9], [4, 7, 11], [5, 9, 12]],  "beats_per_chord": 4, "pad": 0.16, "arp": 0.16, "bass": 0.22, "drums": 0.24, "arp_pattern": [0, 1, 2, 1, 0, 1, 2, 3], "arp_octave": 1, "wave": "triangle" },
+      "space":   { "bpm": 60,  "root_hz": 174.6, "progression": [[0, 7, 14], [5, 12, 16], [3, 10, 15], [7, 14, 19]], "beats_per_chord": 8, "pad": 0.24, "arp": 0.08, "bass": 0.1,  "drums": 0.0,  "arp_pattern": [0, 2, 1, 2, 0, 2, 1, 2], "arp_octave": 1, "wave": "sine" },
+      "moon":    { "bpm": 66,  "root_hz": 196.0, "progression": [[0, 3, 7], [-4, 0, 3], [-2, 2, 5], [0, 3, 7]],  "beats_per_chord": 4, "pad": 0.22, "arp": 0.1,  "bass": 0.12, "drums": 0.0,  "arp_pattern": [0, 1, 2, 1, 0, 1, 2, 1], "arp_octave": 1, "wave": "sine" },
+      "mars":    { "bpm": 80,  "root_hz": 185.0, "progression": [[0, 3, 7], [5, 8, 12], [3, 7, 10], [-2, 2, 5]],  "beats_per_chord": 4, "pad": 0.2,  "arp": 0.12, "bass": 0.16, "drums": 0.06, "arp_pattern": [0, 2, 1, 2, 0, 2, 1, 2], "arp_octave": 1, "wave": "triangle" },
+      "venus":   { "bpm": 70,  "root_hz": 164.8, "progression": [[0, 4, 8], [2, 6, 10], [0, 4, 8], [-2, 2, 6]],  "beats_per_chord": 4, "pad": 0.22, "arp": 0.1,  "bass": 0.14, "drums": 0.0,  "arp_pattern": [0, 1, 2, 1, 0, 2, 1, 2], "arp_octave": 1, "wave": "sine" },
+      "win":     { "bpm": 100, "root_hz": 261.6, "progression": [[0, 4, 7], [5, 9, 12], [7, 11, 14], [0, 4, 7]],  "beats_per_chord": 4, "pad": 0.18, "arp": 0.16, "bass": 0.18, "drums": 0.12, "arp_pattern": [0, 1, 2, 3, 2, 1, 2, 3], "arp_octave": 1, "wave": "triangle" },
+      "fail":    { "bpm": 64,  "root_hz": 196.0, "progression": [[0, 3, 7], [-4, 0, 3], [-5, -1, 2], [0, 3, 7]], "beats_per_chord": 4, "pad": 0.22, "arp": 0.08, "bass": 0.14, "drums": 0.0,  "arp_pattern": [0, 1, 2, 1, 0, 1, 2, 1], "arp_octave": 0, "wave": "sine" }
+    },
+    "difficulty": {
+      "_readme": "UPGRADE_PLAN_V2 step 25 DEFAULT: the tension track plays a little faster and adds a drum layer for the Janitor, and more for the Student. speed multiplies the bpm; extra_drums is added to the drums layer.",
+      "easy":   { "speed": 1.0,  "extra_drums": 0.0 },
+      "medium": { "speed": 1.08, "extra_drums": 0.14 },
+      "hard":   { "speed": 1.16, "extra_drums": 0.26 }
+    },
+    "scenes": {
+      "_readme": "Which music state each screen starts. A screen that is not listed keeps the music that is already playing. \"planet\" = the mission's own state (moon, mars or venus).",
+      "start_menu": "menu", "cutscene_intro": "menu", "name": "calm", "character_room": "calm", "player_count": "calm",
+      "your_file": "calm", "mission_room": "calm", "mission_briefing": "calm", "mission_school": "calm", "design_room": "calm", "review": "calm",
+      "minigame_clean": "build", "minigame_assembly": "build", "minigame_hammer": "build", "minigame_fuel": "build",
+      "launch": "launch", "flight": "space", "arrival": "planet", "cutscene_return": "space"
+    }
+  },
+  "voices": {
+    "_readme": "Beep-talk (no recorded voices, UPGRADE_PLAN_V2 section 7): while a line types out, the speaker beeps at their own pitch. pitch_hz = the beep's note; every letters_per_beep letters make one beep; pitch_wobble = how much each beep's pitch changes at random (0.1 = 10%).",
+    "beep_seconds": 0.045,
+    "letters_per_beep": 3,
+    "pitch_wobble": 0.12,
+    "volume_db": -16,
+    "speakers": {
+      "scientist": { "pitch_hz": 520 },
+      "janitor":   { "pitch_hz": 300 },
+      "student":   { "pitch_hz": 660 },
+      "general":   { "pitch_hz": 170 },
+      "crew":      { "pitch_hz": 420 }
+    }
+  },
+  "source": "Game-design choice. All sounds and music are generated in code (made by the team, free to use)."
+}

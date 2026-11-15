@@ -1,0 +1,208 @@
+{
+  "_readme": "Everything from the challenge's Resources tab (NASA_RESOURCES_PLAN.md, step N1), in one place. resources = each NASA (and CSA) resource: its name, its link, how the game uses it, the screens where the player sees it, and a sentence the Head Writer can copy into the submission form (shipped = true when that step is in the game). segments = NASA's four mission segments, shown as badges on the progress strip (step N2). cml = the Concept Maturity Level meter (step N2). glossary = the Space Dictionary words (step N7): word, meaning (20 words or fewer), real = one 'real missions do this' line, resource = which resource it comes from, unlock = when the stamp unlocks (scene = a screen id; category = a Design Room category; event = something the game reports). dictionary_bonus = the score points for a full set of stamps (DEFAULT: small bonus). Since UPGRADE_PLAN_V3 A2 (2026-11-14) the glossary is also the Q card file: pressing Q near something opens its entry (word, meaning, real, and a short source: link, or the resource's name). unlock { \"event\": \"ask\" } = the stamp unlocks only when you open its Q card (every card unlocks its stamp anyway). Which entry each thing points at: game_data.json hud > scene_questions, ship > station_questions, and GameState.question_for(). Every line has a real source or says PLACEHOLDER. Writers (Rena, Amy): every PLACEHOLDER below needs a check or a link before the final submission.",
+  "source_note": "Links: found by web search (2026-11-14/15); a team member checks each one against the challenge's Resources tab. Kid meanings: written for the game (Head Writer checks them). Glossary sources: each word's source is the NASA resource named in its \"resource\" field (its link is in resources).",
+
+  "resources": {
+    "design_develop": {
+      "name": "Design and Develop Science Missions",
+      "link": "https://ntrs.nasa.gov/citations/20250002492 (NASA webinar deck, March 26 2025, Access to Space for All Systems Engineering series) (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "The game is split into NASA's four mission segments (launch, space, ground, user), shown as badges on the progress strip, and Review is the Verification step.",
+      "screens": ["design_room", "review", "flight", "arrival", "debrief"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The game is split into NASA's four mission segments, shown on the progress strip.",
+      "shipped": true
+    },
+    "cml": {
+      "name": "Concept Maturity Levels (CML)",
+      "link": "https://ntrs.nasa.gov/citations/20150007816 (Wessen, Borden, Ziemer, Kwok, 'Space Mission Concept Development Using Concept Maturity Levels', AIAA SPACE 2013); also https://science.nasa.gov/wp-content/uploads/2023/11/03-ziemer-mission-development-101-cmls.pdf (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "A meter on the progress strip and the tablet levels the player's design up from CML 1 to CML 4.",
+      "screens": ["design_room", "review", "tablet"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The player's design levels up from CML 1 to CML 4.",
+      "shipped": true
+    },
+    "mdl": {
+      "name": "Mission Design Lab (MDL)",
+      "link": "https://etd.gsfc.nasa.gov/capabilities/integrated-design-center/mission-design-lab (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "The Design Room is signposted Mission Design Lab, each part station is named for its discipline, hints are called Office Hours, and Review is an Equipment List.",
+      "screens": ["design_room", "review"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The design rooms are named for the MDL's disciplines, and Review is an equipment list.",
+      "shipped": true
+    },
+    "telescope_game": {
+      "name": "A Learning Game About Telescopes",
+      "link": "https://science.nasa.gov/mission/webb/game-build-it-yourself/ (Build It Yourself: Satellite!, NASA Goddard) (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "Options that cannot work for the chosen mission stand on dim pedestals with a reason, and the report matches the player to a real mission twin.",
+      "screens": ["design_room", "debrief"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "Like this game, ours starts with the science goal and ends by matching you to a real mission.",
+      "shipped": true
+    },
+    "cubesat_101": {
+      "name": "CubeSat 101",
+      "link": "https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "The Mission Briefing shows a ConOps picture strip, and each build minigame names the real step it stands for.",
+      "screens": ["mission_briefing", "minigame_clean", "minigame_assembly", "minigame_hammer", "minigame_fuel"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The briefing shows a ConOps, and each build minigame names the real step.",
+      "shipped": true
+    },
+    "mission_viz": {
+      "name": "NASA Mission Viz",
+      "link": "https://nasa.github.io/mission-viz (Web-based Space Mission Visualization) (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "The trip map on the Bridge wall screen has three views like a mission viewer: whole trip, follow the ship, and destination (keys 1, 2, 3 on the ship).",
+      "screens": ["flight"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The Bridge trip map switches between whole-trip, follow-the-ship and destination views, like NASA's mission viewers.",
+      "shipped": true
+    },
+    "gmat": {
+      "name": "GMAT (General Mission Analysis Tool)",
+      "link": "https://software.nasa.gov/software/GSC-19640-1 (GMAT R2026 in the NASA Software Catalog); overview: https://etd.gsfc.nasa.gov/?p=18597 (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "Named in a Did you know? in the orbit station. Nothing was installed; GMAT is desktop software and cannot run in a web game.",
+      "screens": ["design_room"],
+      "submission_field": "NASA Data",
+      "submission_sentence": "The orbit station tells players that NASA plans real paths with GMAT.",
+      "shipped": true
+    },
+    "vr_challenge": {
+      "name": "Visualize a Space Mission in VR (2023 challenge)",
+      "link": "https://www.spaceappschallenge.org/2023/challenges/visualize-a-space-mission-using-virtual-reality/ (found by web search 2026-11-15)",
+      "how_we_use": "Cited only: its checklist (concept, trajectory, timeline, 3D) matches the Bridge wall screen. No VR.",
+      "screens": [],
+      "submission_field": "NASA Data",
+      "submission_sentence": "",
+      "shipped": false
+    },
+    "csa_games": {
+      "name": "CSA Digital Games and Activities",
+      "link": "https://www.asc-csa.gc.ca/eng/youth-educators/digital-games-and-activities.asp (found by web search 2026-11-14: check it matches the challenge Resources tab)",
+      "how_we_use": "Tone reference. One tip from the CSA site, once a writer adds it with its link (csa_tip below). Until then nothing shows in the game.",
+      "screens": [],
+      "submission_field": "Space Agency Partner & Other Data",
+      "submission_sentence": "Tone reference, and the source of one in-game tip.",
+      "shipped": false
+    }
+  },
+
+  "csa_tip": {
+    "_readme": "One tip from the CSA Digital Games and Activities site, with its link. While text says PLACEHOLDER, the game does not show it. When filled, it shows as a Did you know? in the Mission Room.",
+    "text": "The Canadian Space Agency has a game where you pick the spot on asteroid Bennu where the real OSIRIS-REx spacecraft grabbed its sample. Choosing the target well is step one of every mission!",
+    "link": "https://www.asc-csa.gc.ca/eng/satellites/osiris-rex/activities/game.asp (from the CSA Digital Games and Activities page, found 2026-11-15)"
+  },
+
+  "segments": {
+    "_readme": "NASA's four mission segments (Design and Develop Science Missions). Order matters: they light up in this order on the progress strip. scenes = which screens belong to the segment (the Design Room decides by category: rocket and orbit = launch, the rest = space).",
+    "order": ["launch", "space", "ground", "user"],
+    "launch": { "name": "Launch segment", "short": "Launch", "meaning": "The ride up", "scenes": ["launch"] },
+    "space": { "name": "Space segment", "short": "Space", "meaning": "The thing that flies", "scenes": ["review", "minigame_clean", "minigame_assembly", "minigame_hammer", "minigame_fuel", "flight"] },
+    "ground": { "name": "Ground segment", "short": "Ground", "meaning": "The people and dishes on Earth", "scenes": ["arrival", "cutscene_return"] },
+    "user": { "name": "User segment", "short": "User", "meaning": "The scientists who use the data", "scenes": ["debrief"] },
+    "strip_scenes": ["design_room", "review", "flight", "arrival", "cutscene_return"],
+    "source": "Segment names (launch, space, ground, user): Design and Develop Science Missions, https://ntrs.nasa.gov/citations/20250002492 (found by web search, check against the Resources tab). The scene grouping is a game-design choice."
+  },
+
+  "cml": {
+    "_readme": "The Concept Maturity Level meter. Each level turns on in order when its event happens (GameState.cml_events). nickname = our kid name (game-design choice). official_name = the name in the JPL paper: PLACEHOLDER until the Science & Data Lead copies it in. strip_scenes = the screens where the meter shows on the strip (it is about the design; the tablet always shows it).",
+    "strip_scenes": ["design_room", "review"],
+    "levels": [
+      { "level": 1, "nickname": "The idea", "official_name": "Cocktail Napkin (check: JPL CML paper, link in resources > cml)", "event": "mission_picked", "turns_on_when": "The mission is picked" },
+      { "level": 2, "nickname": "Could it work?", "official_name": "Initial Feasibility (check: JPL CML paper, link in resources > cml)", "event": "fit_check", "turns_on_when": "Rocket and orbit pass the fit check (the mass fits the rocket)" },
+      { "level": 3, "nickname": "Trade-off time", "official_name": "Trade Space (check: JPL CML paper, link in resources > cml)", "event": "trade_off", "turns_on_when": "The player changes a part after seeing the ripple effect" },
+      { "level": 4, "nickname": "The real design", "official_name": "Point Design (check: JPL CML paper, link in resources > cml)", "event": "review_confirmed", "turns_on_when": "Review (Verification) is confirmed" }
+    ],
+    "source": "CML 1-4 names from JPL's Concept Maturity Levels paper: https://ntrs.nasa.gov/citations/20150007816; nicknames are ours (game-design choice)."
+  },
+
+  "dictionary_bonus": {
+    "points": 20,
+    "_readme": "DEFAULT (NASA_RESOURCES_PLAN.md N7): a full set of Space Dictionary stamps adds this many points to the report score (the total never goes over the maximum).",
+    "source": "Game-design choice (2026-11-14), waiting for the team's pass."
+  },
+
+  "glossary": [
+    { "id": "mission", "word": "Mission", "meaning": "One trip with one science goal.", "real": "Every NASA mission starts by naming the question it will answer.", "resource": "design_develop", "unlock": { "scene": "mission_room" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "requirement", "word": "Requirement", "meaning": "Something the mission must do or have to succeed.", "real": "NASA writes requirements before anyone designs a part.", "resource": "design_develop", "unlock": { "scene": "mission_briefing" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "conops", "word": "ConOps", "meaning": "The whole mission plan, step by step, often drawn as pictures.", "real": "CubeSat 101 tells new teams to draw a ConOps first.", "resource": "cubesat_101", "unlock": { "scene": "mission_briefing" }, "source": "resource: cubesat_101 (see its link in resources)" },
+    { "id": "segments", "word": "Mission segments", "meaning": "The four big pieces: launch, space, ground and user.", "real": "NASA plans every science mission in these four segments.", "resource": "design_develop", "unlock": { "scene": "design_room" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "mdl", "word": "Mission Design Lab", "meaning": "Where a NASA team designs a whole mission together, fast.", "real": "Experts for power, heat, radio and more sit in one room.", "resource": "mdl", "unlock": { "scene": "design_room" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "launch_vehicle", "word": "Launch vehicle", "meaning": "The rocket that carries your spacecraft to space.", "real": "NASA buys rides on rockets like the Falcon 9 and Atlas V.", "resource": "design_develop", "unlock": { "category": "rocket" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "orbit", "word": "Orbit", "meaning": "A path that loops around a planet or moon, again and again.", "real": "A lower orbit sees more detail but needs more fuel to reach.", "resource": "design_develop", "unlock": { "category": "orbit" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "trajectory", "word": "Trajectory", "meaning": "The path a spacecraft flies through space.", "real": "NASA plans trajectories with software like GMAT.", "resource": "gmat", "unlock": { "category": "orbit" }, "source": "resource: gmat (see its link in resources)" },
+    { "id": "propellant", "word": "Propellant", "meaning": "The fuel a spacecraft burns to change speed.", "real": "Fuel is often the heaviest thing a spacecraft carries.", "resource": "design_develop", "unlock": { "category": "orbit" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "structure", "word": "Structure", "meaning": "The frame that holds every part together.", "real": "A structures engineer makes sure the frame survives launch.", "resource": "mdl", "unlock": { "category": "structure" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "solar_array", "word": "Solar array", "meaning": "Panels that turn sunlight into electricity.", "real": "In a planet's shadow, solar panels make no power at all.", "resource": "mdl", "unlock": { "category": "solar_panel" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "battery", "word": "Battery", "meaning": "Stores power for when there is no sunlight.", "real": "Spacecraft charge batteries in sunlight and use them in shadow.", "resource": "mdl", "unlock": { "category": "battery" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "attitude_control", "word": "Attitude control", "meaning": "Keeping the spacecraft pointed the right way.", "real": "Spinning wheels inside turn the spacecraft without fuel.", "resource": "mdl", "unlock": { "category": "attitude_control" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "thermal_control", "word": "Thermal control", "meaning": "Keeping every part not too hot and not too cold.", "real": "Heaters warm parts in shade; radiators throw extra heat away.", "resource": "mdl", "unlock": { "category": "thermal_control" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "downlink", "word": "Downlink", "meaning": "Data sent from the spacecraft down to Earth.", "real": "A bigger dish antenna sends data home faster.", "resource": "mdl", "unlock": { "category": "antenna" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "avionics", "word": "Avionics", "meaning": "The spacecraft's computer and electronics.", "real": "Space computers are built to survive radiation from the Sun.", "resource": "mdl", "unlock": { "category": "computer" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "payload", "word": "Payload", "meaning": "The science tools your spacecraft carries.", "real": "Everything else on a spacecraft exists to keep the payload working.", "resource": "design_develop", "unlock": { "category": "instruments" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "instrument", "word": "Instrument", "meaning": "One science tool, like a camera, a drill or a radar.", "real": "Each instrument needs power, mass and data from the spacecraft.", "resource": "telescope_game", "unlock": { "category": "instruments" }, "source": "resource: telescope_game (see its link in resources)" },
+    { "id": "cml", "word": "Concept maturity level", "meaning": "How grown-up a mission idea is, from rough idea to real design.", "real": "JPL uses CML numbers to say how ready a mission idea is.", "resource": "cml", "unlock": { "event": "cml" }, "source": "resource: cml (see its link in resources)" },
+    { "id": "verification", "word": "Verification", "meaning": "Checking that the design really meets every requirement.", "real": "NASA verifies a design before it is built and flown.", "resource": "design_develop", "unlock": { "scene": "review" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "equipment_list", "word": "Equipment list", "meaning": "Every part with its mass, power and cost, added up.", "real": "Mission design teams keep a running equipment list.", "resource": "mdl", "unlock": { "scene": "review" }, "source": "resource: mdl (see its link in resources)" },
+    { "id": "integration", "word": "Integration", "meaning": "Putting all the parts together into one spacecraft.", "real": "Real teams integrate and test parts step by step.", "resource": "cubesat_101", "unlock": { "scene": "minigame_assembly" }, "source": "resource: cubesat_101 (see its link in resources)" },
+    { "id": "vibration_test", "word": "Vibration test", "meaning": "Shaking a spacecraft hard, to be sure nothing falls off at launch.", "real": "Spacecraft are shaken on test tables before launch.", "resource": "cubesat_101", "unlock": { "scene": "minigame_hammer" }, "source": "resource: cubesat_101 (see its link in resources)" },
+    { "id": "fueling", "word": "Fueling", "meaning": "Loading propellant into the tanks, carefully, before launch.", "real": "Fueling is one of the last jobs before launch.", "resource": "cubesat_101", "unlock": { "scene": "minigame_fuel" }, "source": "resource: cubesat_101 (see its link in resources)" },
+    { "id": "go_no_go", "word": "Go/no-go poll", "meaning": "Every team says 'go' or 'no go' right before launch.", "real": "The launch director asks each team, one by one.", "resource": "design_develop", "unlock": { "scene": "launch" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "staging", "word": "Staging", "meaning": "Dropping an empty rocket part so the rest flies lighter.", "real": "Most rockets drop their first stage a few minutes after liftoff.", "resource": "design_develop", "unlock": { "scene": "launch" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "cruise", "word": "Cruise", "meaning": "The long, quiet flight between planets.", "real": "During cruise, teams check every system and fix small problems.", "resource": "design_develop", "unlock": { "scene": "flight" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "signal_delay", "word": "Signal delay", "meaning": "Radio messages take time to cross space.", "real": "A radio command takes minutes to reach Mars.", "resource": "design_develop", "unlock": { "scene": "flight" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "ground_segment", "word": "Ground station", "meaning": "Big dishes on Earth that talk to spacecraft.", "real": "NASA's Deep Space Network has big dishes around the world.", "resource": "design_develop", "unlock": { "scene": "arrival" }, "source": "resource: design_develop (see its link in resources)" },
+    { "id": "user_segment", "word": "User segment", "meaning": "The scientists who use the data a mission sends home.", "real": "Mission data is shared so scientists everywhere can study it.", "resource": "design_develop", "unlock": { "scene": "debrief" }, "source": "resource: design_develop (see its link in resources)" },
+
+    { "id": "lucky_peanuts", "word": "Lucky peanuts", "meaning": "A jar of peanuts JPL teams open before big mission moments, just for luck.", "real": "The tradition began with the Ranger 7 Moon mission in 1964.", "resource": "", "unlock": { "event": "ask" }, "link": "science.nasa.gov/missions/what-are-jpls-lucky-peanuts", "source": "https://science.nasa.gov/missions/what-are-jpls-lucky-peanuts/ (Ranger 7, July 28 1964)" },
+    { "id": "zero_g_indicator", "word": "Zero-g indicator", "meaning": "A small plush toy. When it starts to float, the crew knows they are weightless.", "real": "Artemis II flew a plush mascot named Rise as its zero-g indicator.", "resource": "", "unlock": { "event": "ask" }, "link": "nasa.gov/general/moonmascot", "source": "https://www.nasa.gov/general/moonmascot/ (Artemis II mascot Rise); also https://www.nasa.gov/image-article/cosmonaut-oleg-novitskiy-holds-up-zero-g-indicator/" },
+    { "id": "budget", "word": "Budget", "meaning": "All the money the mission may spend, the rocket included.", "real": "NASA's MAVEN Mars orbiter cost $671 million over its whole life.", "resource": "", "unlock": { "event": "ask" }, "link": "MAVEN press kit (mars.nasa.gov)", "source": "MAVEN press kit, Quick Facts p. 4: https://mars.nasa.gov/files/resources/MAVEN_PressKit_Final.pdf" },
+    { "id": "mass", "word": "Mass", "meaning": "How heavy everything is. Your rocket must be able to lift it all.", "real": "MRO weighed 2,180 kg at launch, and 1,149 kg of that was fuel.", "resource": "", "unlock": { "event": "ask" }, "link": "nssdc.gsfc.nasa.gov (MRO)", "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A" },
+    { "id": "power", "word": "Power", "meaning": "Electricity: what the solar panels make, minus what the parts use.", "real": "Dust on its solar panels slowly took InSight's power until it stopped in 2022.", "resource": "", "unlock": { "event": "ask" }, "link": "nasa.gov (InSight retires)", "source": "https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/" },
+    { "id": "communications", "word": "Communications", "meaning": "How fast the radio can send data home to Earth.", "real": "MRO was built to send about 600 kilobits per second, even with Mars far away.", "resource": "", "unlock": { "event": "ask" }, "link": "JPL MRO launch press kit", "source": "https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf" },
+    { "id": "data", "word": "Data", "meaning": "How much science your instruments collect each day.", "real": "MRO's HiRISE camera sent home more than 12 terabits in its first two years.", "resource": "", "unlock": { "event": "ask" }, "link": "McEwen et al. 2007 (HiRISE team)", "source": "https://boris.unibe.ch/25369/1/2005JE002605.pdf" },
+    { "id": "mission_lifetime", "word": "Mission lifetime", "meaning": "How many months the spacecraft must keep working.", "real": "MRO's main science phase ran two years, November 2006 to December 2008.", "resource": "", "unlock": { "event": "ask" }, "link": "JPL MRO launch press kit", "source": "https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf" },
+    { "id": "moon", "word": "The Moon", "meaning": "Earth's moon. A spacecraft can get there in about three days.", "real": "Apollo astronauts left seismometers that recorded moonquakes until 1977.", "resource": "", "unlock": { "event": "ask" }, "link": "nssdc.gsfc.nasa.gov (Apollo 15 seismometer)", "source": "https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01; 3 days: Apollo 8, https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/" },
+    { "id": "mars", "word": "Mars", "meaning": "The red planet. The trip takes about seven months.", "real": "In 2008 the Phoenix lander dug up real water ice near Mars's north pole.", "resource": "", "unlock": { "event": "ask" }, "link": "jpl.nasa.gov (Phoenix confirms frozen water)", "source": "https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/; 7 months: MRO 210 days, https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A" },
+    { "id": "venus", "word": "Venus", "meaning": "The hottest planet, wrapped in thick clouds. Nobody lands there.", "real": "Its surface is about 467 °C, hot enough to melt lead.", "resource": "", "unlock": { "event": "ask" }, "link": "science.nasa.gov/venus/venus-facts", "source": "https://science.nasa.gov/venus/venus-facts/" },
+    { "id": "rocket_small", "word": "Falcon 9", "meaning": "A SpaceX rocket. Its first stage lands and flies again.", "real": "NASA's PACE Earth science satellite launched on a Falcon 9.", "resource": "", "unlock": { "event": "ask" }, "link": "nasa.gov (PACE launch contract)", "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/" },
+    { "id": "rocket_medium", "word": "Atlas V 401", "meaning": "A ULA rocket with no strap-on boosters.", "real": "NASA's Lucy asteroid mission launched on an Atlas V 401.", "resource": "", "unlock": { "event": "ask" }, "link": "nasa.gov (Lucy launch contract)", "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/" },
+    { "id": "rocket_large", "word": "Atlas V 541", "meaning": "A bigger Atlas V with four strap-on boosters, for heavy loads.", "real": "It launched the Mars 2020 mission with the Perseverance rover.", "resource": "", "unlock": { "event": "ask" }, "link": "nasa.gov (Mars 2020 launch contract)", "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/" },
+    { "id": "launch_window", "word": "Launch window", "meaning": "The days when a rocket can leave and reach its target using the least fuel.", "real": "Earth and Mars line up for a good launch only about every 26 months.", "resource": "", "unlock": { "event": "ask" }, "link": "mars.nasa.gov (launch windows)", "source": "https://mars.nasa.gov/msl/timeline/launch/launch-windows/" }
+  ],
+
+  "_real_things_readme": "UPGRADE_PLAN_V3 C1: one file for the real things. real_missions, real_rockets and astronaut_facts: every entry has name, year, one sentence, a source link, and shows_in (where it shows in the game: a glossary id = that Q card, school_<resource> = that Mission School beat, intro = the intro plaques, flight_<mission> = the flight log line at the end of the trip, mission_room / briefing / twin = text that lives in story.json or destinations.json). An entry whose status or source says PLACEHOLDER does not ship (GameState.is_checked). Section 4 rules: facts only, never invented dialogue, no photos. Astronaut facts checked by web search on NASA pages, 2026-11-14 (the Science & Data Lead re-checks each link).",
+  "real_missions": [
+    { "name": "Apollo 8", "year": 1968, "sentence": "Apollo 8 took just under three days to get from Earth orbit to orbit around the Moon.", "flight_log_line": "Day {day}: Apollo 8 took just under three days to reach the Moon. We made it in about the same.", "shows_in": ["flight_moon"], "source": "https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/" },
+    { "name": "Mars Reconnaissance Orbiter", "year": 2005, "sentence": "MRO launched in August 2005 and reached Mars orbit 210 days later.", "flight_log_line": "Day {day}: MRO took 210 days to reach Mars. Our trip is built on its real one.", "shows_in": ["flight_mars", "mission_room", "briefing"], "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A" },
+    { "name": "Pioneer Venus Orbiter", "year": 1978, "sentence": "Pioneer Venus launched in May 1978 and entered Venus orbit 198 days later.", "flight_log_line": "Day {day}: Pioneer Venus took 198 days to reach Venus. Our trip is built on its real one.", "shows_in": ["flight_venus"], "source": "https://science.nasa.gov/mission/pioneer-venus-1/" },
+    { "name": "Apollo 11 seismometer", "year": 1969, "sentence": "Apollo 11 left the first seismometer on the Moon; it felt moonquakes.", "shows_in": ["mission_room", "briefing", "twin"], "source": "https://science.nasa.gov/resource/apollo-11-seismic-experiment/" },
+    { "name": "Phoenix lander", "year": 2008, "sentence": "Phoenix dug into the soil near Mars's north pole and found water ice.", "shows_in": ["mission_room", "briefing", "twin"], "source": "https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/" },
+    { "name": "Magellan", "year": 1989, "sentence": "Magellan mapped about 98% of Venus with radar, right through the clouds.", "shows_in": ["mission_room", "briefing", "twin"], "source": "https://nssdc.gsfc.nasa.gov/planetary/magellan.html" },
+    { "name": "VEGA balloons", "year": 1985, "sentence": "Two Soviet VEGA balloons floated in the clouds of Venus.", "shows_in": ["briefing", "twin"], "source": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F" }
+  ],
+  "real_rockets": [
+    { "name": "Falcon 9", "game_id": "small", "year": 2024, "sentence": "A Falcon 9 launched NASA's PACE Earth science satellite.", "shows_in": ["rocket_small"], "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/" },
+    { "name": "Atlas V 401", "game_id": "medium", "year": 2021, "sentence": "An Atlas V 401 launched NASA's Lucy asteroid mission.", "shows_in": ["rocket_medium"], "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/" },
+    { "name": "Atlas V 541", "game_id": "large", "year": 2020, "sentence": "An Atlas V 541 launched Mars 2020 with the Perseverance rover.", "shows_in": ["rocket_large"], "source": "https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/" }
+  ],
+  "astronaut_facts": [
+    { "name": "Buzz Aldrin", "mission": "Apollo 11", "year": 1969, "sentence": "Set up the first seismometer on the Moon.", "short_source": "science.nasa.gov", "shows_in": ["instrument", "intro"], "source": "https://science.nasa.gov/resource/apollo-11-seismic-experiment/ and https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_11_30th.html" },
+    { "name": "David Scott", "mission": "Apollo 15", "year": 1971, "sentence": "Drilled holes for the heat flow probes; the hard ground stopped him at about 1.6 m.", "short_source": "Apollo Lunar Surface Journal", "shows_in": ["mars", "intro"], "source": "https://history.nasa.gov/alsj/a15/a15.summary.html and https://www.hq.nasa.gov/office/pao/History/alsj/a15/a15.alsepdep.html" },
+    { "name": "Scott Kelly", "mission": "One-Year Mission", "year": 2016, "sentence": "Lived 340 days on the space station so doctors could study long trips.", "short_source": "nasa.gov", "shows_in": ["mission_lifetime", "school_mission_lifetime"], "source": "https://www.nasa.gov/missions/station/looking-back-at-the-yearinspace/" },
+    { "name": "Christina Koch", "mission": "Expeditions 59-61", "year": 2020, "sentence": "Spent 328 days in space in one trip, the longest single flight by a woman.", "short_source": "nasa.gov", "shows_in": ["cruise"], "source": "https://www.nasa.gov/news-release/nasa-astronauts-record-setting-mission-helps-scientists-for-future-missions/" },
+    { "name": "Reid Wiseman, Victor Glover, Christina Koch, Jeremy Hansen", "mission": "Artemis II", "year": 2026, "sentence": "Flew around the Moon in April 2026, farther from Earth than any people before.", "short_source": "nasa.gov", "shows_in": ["zero_g_indicator", "trajectory", "intro"], "source": "https://www.nasa.gov/news-release/nasa-welcomes-record-setting-artemis-ii-moonfarers-back-to-earth/" },
+    { "name": "STS-30 crew (Space Shuttle Atlantis)", "mission": "STS-30", "year": 1989, "sentence": "Released Magellan, the first planetary probe launched from a Space Shuttle.", "short_source": "nasa.gov", "shows_in": ["venus", "launch_vehicle"], "source": "https://www.nasa.gov/history/magellan-mission-to-venus-began-25-years-ago-aboard-atlantis-on-sts-30-mission/" }
+  ],
+  "intro_plaques": {
+    "_readme": "UPGRADE_PLAN_V3 C4: the name plaques in the intro (text only, no photos). names = the plaque lines; line = what the General says about them (he is our own character; the real people never speak). Both come from the checked astronaut_facts above.",
+    "names": ["BUZZ ALDRIN · APOLLO 11", "DAVID SCOTT · APOLLO 15", "REID WISEMAN · ARTEMIS II", "VICTOR GLOVER · ARTEMIS II", "CHRISTINA KOCH · ARTEMIS II", "JEREMY HANSEN · ARTEMIS II"],
+    "line": "Real crews set up seismometers on the Moon. In 2026, Artemis II flew all the way around it.",
+    "speaker": "General",
+    "at_seconds": 17.3,
+    "show_seconds": 4.5,
+    "_timing_readme": "at_seconds = when the intro pauses for the plaques (just before \"You. I want you.\" at 18.2 s); show_seconds = how long they stay. Game-design choice.",
+    "source": "See astronaut_facts (Aldrin, Scott, Artemis II)."
+  },
+
+  "did_you_know": "The Did you know? tips stay in data/story.json (\"did_you_know\"), each with its own NASA source. The Design Room shows the tip for each category after you preview an option (rule 1: do, then learn)."
+}

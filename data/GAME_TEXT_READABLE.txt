@@ -1,0 +1,2680 @@
+﻿HOW DID WE GET HERE? - ALL GAME TEXT, EASY TO READ
+Made from data/story.json and data/inner_voice.json on 2026-11-15 11:51.
+This file is for READING only. The game does not use it. To change a line, edit the same line in the
+JSON file (find it with Ctrl+F). Keep the {blanks} like {mass}: the game fills them in with real numbers.
+The section and line names below match the names in the JSON file (with spaces instead of _).
+
+
+====================================================================================================
+  inner_voice.json: INNER VOICE (what the character's inner voice says, the hints, the report sentences)
+====================================================================================================
+(Note for writers: Everything the inner voice says. Writers can change any sentence. Keep the key names (left of the colons). Words in {curly braces} are filled in by the game: {value} = the player's total, {limit} = the mission limit, {unit} = the unit.)
+speaker name: Your inner voice
+
+--- MINIGAMES ---
+    (Note for writers: What the inner voice says on each minigame's results screen (TASKS.md step 14). good / ok / bad depends on the team average (data/minigames.json, "voice"). Hammering has only good and bad: the line is the launch's structure check (data/timing.json, structure_check). One line per level: easy = the scientist, medium = the janitor, hard = the student. The voice says what the score will change later, so the player sees the link.)
+
+    --- ASSEMBLY ---
+        [good]
+            easy: Clean assembly. High build quality means small problems in flight can fix themselves.
+            medium: Every bolt where it belongs. I think. Good builds hold up better out there.
+            hard: We built a whole spacecraft! It's like LEGO, but it costs millions.
+        [ok]
+            easy: Decent assembly. Not perfect, so small problems in flight won't fix themselves.
+            medium: Mostly put together. A few parts look... wobbly.
+            hard: Some pieces are on. Some pieces are maybe on. It's fine. Probably.
+        [bad]
+            easy: Rushed assembly. Low build quality: any problem in flight will cost us reserve money.
+            medium: Uh oh. I see leftover screws. That's never good.
+            hard: Why are there extra pieces? There are NEVER supposed to be extra pieces.
+
+    --- HAMMER ---
+        [good]
+            easy: A strong structure. It will take the shaking of the launch without loosening anything.
+            medium: Solid! That frame won't rattle apart on the way up.
+            hard: Bonk bonk bonk! Every nail in. That rocket is NOT falling apart.
+        [bad]
+            easy: A weak structure. The launch will shake it hard, and a part may come loose.
+            medium: Lots of loose nails. The launch is going to rattle something off.
+            hard: Is it supposed to wobble when I poke it? It's wobbling.
+
+    --- FUEL ---
+        [good]
+            easy: Tanks loaded right. If the launch doesn't spill any, we have enough for the burn that slows us into orbit.
+            medium: Fueled up! As long as the launch goes smoothly, we won't run dry when it's time to brake.
+            hard: Full tank! Like at the gas station, but SO much more.
+        [ok]
+            easy: Fuel is a bit short. The arrival burn might be tight.
+            medium: Almost full. I hope almost is enough.
+            hard: The fuel thing says 'kind of full'. Is that a real number?
+        [bad]
+            easy: Not enough fuel. The burn at arrival will be rough, and that costs mission lifetime.
+            medium: That's way off. We might not have enough fuel to slow down.
+            hard: Oops. I think I turned it the wrong way. A lot.
+
+--- SETUP ---
+    (Note for writers: What the inner voice says after each setup answer. {name} = the name the player typed. It is never wrong: it only knows what the player's character knows (easy = the scientist, an expert; medium = the janitor, an everyday adult; hard = the student, a kid).)
+    name: {name}. Okay. That's my name. Please don't forget it, brain.
+
+    --- GOAL ---
+        (Note for writers: What the inner voice says after the player picks a mission on the Choose a mission screen. One entry per mission id in data/destinations.json.)
+        [mars]
+            easy: Mars. We land, drill, and measure the ice under the soil. Then the data has to get all the way back to Earth, and Mars is far away, so the radio matters.
+            medium: Mars. The red one. We land and dig for ice, so future astronauts have water. I heard the scientists say the signal home is weak out there.
+            hard: Mars! There's ice on Mars? Maybe a frozen alien is in there. Okay, probably not. But we're digging anyway.
+        [moon]
+            easy: The Moon. We place three seismometers far apart and listen for moonquakes. The hard part is the lunar night: about two Earth weeks with no sunlight, so batteries and heat control matter.
+            medium: The Moon. We set up machines that feel moonquakes. I heard the nights there are super long and super cold.
+            hard: The Moon! Does the Moon even shake? I guess we're about to find out.
+        [venus]
+            easy: Venus. Nobody lands: the surface is hot enough to melt lead, and the air would crush a lander. We study the storms from orbit and drop a balloon into the clouds.
+            medium: Venus. I heard nobody can land there. Way too hot, way too heavy air. So we stay up top and watch the clouds.
+            hard: Venus! We're not landing? Good. I heard it's hotter than a pizza oven down there.
+
+    --- ROCKET ---
+        [small]
+            easy: Falcon 9. The cheapest, because its booster can land and be used again. But the launch moments are tighter. A fair trade if I stay sharp.
+            medium: Falcon 9. The one that lands itself! Cheap, I think. Probably harder to launch, too.
+            hard: Falcon 9. The rocket that lands on a boat! Cheap. Gulp.
+        [medium]
+            easy: Atlas V 401, the rocket that launched MRO. Fair timing, but it lifts the least of the three, so the orbit fuel has to fit.
+            medium: Atlas V 401. Middle price. Not too big, not too small. Like porridge.
+            hard: The middle one. Middle is the safe pick, right?
+        [large]
+            easy: Atlas V 541, the Curiosity rover's rocket. It costs the most, but its launch moments are fewer and easier to hit. The forgiving option.
+            medium: Atlas V 541. Big rocket. Big price. Fewer scary moments, I hope.
+            hard: The big one! It costs more, but bigger has to be easier. Right?
+
+    --- ORBIT ---
+        (Note for writers: What the inner voice says after the player picks an orbit. One group per mission id, then one line per orbit and level.)
+        [mars]
+            [low]
+                easy: Low orbit. Sharper pictures, but slowing down into it burns more fuel, and that fuel counts against what the rocket can lift.
+                medium: Low and close. I heard the scientists say getting close costs more fuel. Fuel is heavy, right?
+                hard: Low orbit! We'll fly so low we can wave at the Martians. If there are any. There probably aren't.
+            [high]
+                easy: High orbit. Less fuel to get there, so the spacecraft is lighter at launch. The pictures will show less detail, though.
+                medium: High up. Less fuel, I think. But things look smaller from far away. Makes sense.
+                hard: High orbit. Way up there. Like a bird. A space bird. Okay, moving on.
+            [polar]
+                easy: Polar orbit. It passes over both poles, where much of the ice is. It's low, so it needs the same extra fuel as a low orbit.
+                medium: Over the poles. That's where the ice is, I'm pretty sure. Still takes lots of fuel, though.
+                hard: The poles! Like Santa, but on Mars. I'm sure that's how it works. It's not.
+        [moon]
+            [low]
+                easy: Low lunar orbit. A short trip down to land, but slowing into it takes more fuel, and that fuel counts against the rocket.
+                medium: Low and close to the Moon. More fuel, I think. Fuel is heavy.
+                hard: Low orbit. So close I could almost touch the Moon. I can't. Space doesn't work like that.
+            [high]
+                easy: High orbit. Less fuel to get into, so the launch is lighter. The lander has farther to go down, though.
+                medium: High up. Less fuel, probably. A longer way down to land.
+                hard: Way up high. The Moon looks like a big gray ball from here. Because it is one.
+            [polar]
+                easy: Polar orbit. Over the poles, so in time we pass over the whole Moon. It's low, so it needs the extra fuel.
+                medium: Over the top and bottom of the Moon. Low, so lots of fuel.
+                hard: The Moon has poles? Like a North Pole? Huh. Okay.
+        [venus]
+            [low]
+                easy: Low orbit, just above the clouds. Sharp views of the storms, but slowing into it burns more fuel, and fuel counts against the rocket.
+                medium: Low and close to the clouds. More fuel, I think. Fuel is heavy.
+                hard: Low orbit! Close enough to smell the clouds. You can't smell clouds from space. I checked.
+            [high]
+                easy: High orbit. Less fuel, so the launch is lighter, and we see whole storms at once. Less detail, though.
+                medium: High up. Less fuel, probably. The storms look smaller from far away.
+                hard: Way up high. Venus looks like a big yellow marble. Neat.
+            [polar]
+                easy: Polar orbit. Venus has giant swirling storms over its poles. It's a low orbit, so it needs the extra fuel.
+                medium: Over the poles. I heard there are huge storms there. Lots of fuel, though.
+                hard: Poles on Venus? Are they made of ice? No. Definitely not. Way too hot.
+
+    --- PLAYER COUNT ---
+        (Note for writers: What the inner voice says after the player picks how many players. One line per number.)
+        1: Just me. Every build job is mine. No pressure. Lots of pressure.
+        2: Two of us. We take turns, and our scores get averaged. Teamwork!
+        3: Three of us. Everybody gets a turn at every job.
+        4: A team of four. That's a real mission crew.
+
+    --- CHARACTER ---
+        scientist: Right. I'm the scientist. I actually know this stuff. Please let me remember it under pressure.
+        janitor: I'm the janitor. I know where every mop is. I don't know where Mars is. Okay, I do, it's up there.
+        student: I'm a student. I have homework due tomorrow, and now a spacecraft. Great.
+
+--- REVIEW ---
+    all good: Huh. Everything is inside the limits. Did I... do that right?
+    some over: Something is in the red. The general is going to ask about that.
+    missing key: Wait. We didn't pack the {instrument}. That's the whole point of this mission!
+
+--- ARRIVAL ---
+    (Note for writers: What the inner voice says during the arrival walk, one group per mission. tasks = lines for each task id: ok = done, early / late = a hold let go too early or too late, missing = the instrument is not packed (said when you reach the spot), start = a send begins. slow_send is added when the signal is weak.)
+
+    --- MARS ---
+        start: We landed on Mars! Okay. Walk to the glowing dig spot out there.
+        slow send: The signal is weak, so this is slow. A bigger antenna would send it faster.
+        all done: Every task done. Press Enter when you're ready to leave Mars.
+        cant finish: That's all we can do here. Press Enter to leave Mars.
+        [tasks]
+            [reach]
+                ok: This is the dig spot. Hold E to run the drill, and let go when the bar is in the green.
+            [drill]
+                ok: Got it! An ice sample. Now take it to the analyzer next to the lander.
+                early: Too early! The drill didn't reach the ice. Hold E and try again.
+                late: Too far! The drill went past the ice. Try again.
+                missing: The dig spot. But we didn't pack an ice drill. We can't take a sample. That was the whole point of the mission.
+            [analyze]
+                start: Sample in the analyzer. Now the data goes home to Earth.
+                ok: The data is on its way to Earth!
+
+    --- MOON ---
+        start: We landed on the Moon! I feel so light. Place the three seismometers at the glowing spots, far apart.
+        slow send: The signal is weak, so this is slow. A bigger antenna or better pointing would help.
+        all done: Every task done. Press Enter when you're ready to leave the Moon.
+        cant finish: That's all we can do here. Press Enter to leave the Moon.
+        [tasks]
+            [place 1]
+                ok: Seismometer 1 is down and listening.
+                missing: This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network.
+            [place 2]
+                ok: Seismometer 2 is listening. Far apart is better: it helps find where a quake starts.
+                missing: This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network.
+            [place 3]
+                ok: Seismometer 3 is listening. That's the whole network!
+                missing: This is where a seismometer goes. But we didn't pack one. No seismometers, no moonquake network.
+            [point antenna]
+                ok: The antenna points at Earth. Now we can send data home.
+                early: Not far enough. Earth is up there. Hold E and try again.
+                late: Too far! It swung past Earth. Try again.
+            [send quakes]
+                start: The ground is shaking a tiny bit. A moonquake! The wiggles go home to Earth now.
+                ok: The quake data is on its way to Earth!
+
+    --- VENUS ---
+        start: We're in orbit around Venus. Nobody lands here: the surface would melt lead and crush a lander. So we work from up here. Look at those clouds!
+        slow send: The signal is weak, so this is slow. A bigger antenna would send it faster.
+        all done: Every task done. Press Enter when you're ready to leave Venus.
+        cant finish: That's all we can do here. Press Enter to leave Venus.
+        [tasks]
+            [release balloon]
+                ok: The balloon drops into the clouds and floats. It's measuring the wind!
+                missing: This is the airlock for the balloon. But we didn't pack a balloon probe. No balloon, no wind data.
+            [aim camera]
+                ok: Got it! The camera is pointed right at a storm.
+                early: Not far enough. The storm is still out of view. Try again.
+                late: Too far! It swung past the storm. Try again.
+                missing: This is the camera console. But we didn't pack a cloud camera. We can't watch the storms.
+            [send wind]
+                start: Wind data from the balloon, pictures from the camera. Sending it all home to Earth.
+                ok: The storm data is on its way to Earth!
+
+--- RESOURCE FAILURES ---
+
+    --- ARRIVAL NO DRILL ---
+        title: No ice sample
+        what: We landed on Mars, but we could not take an ice sample, so there was no ice data to send home.
+        why: The ice drill was not packed. It is the key instrument for this mission.
+        fix: On the Build screen, open the Instruments tab and pack the ice drill.
+
+    --- ARRIVAL NO SEISMOMETER ---
+        title: No moonquake network
+        what: We landed on the Moon, but we could not place any seismometers, so there was no quake data to send home.
+        why: The seismometer was not packed. It is the key instrument for this mission.
+        fix: On the Build screen, open the Instruments tab and pack the seismometer.
+
+    --- ARRIVAL PLACE SEISMOMETERS ---
+        title: Network not finished
+        what: We left the Moon before all three seismometers were placed.
+        why: The seismometer tasks were not finished.
+        fix: Walk to all three glowing spots and press E at each one.
+
+    --- ARRIVAL SEND QUAKE DATA ---
+        title: Quake data not sent
+        what: The moonquake data never made it home to Earth.
+        why: The quake data was not sent before we left.
+        fix: Place all 3 seismometers, point the antenna at Earth, then press E at the quake screen.
+
+    --- ARRIVAL NO BALLOON ---
+        title: No cloud balloon
+        what: We reached Venus, but we could not release a balloon, so there was no wind data to send home.
+        why: The balloon probe was not packed. It is a key instrument for this mission.
+        fix: On the Build screen, open the Instruments tab and pack the balloon probe.
+
+    --- ARRIVAL NO CLOUD CAMERA ---
+        title: No storm pictures
+        what: We reached Venus, but we could not watch the storms.
+        why: The cloud camera was not packed. It is a key instrument for this mission.
+        fix: On the Build screen, open the Instruments tab and pack the cloud camera.
+
+    --- ARRIVAL RELEASE BALLOON ---
+        title: Balloon not released
+        what: We left Venus without releasing the cloud balloon.
+        why: The balloon task was not finished.
+        fix: Walk to the airlock and press E.
+
+    --- ARRIVAL SEND STORM DATA ---
+        title: Storm data not sent
+        what: The storm and wind data never made it home to Earth.
+        why: The data was not sent from the comms console before we left.
+        fix: Release the balloon and aim the camera, then press E at the comms console.
+
+    --- RETURN DEPART ---
+        title: Rough lift-off
+        what: Leaving was a struggle: there was very little fuel left.
+        why: The tanks were not filled well in Fueling, or the launch burned extra fuel.
+        fix: Stop the valve on the orange mark in Fueling, and hit the launch moments.
+
+    --- RETURN HOME ---
+        title: Rough landing at home
+        what: The ride home shook parts loose, and the landing was rough.
+        why: The structure was weak: too many missed nails in Hammering.
+        fix: Hit more nails in Hammering, or pick a stronger frame.
+
+    --- ARRIVAL MAP STORMS ---
+        title: Storms not mapped
+        what: We never got a good look at the storms.
+        why: The cloud camera was not aimed at a storm before we left.
+        fix: Hold E at the camera console and let go in the green zone.
+
+    --- FLIGHT HEAT NEAR SUN ---
+        title: Too hot near the Sun
+        what: On the way to Venus, it got too hot, and an instrument had to be switched off.
+        why: Heaters only can make things warmer, but they cannot get rid of extra heat.
+        fix: Pick louvers or radiators for heat control.
+
+    --- FLIGHT LUNAR NIGHT ---
+        title: Frozen in the lunar night
+        what: In the long lunar night, a seismometer froze, so the mission will not last as long.
+        why: There was no sunlight for days, and the battery and heat control were too small to keep things warm.
+        fix: Pick a medium or large battery AND better heat control than heaters only.
+
+    --- ARRIVAL SAMPLE ICE ---
+        title: No ice sample
+        what: We left Mars without taking an ice sample.
+        why: The drill task was not finished.
+        fix: At the dig spot, hold E and let go when the bar is in the green zone.
+
+    --- ARRIVAL SEND DATA ---
+        title: Data not sent
+        what: The ice data never made it home to Earth.
+        why: The sample was not analyzed and sent before we left.
+        fix: Take the sample to the analyzer next to the lander, and wait for the send to finish.
+
+    --- FLIGHT SOLAR FLARE ---
+        title: Solar flare
+        what: A solar flare reset the computer during the flight, and some data was lost.
+        why: The simple computer has no protection against radiation from the Sun.
+        fix: Pick a better computer, or build more carefully in the Assembly job.
+
+    --- FLIGHT FAR FROM EARTH ---
+        title: Weak radio
+        what: Far from Earth, the data rate had to be cut.
+        why: The antenna was too weak (or damaged at launch) for such a long distance from Earth.
+        fix: Pick a bigger antenna or better pointing, and build a strong structure so nothing shakes loose.
+
+    --- FLIGHT DUST ON PANELS ---
+        title: Dust on the panels
+        what: Dust covered the solar panels, and an instrument had to be switched off.
+        why: There was not enough spare power to keep everything running.
+        fix: Pick a bigger solar panel, or parts that use less power.
+
+    --- FLIGHT ARRIVAL BURN ---
+        title: Rough arrival
+        what: The arrival burn ran short of fuel, so the mission will not last as long.
+        why: Not enough fuel was loaded in the Fueling job, or fuel was lost at launch.
+        fix: Get closer to the target angle in Fueling, and time the launch presses well.
+
+    --- BUDGET ---
+        what: Budget: we spent {value} {unit}. The limit is {limit}.
+        why: NASA can't pay for a mission that costs more than its budget. It gets cancelled before launch.
+        fix: Pick cheaper parts. The high resolution camera and the large solar panel cost the most.
+
+    --- MASS ---
+        what: Mass: the spacecraft weighs {value} {unit}. The limit is {limit}.
+        why: The rocket can only lift so much. Too heavy, and we never leave Earth.
+        fix: Swap a big part for a smaller one.
+
+    --- POWER ---
+        what: Power: we have {value} {unit}. We need at least {limit}.
+        why: The parts use more power than the solar panel makes. Things start shutting down.
+        fix: Use a bigger solar panel, or parts that use less power.
+
+    --- COMMUNICATIONS ---
+        what: Communications: the antenna sends {value} {unit}. We need at least {limit}.
+        why: Mars gets far from Earth. A small antenna is too slow to send our pictures.
+        fix: Use a bigger antenna.
+
+    --- DATA ---
+        what: Data: the camera collects {value} {unit}. We need at least {limit}.
+        why: Not enough pictures to make a useful ice map.
+        fix: Use a better camera.
+
+    --- MISSION LIFETIME ---
+        what: Mission lifetime: the spacecraft lasts {value} {unit}. We need at least {limit}.
+        why: The spacecraft wears out before the map is finished.
+        fix: A bigger solar panel keeps the batteries healthy longer.
+
+    --- DATA LIVE ---
+        what: Data: by the end we had {value} {unit}. We needed at least {limit}.
+        why: The camera was turned off, so the data stopped coming in. The ice map has holes in it.
+        fix: Leave the camera on: it uses too little power to help in the shadow. The basic camera has no spare data. Watch the Data row on your wrist.
+
+    --- COMMUNICATIONS LIVE ---
+        what: Communications: at the end we had {value} {unit}. We needed at least {limit}.
+        why: The antenna was switched off, so no messages reached Earth.
+        fix: Switch the antenna back on at the power panel as soon as there is enough power. Watch the Communications row on your wrist.
+
+    --- MISSION LIFETIME LIVE ---
+        what: Mission lifetime: at the end we had {value} {unit}. We needed at least {limit}.
+        why: The heater was off too long. The cold wore out the parts, and the mission got shorter.
+        fix: Switch the heater back on as soon as we're out of the shadow. Every second it is off takes months off the mission lifetime.
+
+    --- POWER EVENT ---
+        title: Power alarm
+        what: Power: the batteries ran out during the mission.
+        why: We flew into Mars' shadow. The solar panels got no sun, the batteries couldn't run everything, and power stayed in the red.
+        fix: When the alarm sounds, go to the power panel and switch off the heater or the antenna. The camera uses too little to help. Real NASA teams turn the heaters down before every shadow.
+
+    --- FOOD EMPTY ---
+        title: Food ran out
+        what: Food: the crew ran out of food.
+        why: The crew eats every day, about 1.8 kg of food and packaging each. The food store emptied before the trip was over.
+        fix: Go to the Food station in Life Support and press E to start rationing early. Rationing makes the food last longer.
+
+    --- WATER EMPTY ---
+        title: Water ran out
+        what: Water: the crew ran out of water.
+        why: The crew drinks every day, and a leak pours water out fast if nobody stops it.
+        fix: When the voice warns about a leak, run to the Water station in Life Support and press E to stop it.
+
+    --- AIR EMPTY ---
+        title: Air ran out
+        what: Air: the crew ran out of air to breathe.
+        why: Breathing uses up the air every day. The oxygen generator makes more oxygen, and nobody ran it in time.
+        fix: Go to the Air station in Life Support and press E to run the oxygen generator. Press E again when the ring closes on the target.
+
+    --- FOOD LOW ---
+        title: Food too low
+        what: Food: the store was almost empty at the end.
+        why: The crew eats every day, and the food was not rationed, so it ran too low.
+        fix: Go to the Food station in Life Support and press E to start rationing. Rationing makes the food last longer.
+
+    --- WATER LOW ---
+        title: Water too low
+        what: Water: the tank was almost empty at the end.
+        why: The crew drinks every day. A leak that is fixed late loses a lot of water.
+        fix: When the voice warns about a leak, run to the Water station in Life Support and press E at once.
+
+    --- AIR LOW ---
+        title: Air too low
+        what: Air: the air was almost gone at the end.
+        why: Breathing uses up the air every day, and the oxygen generator was not run (or was run badly).
+        fix: Go to the Air station in Life Support and press E to run the oxygen generator. A press close to the target makes more oxygen.
+
+--- PARTS ---
+
+    --- SOLAR PANEL ---
+        small: The small solar panel. Cheap and light, but it adds no spare months, so the heater can't stay off long.
+        medium: The medium solar panel. A middle choice for power, cost, and weight.
+        large: The large solar panel. Lots of power, but heavy and costly, and in Mars' shadow it makes none.
+
+    --- CAMERA ---
+        basic: The basic camera. Maps all of Mars, but with no data to spare.
+        high res: The high resolution camera. Super sharp, but heavy and expensive.
+
+    --- ANTENNA ---
+        small: The small antenna. Light and cheap, but too slow when Mars is far.
+        medium: The medium antenna. A middle size dish with a middle speed.
+        large: The large antenna. Fast to Earth, but heavy. Same power as the small one.
+
+--- WALK ---
+    start: Okay. This is the ship. I start on the Bridge. Walk around the rooms. Press E to use things.
+    press e hint: Press E
+    numbers intro: Its numbers:
+    alarm: Uh oh. We just flew into Mars' shadow! No sun on the solar panels, only batteries. POWER LOW! Get to the power panel and switch something off!
+    alarm banner: POWER LOW! Go to the power panel: {seconds}
+    alarm again: Too much power again! We're still in the shadow. Switch something off!
+    alarm fixed: It fits. Phew. But everything I switched off is costing me something. I'd better check my wrist.
+    alarm failed: Too late. The batteries are empty.
+    mission complete: That's it. Two years of mapping Mars, done. Time to report to the general.
+    storm ok: We're in Mars' shadow. No sun on the solar panels, but the batteries can run everything. Huh. Good planning?
+    storm over: Out of the shadow! The sun is back on the solar panels. I can switch everything back on at the power panel. That shadow stood for every real 40-minute shadow, sped up. The real orbiter goes through one every two hours!
+    storm over all on: Out of the shadow. The sun is back on the solar panels.
+    panel name: Power panel
+    panel sign: POWER
+
+--- FLIGHT ---
+    (Note for writers: What the inner voice says during Flight (Stage 3). The voice is never wrong. The levels do not change these lines yet.)
+    start: We are on our way to Mars! This leg of the trip stands for {days} real days of flying, sped up so I can play it. The crew eats, drinks and breathes every day. Press Tab to look at the Crew supplies on my wrist, and visit the Life Support room.
+    leg end: The leg is over. Mars is getting close! Now for the work at Mars.
+    ration explain: This is the Food station. If we ration, the crew eats a little less every day. They get hungry, but the food lasts longer. Smart. I think.
+    ration on: Rations on! The food will last longer now. Everyone is a little hungry, but everyone is alive.
+    ration already: We are already rationing. The food is lasting longer.
+    generator start: This is the oxygen generator. It makes oxygen for the crew to breathe, like the real one on the Space Station. Run it! Press E when the ring closes on the target.
+    generator perfect: Perfect! The oxygen generator is running smoothly and making lots of oxygen. I did that. Me!
+    generator good: Good! The oxygen generator is running and making a good amount of oxygen.
+    generator miss: Missed the timing. The oxygen generator still starts, but it runs rough, so it makes less oxygen. A Miss still runs it, just not as well.
+    generator already: The oxygen generator is already running. That is enough for now.
+    leak warning: Uh oh. A pipe broke! The water tank is leaking and the water meter is falling fast. Run to the Water station in Life Support and press E to stop it!
+    leak fixed: Leak stopped! We lost some water, but not all of it. That is why we keep an eye on the meters.
+    no leak: The water pipes look fine. No leak right now.
+    empty food: The food is gone. Zero. The crew is very hungry, and that is a big problem.
+    empty water: The water tank is empty. Zero. A leak pours water out fast if nobody stops it.
+    empty air: The air is gone. Zero. The oxygen generator makes oxygen, and we needed it running.
+
+--- REROUTE ---
+    (Note for writers: The words on the power panel (Reroute Power mini-game).)
+    title: POWER PANEL
+    close hint: E or Esc = close
+    countdown: POWER LOW! {seconds} s left
+    available label: Power available (sun, or batteries in shadow)
+    body label: Spacecraft body (always on)
+    used label: Power used
+    of word: of
+    on word: ON
+    off word: OFF
+    fits: It fits. Power used is not more than power available.
+    too much: Too much! Turn something off.
+    heater name: Heater
+    instruments name: Science instruments
+    watt unit: W
+
+    --- OFF COSTS ---
+        instruments: Off: no new science data
+        antenna: Off: no messages to Earth
+        heater: Off: the cold wears out parts (less mission lifetime)
+
+--- DEBRIEF ---
+    success title: Mission success
+    success text: The ice map is coming in. The general nods. Just once. That's a lot, for the general.
+    failed title: Mission failed
+    failed intro: Let's figure out what happened.
+    report label: MISSION REPORT
+    designer label: Mission designer:
+    time label: Mission time:
+    findings label: FINDINGS
+    finding word: Finding
+    readings label: FINAL READINGS
+    header resource: Resource
+    header end: At the end
+    header limit: Limit
+    header result: Result
+    success note: All six readings stayed inside their limits. No problems to report.
+    what label: What failed
+    why label: Why it failed
+    fix label: How to fix it
+    try again: Try again
+    redesign button: Redesign and fly again
+    new mission button: New mission
+    flight label: Flight:
+    flight value: {days} days
+    lifetime label: Mission lifetime:
+    score label: Score
+    score value: {score} / {max}
+
+    --- SCORE PARTS ---
+        goals: Goals met
+        data: Science data returned
+        resources: Resources used well
+        build quality: Build quality
+        teamwork: Teamwork average
+        teamwork solo: Build jobs average
+        dictionary: Space Dictionary full set (bonus)
+    score line: {name}: {points} / {max}
+    checklist label: Checklist
+    went well label: WHAT WENT WELL
+    fix next label: FIX NEXT TIME
+    fix line: {title}: {fix}
+    went well none: Not much this time. Every mission teaches something.
+    fix none: Nothing to fix! Try it as a harder character, or with a cheaper design.
+
+    --- WENT WELL ---
+        (Note for writers: One line per thing that went well. {computer} = the picked computer's name.)
+        solar flare: Your {computer} shrugged off the solar flare.
+        solar flare saved: Careful assembly saved the data when the solar flare hit.
+        solar flare fixed: You sounded the flare alarm in time on the ship. (A better computer would not need it.)
+        far from earth fixed: You re-aimed the dish in time and saved the signal. (A bigger antenna would not need it.)
+        dust on panels fixed: You turned the dusty panels to the Sun in time. (More spare power would not need it.)
+        arrival burn fixed: Your careful burn saved fuel for the arrival. (More fuel loaded would not need it.)
+        heat near sun fixed: You reset the hot breaker in time. (Better heat control would not need it.)
+        lunar night fixed: You switched to battery saver in time for the lunar night. (A bigger battery and better heat control would not need it.)
+        far from earth: Your antenna kept a strong signal all the way there.
+        dust on panels: Your solar panels had power to spare when the dust came.
+        dust on panels saved: Well-built solar panels kept going under the dust.
+        arrival burn: Your team loaded enough fuel for a smooth arrival.
+        sample ice: The ice drill worked: we have an ice sample.
+        send data: The ice data made it home to Earth.
+        place seismometers: All three seismometers are listening: a real moonquake network.
+        send quake data: The moonquake data made it home to Earth.
+        lunar night: Your battery and heat control got the seismometers through the lunar night.
+        heat near sun: Your heat control kept everything cool near the Sun.
+        release balloon: The cloud balloon floated through the clouds of Venus.
+        map storms: The storm pictures and wind data made it home to Earth.
+        resources: Every resource was inside its limit at Review.
+        teamwork: Great teamwork in the build jobs ({score} average).
+        teamwork solo: Great work in the build jobs ({score} average).
+    general speaker: General
+    general success: Mission complete. Good work, {name}. The data is on my desk.
+    general failed: Not every mission works the first time, {name}. Read the report. Then fix it and fly again.
+    general default name: designer
+
+--- OFFICE HOURS ---
+    (Note for writers: Office Hours (NASA_RESOURCES_PLAN.md N3): the hint key O in the Design Room and the button on the Equipment List. It looks at the six resources and talks about the first problem. Hint detail per level (AGENT_SOURCE.md): easy names the problem AND the parts that change it, medium names the problem, hard only warns. {warning} = the dashboard warning line for that resource, {parts} = the part names that change it (from the part data). Hints never give the answer.)
+
+    --- ALL GOOD ---
+        easy: Office Hours: every resource is inside its limit. Now the trade-offs are yours.
+        medium: Office Hours: everything looks inside the limits. I think.
+        hard: Office Hours: nothing is red. Is that good? That's good.
+
+    --- PROBLEM ---
+        easy: Office Hours: {warning} These parts change it: {parts}.
+        medium: Office Hours: {warning}
+        hard: Office Hours: something on the dashboard isn't happy. Look for yellow or red.
+
+--- DASHBOARD WARNINGS ---
+    (Note for writers: What the inner voice says when a dashboard row turns yellow (warning) or red (danger) during the walk.)
+
+    --- BUDGET ---
+        warning: Budget is getting close to the limit.
+        danger: Budget is over the limit!
+
+    --- MASS ---
+        warning: Mass is getting close to the limit.
+        danger: Too heavy! Mass is over the limit.
+
+    --- POWER ---
+        warning: Spare power is getting low.
+        danger: Power is in the red! We're using more than we make.
+
+    --- COMMUNICATIONS ---
+        warning: The antenna is barely fast enough.
+        danger: Communications are too slow! Earth can't hear us.
+
+    --- DATA ---
+        warning: Data is barely keeping up with the plan.
+        danger: Data is falling behind! We're not collecting enough.
+
+    --- MISSION LIFETIME ---
+        warning: No spare months. The spacecraft will barely last.
+        danger: The spacecraft won't last long enough!
+
+    --- FOOD ---
+        warning: The food is running low. The crew gets hungry.
+        danger: The food is almost gone! The crew is in trouble.
+
+    --- WATER ---
+        warning: The water is running low. Everyone is thirsty.
+        danger: The water is almost gone! The crew is in trouble.
+
+    --- AIR ---
+        warning: The air is getting stale. The meter is low.
+        danger: The air is almost gone! The crew can barely breathe.
+
+--- LAUNCH ---
+    (Note for writers: What the inner voice says during Launch. start = when the screen opens. results = one short line per moment result (the game takes them in turn). summary_clean / summary_costs = after the last moment. The voice is never wrong. The levels do not change these lines yet.)
+    start: A rocket launch. First the go / no-go poll: is everything ready? Then a ring closes on a target, and I press Space when they line up. Easy. Probably.
+
+    --- RESULTS ---
+        Perfect:
+            - Perfect! Right on the target. I have no idea how I did that.
+            - Bullseye! I will pretend I planned that.
+            - Perfect again! My thumb is a genius.
+        Good:
+            - Good! Close to the target. Close counts.
+            - Not perfect, but good. Good is fine. Good is great, really.
+            - Good enough! Our rocket is still happy.
+        Miss:
+            - Missed it! That will cost us something. But the mission is not over.
+            - Too early or too late. Oops. Something got hurt, but we keep flying.
+            - Miss. The ring has to line up with the target. Next time!
+    summary clean: Nothing lost at all! A perfect launch. I may have just been lucky.
+    summary costs: Some misses. The list shows what they cost us. But we are still flying! Next, the long trip.
+
+--- EXTRAS ---
+    (Note for writers: Inner voice lines for the extra features added on 2026-11-14 (numbers: data/extras.json). The NASA sources for the real facts are in data/extras.json and story.json extras.)
+    signal delay: Real radio from {planet} takes about {delay} to reach Earth. We skip the wait here!
+    footprints moon: Look back: my footprints will stay here for millions of years. There's no wind on the Moon.
+    footprints mars: My footprints are already fading. The Martian wind covers them with dust.
+    ice start: Got the ice! Quick, to the analyzer: in this thin air the ice turns straight into gas.
+    ice share: We saved {percent}% of the ice sample.
+    ice gone: The ice vanished before we got there. We only have a little data from it.
+    clean halfway: Halfway! Dust floats around in zero-g and lands on everything. I should clean the instruments in the Science Bay.
+    zero g: Look, the little plush is floating! Crews carry one so they can see the moment they reach zero gravity.
+    quick fix: Quick fix done. It will cost us later, but it bought us time.
+    proper fix: Fixed properly. No surprises later.
+    weather wait: We wait one day. It costs money, but the winds calm down.
+    weather go: Launching into the wind. Stay sharp: the timing will be tighter.
+    gravity moon: Whoa, I'm light! The Moon pulls about one sixth as hard as Earth. Try jumping!
+    gravity mars: Mars pulls about a third as hard as Earth. My jumps are almost three times higher!
+    minigame good: Spotless! No Earth germs will hitch a ride on this one.
+    minigame ok: Mostly clean. A few specks got away, but it should be fine.
+    minigame bad: That's a lot of dust left. Earth germs could travel along with us.
+
+--- CHARACTER HINTS ---
+    (Note for writers: Three voices, one decision (INNOVATION.md Feature A). Keyed by decision (the Design Lab station) and by character. scientist = the real term plus a real number with its unit; janitor = everyday comparison, no technical terms; student = a question about the trade-off, never the answer. Two sentences, about 25 words. {blanks} are filled by the game from the data files (Notebook.gd hint_values), so the numbers always match the screen. learned = what the voice says once that character has earned the word in the Notebook (Feature B): the newest earned word of the list wins. learned_only stations say nothing until a word is earned. Writers: change the words freely, keep the {blanks}.)
+
+    --- ROCKET ---
+        scientist: Payload capacity is the most mass a launch vehicle can lift. Our spacecraft is {mass} kg, and the {low_name} lifts only {low_lift} kg.
+        janitor: You can't fit a couch in a tiny car. Make sure the rocket can carry everything we packed before we pay for it.
+        student: The cheapest rocket saves money, but what could it cost us in other ways? When is a pricier rocket worth it?
+        [learned]
+            [payload capacity]
+                scientist: I learned it the hard way: check the payload capacity first. We are at {mass} kg, and the {low_name} lifts {low_lift} kg.
+                janitor: Now I know the word: payload capacity, the most a rocket can lift. We're at {mass} kg, so pick one that lifts more.
+                student: Last time we went over the payload capacity. Is {mass} kg under what this rocket can lift?
+            [launch vehicle]
+                scientist: The launch vehicle sets our mass limit and a big part of the cost. The {cheap_name} costs {cheap_cost} million $ and lifts {cheap_lift} kg.
+                janitor: Now I know: the rocket is called the launch vehicle. The {cheap_name} costs {cheap_cost} million $ and lifts {cheap_lift} kg.
+                student: Which launch vehicle fits a {mass} kg spacecraft? Is the cheapest one still enough?
+            [trade off]
+                scientist: Every rocket is a trade-off between cost and lift. The {cheap_name} is {cheap_cost} million $; the {big_name} lifts {big_lift} kg.
+                janitor: Now I know the word: a trade-off, where you gain one thing and lose another. A bigger rocket lifts more but eats the budget.
+                student: This is a trade-off: money against lift. What do we lose if we pay for the {big_name}?
+
+    --- ORBIT ---
+        scientist: Orbital altitude is how high we circle {planet}. The {low_orbit} needs {low_fuel} kg of fuel to reach, the {high_orbit} only {high_fuel} kg.
+        janitor: Parking right by the store gives a great look, but stopping fast burns more gas. Up high is easier to reach, but everything looks smaller.
+        student: Do we want sharp close-up pictures, or do we want to save fuel? Which one matters more for our goal at {planet}?
+        [learned]
+            [orbit]
+                scientist: Getting into orbit failed us before. The {low_orbit} needs {low_fuel} kg of fuel; the {high_orbit} needs {high_fuel} kg.
+                janitor: Now I know the word orbit: the path we circle on. The {low_orbit} needs {low_fuel} kg of fuel, the {high_orbit} {high_fuel} kg.
+                student: We had trouble reaching our orbit last time. Is a close look worth {low_fuel} kg of fuel instead of {high_fuel}?
+            [orbital altitude]
+                scientist: Remember the orbital altitude lesson: the {low_orbit} costs {low_fuel} kg of fuel, the {high_orbit} {high_fuel} kg. Pick on purpose.
+                janitor: Now I know orbital altitude: how high we circle. Low means sharp pictures but {low_fuel} kg of fuel; high needs {high_fuel} kg.
+                student: Which orbital altitude fits our goal? Is the sharper view worth the extra fuel?
+
+    --- INSTRUMENTS ---
+        scientist: The payload is the science instruments we carry. Our goal needs the {key_name}, which uses {key_power} W of power.
+        janitor: Bring the right tool for the job, like a shovel for digging. Every extra gadget is more to carry and more to plug in.
+        student: Which instrument does our goal truly need? If we pack extra cameras, what runs out first: power, money or mass?
+        [learned]
+            [payload]
+                scientist: Payload first: the {key_name} is the instrument our goal needs. It uses {key_power} W, so leave power for it.
+                janitor: Now I know the word payload: the science instruments. Our goal needs the {key_name}, so pack it first.
+                student: Our payload let us down last time. Which instrument here makes the goal possible?
+            [power consumption]
+                scientist: Watch the power consumption: the {key_name} alone uses {key_power} W. Every instrument we add needs its share.
+                janitor: Now I know power consumption: how much power the parts use. The {key_name} uses {key_power} W by itself.
+                student: We ran out of power last time. Can our panels feed every instrument we pack?
+            [data rate]
+                scientist: Data is only useful if the data rate gets it home. Our signal needs at least {comms_need} Mb/s, so don't pack more than we can send.
+                janitor: Now I know data rate: how fast we can send data home. We need at least {comms_need} Mb/s, so check the antenna too.
+                student: More instruments make more data. But can our antenna send it home fast enough?
+
+    --- LEARNED ONLY ---
+        [solar panel]
+            [power consumption]
+                scientist: Power consumption must stay below what the panels make. Right now we have {power_spare} W to spare.
+                janitor: Now I know power consumption: what our parts use. We have {power_spare} W to spare, so bigger panels might help.
+                student: Last time we ran out of power. Do we have enough spare power for the dark parts of the trip?
+        [antenna]
+            [data rate]
+                scientist: The data rate has to beat {comms_need} Mb/s. Right now our signal is {comms} Mb/s.
+                janitor: Now I know data rate: how fast we talk to home. We have {comms} Mb/s and need {comms_need} Mb/s.
+                student: Our data rate was too low last time. Is a bigger antenna worth its mass and power?
+            [attitude control]
+                scientist: Attitude control keeps the antenna pointed at Earth. A bigger antenna only helps if we can point it.
+                janitor: Now I know attitude control: what turns and points the spacecraft. Point the antenna right, and home hears us.
+                student: What good is a big antenna if we can't point it at Earth?
+        [attitude control]
+            [attitude control]
+                scientist: Attitude control points our antenna and panels. Better wheels point more exactly, but cost money and power.
+                janitor: Now I know attitude control: the part that turns the spacecraft. Better wheels point straighter.
+                student: How exactly do we need to point? Is the better system worth its cost?
+        [battery]
+            [mission lifetime]
+                scientist: Mission lifetime has to reach {lifetime_need} months. Right now we are at {lifetime} months.
+                janitor: Now I know mission lifetime: how long the spacecraft keeps working. We have {lifetime} months and need {lifetime_need}.
+                student: Our mission ended too soon last time. What would make it last longer, and what would it cost?
+
+
+====================================================================================================
+  story.json: STORY AND SCREEN TEXT (titles, buttons, cards, notebook, everything else on screen)
+====================================================================================================
+(Note for writers: Story text for the screens. Writers can change any sentence. Do not change the names on the left side of the colons (the keys), or the game cannot find the text.)
+missing picture: Picture goes here:
+
+--- DID YOU KNOW ---
+    (Note for writers: "Did you know?" tips on the Build screen (PLAN.md section 6e, TASKS.md step 14): one short REAL fact per part tab, one per mission for the Instruments tab, and one (rockets) shown in the voice bar on the rocket screen. Each fact has its NASA source next to it. Only facts already checked in this project's data files are used. label = the word before the fact.)
+    label: Did you know?
+
+    --- PARTS ---
+        [structure]
+            text: MRO weighed 2,180 kg at launch, and 1,149 kg of that was fuel. Fuel is often the heaviest thing a spacecraft carries!
+            source: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+        [solar panel]
+            text: In a planet's shadow, solar panels make no power at all. MRO flies through Mars' shadow for about 40 minutes of every two-hour orbit.
+            source: https://www.jpl.nasa.gov/news/news.php?feature=7059
+        [battery]
+            text: MRO carries a pair of rechargeable batteries to keep it running whenever it flies through the shadow of Mars.
+            source: https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+        [attitude control]
+            text: A radio command takes 3 to 22 minutes to reach Mars. Nobody on Earth can steer a spacecraft live, so it has to point itself.
+            source: https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/
+        [thermal control]
+            text: MRO uses as much as 300 watts just to run its heaters. In the shade, space is very, very cold.
+            source: https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/
+        [antenna]
+            text: MRO's 3-meter dish can send data home at up to about 6 megabits per second. When Mars is farthest from Earth, that drops to about 0.6.
+            source: https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf and https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+        [computer]
+            text: MRO's big camera, HiRISE, was planned to send home more than 12 terabits of pictures in its first two years. The computer stores pictures until the next radio contact with Earth.
+            source: McEwen et al. 2007 (HiRISE team paper): https://boris.unibe.ch/25369/1/2005JE002605.pdf
+
+    --- ROCKETS ---
+        text: NASA paid about $80 million to launch one mission on a Falcon 9, and $148 million for one on an Atlas V 401. The Falcon 9's booster lands and flies again.
+        source: https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/ and https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/ (Team decision 2026-11-13: keep the real rocket numbers and teach why the Falcon 9 is cheap.)
+
+    --- INSTRUMENTS ---
+        [mars]
+            text: MRO's Context Camera weighs just 3 kg, yet it was planned to take about 3.5 terabits of pictures of Mars in its first two years.
+            source: https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/ and https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf
+        [moon]
+            text: Apollo astronauts left seismometers on the Moon. One weighed about 11.5 kg and used only about 7 watts.
+            source: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01
+        [venus]
+            text: In 1985 the Vega 1 balloon floated in the clouds of Venus. The balloon, its gondola and its helium weighed only 21.5 kg together.
+            source: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F
+setup next button: Next
+
+--- NAME SCREEN ---
+    title: First things first. What is your name?
+    placeholder: Type your name
+    button: Next
+
+--- CHARACTER SCREEN ---
+    title: Wait. Who are you, again?
+    difficulty word: Difficulty
+
+--- PLAYER COUNT SCREEN ---
+    title: How many players are on the team?
+
+    --- CARDS ---
+        [1]
+            name: 1 player
+            description: You do every build job yourself.
+            button: Just me
+        [2]
+            name: 2 players
+            description: Take turns at each build job. Your scores are averaged.
+            button: Two of us
+        [3]
+            name: 3 players
+            description: Take turns at each build job. Your scores are averaged.
+            button: Three of us
+        [4]
+            name: 4 players
+            description: Take turns at each build job. Your scores are averaged.
+            button: Four of us
+
+--- MINIGAMES ---
+    (Note for writers: Words for the three build minigames and the turn screens around them. {player} = the player's name, {score} = a score out of 100, {n} = the player number.)
+    player default: Player {n}
+    your turn: {player}, your turn!
+    start button: Start
+    time left: Time: {seconds}
+    your score: {player} scored {score} out of 100
+    next player button: Next player
+    results button: See the team results
+    results title: Team results
+    result line: {player}: {score}
+    average line: Team average: {score} out of 100
+    becomes line: {result} is now {score} out of 100.
+    next button: On to the next job
+    help button: ?
+    back button: Back to the game
+    press space: Press Space to start
+
+    --- ASSEMBLY ---
+        title: Build job 1: Assembly
+        how to: Type the name of the part being bolted on. Each finished word snaps that part onto the rocket. A wrong key freezes you for {freeze} seconds.
+        steps:
+            - A part name appears, like FIN or TANK.
+            - Type its letters in order. Spaces don't count.
+            - Finish the word and the part snaps onto the rocket behind you.
+        example word: FIN
+        real step: Real teams call this integration: putting every part into one spacecraft.
+        real step source: NASA CubeSat 101 (integration and testing): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf
+        result name: Build quality
+        placed: Parts on: {count} of {target}
+        bolt on: Bolt on the:
+        oops: Wrong key!
+
+    --- HAMMER ---
+        title: Build job 2: Hammering
+        how to: Nails stick out of the rocket panel. Click a nail to hammer it in before it slides back out. Missing hits the panel and dents it.
+        steps:
+            - Nails pop up on the rocket panel.
+            - Move the hammer over a nail and click to hit it.
+            - Be quick: a nail you don't hit slides back out and stays loose.
+        result name: Structure strength
+        real step: Real teams shake-test a spacecraft so nothing falls off at launch.
+        real step source: NASA CubeSat 101 (environmental testing, including vibration): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf
+        hits: Nails in: {hits}
+        left: Nails left: {left}
+
+    --- FUEL ---
+        title: Build job 3: Fueling
+        how to: Drag the valve wheel's white knob counterclockwise and let go when the fuel gauge reaches the orange mark.
+        steps:
+            - An orange mark shows how far to turn the valve.
+            - Drag the white knob around counterclockwise. The gauge fills as you turn.
+            - Let go on the mark. The closer you are, the more points.
+        result name: Fuel loaded
+        real step: Real teams load propellant slowly and carefully, one of the last jobs before launch.
+        real step source: NASA CubeSat 101 (launch preparation): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf; propellant loading is one of the last steps before launch
+        gauge: FUEL
+        target: Round {round} of {rounds}: turn the valve {angle}° counterclockwise
+        start mark: Start
+        live angle: {angle}°
+        round result: You turned {turned}°. Off by {off}°: {points} points.
+
+--- ROCKET SCREEN ---
+    title: What kind of rocket?
+    cost word: Cost
+    capacity word: Lift toward Mars
+    moments word: Launch moments
+    tightness word: Window tightness
+
+--- MISSION SCREEN ---
+    title: Choose a mission
+    goal heading: Success if we:
+    checklist mark: [ ]
+    locked button: Locked
+
+--- BUILD SCREEN ---
+    title: Build your spacecraft. Pick a card in every tab.
+    max word: max
+    min word: need at least
+    review button: Review my spacecraft
+    instruments tab: Instruments
+    instruments hint: Science instruments do the real work of the mission. Pack as many as you can afford, but don't forget the one the goal needs.
+    pick button: Pick this
+    picked button: Picked
+    picked word: YOUR PICK
+    pack button: Pack it
+    unpack button: Take it out
+    packed word: PACKED
+    key instrument line: Needed for the mission goal!
+
+--- RIPPLE ---
+    (Note for writers: The Ripple effect strip on the Build screen (PLAN.md 6c). It shows what ONE change did to the other numbers. start = the line before any change. arrow = what goes between the steps. swap = a part card change ({part} = category, {new} and {old} = card names). packed / unpacked = an instrument change. change = one number that moved. no_change = when nothing moved. now_bad = a row that just turned red ({rocket} = the rocket's name), followed by its tip. now_ok = a row that just came back inside its limit.)
+    start: Change a card to see what else changes.
+    arrow:   →  
+    swap: {part}: {new} instead of {old}
+    packed: Packed the {name}
+    unpacked: Took out the {name}
+    change: {resource} {amount} {unit}
+    no change: Nothing else changed.
+
+    --- NOW BAD ---
+        budget: Over budget now
+        mass: Too heavy for the {rocket} now
+        power: Not enough power now
+        communications: Signal too weak now
+        data: Not enough data now
+        mission lifetime: Won't last long enough now
+
+    --- TIPS ---
+        budget: pick cheaper parts or a cheaper rocket
+        mass: pick a bigger rocket or lighter parts
+        power: pick a bigger solar panel or parts that use less power
+        communications: pick a bigger antenna or better pointing
+        data: pack more instruments or pick a better computer
+        mission lifetime: pick a stronger frame, a bigger battery or better heat control
+    now ok: {resource} is back inside the limit
+
+--- CAUSE CHAIN ---
+    (Note for writers: The cause chain on the Mission Report's finding cards (debrief, 2026-11-14), e.g. "Heavy Large frame (+120 kg) → more mass (4100 kg) → bigger rocket (Atlas V 541, 243 million $) → budget gone (712 of 671 million $)". GameState.get_cause_chain() picks the choice that pushed the resource furthest from its best option. label = the heading. arrow = between the steps. first = the first step per resource ({item} = the choice, {amount} {unit} = how much worse it is than the best option). orbit_item / window_item = how the orbit fuel and the launch date are named. more_mass and bigger_rocket = the middle steps when a heavy design forced a pricier rocket. last = the final step per resource ({value} = the total, {limit} = the limit, {rocket} = the rocket's name).)
+    label: How it happened
+    arrow:   →  
+
+    --- FIRST ---
+        budget: Pricey {item} (+{amount} {unit})
+        mass: Heavy {item} (+{amount} {unit})
+        power: Power-hungry {item} (uses {amount} W more)
+        communications: {item} (sends {amount} {unit} less)
+        data: {item} ({amount} {unit} less data)
+        mission lifetime: {item} ({amount} {unit} shorter life)
+    orbit item: fuel for the {name}
+    window item: extra fuel for the {name}
+    more mass: more mass ({value} {unit})
+    bigger rocket: bigger rocket ({rocket}, {cost} million $)
+
+    --- LAST ---
+        budget: budget gone ({value} of {limit} {unit})
+        mass: too heavy for the {rocket} (lifts {limit} {unit})
+        power: not enough power ({value} {unit})
+        communications: signal too weak ({value} of {limit} {unit})
+        data: not enough data ({value} of {limit} {unit})
+        mission lifetime: won't last long enough ({value} of {limit} {unit})
+
+--- PARTS ---
+    (Note for writers: The Build screen tabs and cards. tab = the short word on the tab button. name = the category's full name. hint = one line under the tabs that says what the category does. versions = one card each: name and a one-sentence description. The left-side names must match data/game_data.json ("parts").)
+
+    --- STRUCTURE ---
+        tab: Structure
+        name: Structure (frame)
+        hint: The frame holds every part together. A bigger frame is stronger and lasts longer, but it is heavier.
+        [versions]
+            [small]
+                name: Small frame
+                description: Light and cheap. Just enough to hold everything.
+            [medium]
+                name: Medium frame
+                description: Stronger, so the spacecraft lasts a bit longer.
+            [large]
+                name: Large frame
+                description: The toughest frame. Lasts the longest, weighs the most.
+
+    --- SOLAR PANEL ---
+        tab: Solar panel
+        name: Solar panel
+        hint: Solar panels turn sunlight into electricity. Every other part needs power.
+        [versions]
+            [small]
+                name: Small
+                description: Cheap and light, but makes the least power.
+            [medium]
+                name: Medium
+                description: A middle choice for power, cost and weight.
+            [large]
+                name: Large
+                description: Lots of spare power, but heavy and costly.
+
+    --- BATTERY ---
+        tab: Battery
+        name: Battery
+        hint: The battery stores power for when the spacecraft is in shadow and the sun can't reach the panels.
+        [versions]
+            [small]
+                name: Small battery
+                phrase: small battery
+                description: Light, but it wears out sooner.
+            [medium]
+                name: Medium battery
+                phrase: medium battery
+                description: Holds more, so the mission can last longer.
+            [large]
+                name: Large battery
+                phrase: large battery
+                description: Holds the most and lasts the longest. Heavy.
+
+    --- ATTITUDE CONTROL ---
+        tab: Pointing
+        name: Attitude control (pointing)
+        hint: Pointing keeps the spacecraft facing the right way: panels to the Sun, antenna to Earth, instruments to the target.
+        [versions]
+            [simple]
+                name: Small thrusters
+                description: Little puffs of gas turn the spacecraft. Cheap, but not very exact.
+            [better]
+                name: Spinning wheels
+                description: Spinning wheels turn it smoothly. Aims better, uses more power.
+            [best]
+                name: Wheels + star tracker
+                description: A camera finds the stars to know exactly where it points.
+
+    --- THERMAL CONTROL ---
+        tab: Heat
+        name: Thermal control (heat)
+        hint: Space is freezing in the shade and boiling in the Sun. Heat control keeps the parts at a safe temperature.
+        [versions]
+            [heaters]
+                name: Heaters only
+                phrase: heaters alone
+                description: Electric heaters keep things warm. Simple, but they use a lot of power.
+            [louvers]
+                name: Heaters + louvers
+                phrase: heaters and louvers
+                description: Little shutters open and close to let heat out, so the heaters work less.
+            [radiators]
+                name: Radiators + heat pipes
+                phrase: radiators and heat pipes
+                description: Moves heat around the spacecraft on its own. Uses the least power.
+
+    --- ANTENNA ---
+        tab: Antenna
+        name: Radio antenna
+        hint: The antenna sends your data home to Earth. A bigger dish sends faster, but it is heavier.
+        [versions]
+            [small]
+                name: Small
+                description: Light and cheap, but too slow when Mars is far.
+            [medium]
+                name: Medium
+                description: A middle size dish, a middle speed.
+            [large]
+                name: Large
+                description: Fast to Earth, but heavy.
+
+    --- COMPUTER ---
+        tab: Computer
+        name: Computer
+        hint: The computer runs the spacecraft and packs the science data so more of it fits.
+        [versions]
+            [simple]
+                name: Simple computer
+                description: Does the job. Nothing extra.
+            [better]
+                name: Better computer
+                description: Squeezes more science into the same data.
+            [best]
+                name: Best computer
+                description: The fastest. Squeezes the most, and is built to last.
+
+--- INSTRUMENTS ---
+    (Note for writers: The Instruments tab cards, one group per mission id in data/destinations.json. needed_for = finishes the sentence "without it, you can't ..." on the Review screen.)
+
+    --- MARS ---
+        [ice drill]
+            name: Ice drill
+            description: Drills into the ground and takes a sample of the ice.
+            needed for: drill and sample the ice
+        [camera basic]
+            name: Basic camera
+            description: Takes wide pictures of Mars. Light and cheap.
+        [camera high res]
+            name: High resolution camera
+            description: Super sharp pictures, but heavy and expensive.
+        [ground radar]
+            name: Ground radar
+            description: Sends radio waves into the ground to look for buried ice.
+
+    --- MOON ---
+        [seismometer]
+            name: Seismometer
+            description: Feels the ground shake. It listens for moonquakes.
+            needed for: listen for moonquakes
+        [camera basic]
+            name: Basic camera
+            description: Takes wide pictures of the Moon. Light and cheap.
+        [heat flow probe]
+            name: Heat flow probe
+            description: Pushes into the ground to measure the heat coming up from inside the Moon.
+        [laser reflector]
+            name: Laser reflector
+            description: A mirror. Scientists on Earth bounce lasers off it to measure the distance.
+
+    --- VENUS ---
+        [cloud camera]
+            name: Cloud camera
+            description: Watches the swirling clouds and storms from orbit.
+            needed for: map the storms
+        [balloon probe]
+            name: Balloon probe
+            description: A balloon that floats in the clouds and measures the wind.
+            needed for: release a cloud balloon
+        [radar mapper]
+            name: Radar mapper
+            description: Sees through the thick clouds to map the ground. Uses lots of power.
+        [spectrometer]
+            name: Spectrometer
+            description: Splits light into colors to find out what the clouds are made of.
+
+--- REVIEW SCREEN ---
+    title: Before launch: does it all add up?
+    check line: {mark} {name}: {value} {unit} ({rule} {limit})
+    instrument ok line: {mark} Key instrument packed: {instrument}
+    instrument missing line: {mark} Key instrument missing: {instrument}
+    ok mark: [OK]
+    bad mark: [X]
+    header resource: Resource
+    header have: You have
+    header limit: Limit
+    header status: Status
+    ok word: OK
+    over word: OVER THE LIMIT
+    under word: TOO LOW
+    back button: Back to build
+    launch button: Launch mission
+    launch anyway button: Launch anyway
+    blockers title: Blockers (you can still launch, but these will cause trouble):
+
+    --- BLOCKERS ---
+        (Note for writers: One line for each resource that breaks its limit. {value} = the player's total, {limit} = the limit, {unit} = the unit, {rocket} = the picked rocket's name.)
+        budget: Over budget: {value} {unit}, but the limit is {limit}.
+        mass: Too heavy: {value} {unit} with the orbit fuel, but the {rocket} can only lift {limit}.
+        power: Not enough power: {value} {unit}, but it needs at least {limit}.
+        communications: Signal too weak: {value} {unit}, but it needs at least {limit}.
+        data: Not enough data: {value} {unit}, but it needs at least {limit}.
+        mission lifetime: Won't last long enough: {value} {unit}, but it needs at least {limit}.
+        key instrument: No {instrument} packed: without it, you can't {needed_for}.
+
+--- ORBIT SCREEN ---
+    title: Choose an orbit
+    fuel word: Fuel to get there
+
+--- ORBITS ---
+    (Note for writers: The orbit cards, one group per mission id in data/destinations.json.)
+
+    --- MARS ---
+        [low]
+            name: Low orbit
+            description: Close to Mars. Sharper pictures, but it takes more fuel to slow down into it.
+            button: Pick low
+        [high]
+            name: High orbit
+            description: Far above Mars. A wide view with less detail, and it takes less fuel to reach.
+            button: Pick high
+        [polar]
+            name: Polar orbit
+            description: A low orbit that passes over the north and south poles, where much of the ice on Mars is.
+            button: Pick polar
+
+    --- MOON ---
+        [low]
+            name: Low orbit
+            description: Close to the Moon. A short way down to land, but it takes more fuel to slow down into it.
+            button: Pick low
+        [high]
+            name: High orbit
+            description: Far above the Moon. Less fuel to reach, but a longer trip down to the surface.
+            button: Pick high
+        [polar]
+            name: Polar orbit
+            description: A low orbit over the Moon's poles, so it passes over every part of the Moon in time.
+            button: Pick polar
+
+    --- VENUS ---
+        [low]
+            name: Low orbit
+            description: Just above the clouds. Close-up views of the storms, but it takes more fuel to slow down into it.
+            button: Pick low
+        [high]
+            name: High orbit
+            description: Far above Venus. You see whole storms at once, and it takes less fuel to reach.
+            button: Pick high
+        [polar]
+            name: Polar orbit
+            description: A low orbit over the poles, where Venus has giant swirling storms.
+            button: Pick polar
+
+--- SHIP ---
+    (Note for writers: Names on the ship. room_names = the sign above each room's doorway (left side of the colon must match the room names in game_data.json). future_stations = the floating label over each glowing floor marker.)
+
+    --- ROOM NAMES ---
+        bridge: BRIDGE
+        power room: POWER ROOM
+        science bay: SCIENCE BAY
+        comms room: COMMS ROOM
+        life support: LIFE SUPPORT
+
+    --- FUTURE STATIONS ---
+        science bay: Future station: Data
+        comms room: Future station: Comms
+        life support food: Food station
+        life support water: Water station
+        life support air: Air station
+
+--- WALK SCREEN ---
+    controls hint: WASD = walk    Space = jump    Mouse = look    E = use    Tab = raise arm (dashboard)    Esc = free the mouse
+
+--- CHARACTERS ---
+    (Note for writers: UPGRADE_PLAN_V3 B1: staff_card = the Character Room wall card (who, knows, help; the difficulty dots come from levels). Under 30 words per card, and never an inner-voice line. Head Writer: these are drafts from the plan; the janitor's help line is new (PLACEHOLDER wording, check it).)
+
+    --- SCIENTIST ---
+        name: The Assistant Scientist
+        description: You know spacecraft, orbits and Mars better than anyone in the room. The general just needs you to decide.
+        [staff card]
+            who: Assistant Scientist. Works here.
+            knows: Knows the real terms. Has helped on missions.
+            help: Clear hints, every time you ask.
+        button: That's me
+        picture: res://assets/characters/scientist.png
+
+    --- JANITOR ---
+        name: The Janitor
+        description: You know every room in this building. You know nothing about spacecraft.
+        [staff card]
+            who: Janitor. Twenty years of overhearing scientists.
+            knows: Half-remembers things. Never built a spacecraft.
+            help: Some hints, in plain words.
+        button: That's me
+        picture: res://assets/characters/janitor.png
+
+    --- STUDENT ---
+        name: The Student
+        description: You came on a school tour and took a wrong turn. You know a little from class. The general points at you anyway.
+        [staff card]
+            who: Lost Student. Came for a field trip. Took a wrong turn.
+            knows: Not much yet. Has never worked on a mission.
+            help: Almost no hints. You figure it out.
+        button: That's me
+        picture: res://assets/characters/student.png
+
+--- DESTINATIONS ---
+    (Note for writers: The three mission cards on the Choose a mission screen. goal = the short line under the name. goals = one sentence for each checklist id in data/destinations.json. mission_card = the Mission Room wall card (UPGRADE_PLAN_V3 B2): where, job, why, nasa; under 40 words; the longer story is behind Q on the globe.)
+    mission card source: Distances: NASA fact sheets. Moon mean distance 384,400 km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html; Mars 54.6 to 401.3 million km from Earth: https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html; Venus 38.2 to 261.0 million km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html (Science & Data Lead: please confirm these three lines). Trip times: destinations.json trip_days (Apollo 8 about 3 days, MRO 210 days, Pioneer Venus 198 days). NASA lines: destinations.json twins sources (Apollo seismometers until 1977, Phoenix ice 2008, MRO SHARAD buried ice, Magellan radar map) and NASA Venus facts (surface hot enough to melt lead).
+
+    --- MOON ---
+        name: The Moon
+        in sentence: the Moon
+        goal: Build a moonquake network
+        description: Land, set up seismometers far apart, and listen for moonquakes. The long lunar night has no sunlight at all.
+        [mission card]
+            where: 384,400 km away. About 3 days by spacecraft.
+            job: Set up seismometers and listen for moonquakes.
+            why: Quakes show what the Moon is made of inside.
+            nasa: Apollo astronauts left seismometers that worked until 1977.
+        button: Go to the Moon
+        [goals]
+            launch safely: Launch safely
+            cruise safely: Cross to the Moon
+            enter orbit: Enter lunar orbit
+            land safely: Land on the Moon
+            place seismometers: Place 3 seismometers
+            send quake data: Send quake data through one lunar night
+            lift off: Lift off from the Moon
+            land home: Land safely on Earth
+
+    --- MARS ---
+        name: Mars
+        goal: Find and measure ice
+        description: Land, drill into the soil, and study the ice under it. Future astronauts will need that water.
+        [mission card]
+            where: 55 to 401 million km away. About 7 months.
+            job: Land, drill and study the ice under the soil.
+            why: Future astronauts could use that ice for water.
+            nasa: Phoenix dug up ice in 2008. MRO's radar finds buried ice.
+        button: Go to Mars
+        [goals]
+            launch safely: Launch safely
+            cruise safely: Survive the trip to Mars
+            enter orbit: Enter Mars orbit
+            land safely: Land on Mars
+            sample ice: Drill and sample the ice
+            send data: Send the ice data home
+            lift off: Lift off from Mars
+            land home: Land safely on Earth
+
+    --- VENUS ---
+        name: Venus
+        goal: Study the storms and clouds
+        description: Nobody lands here: the surface is hot enough to melt lead, and the air would crush a lander. We study it from orbit.
+        [mission card]
+            where: 38 to 261 million km away. About 6½ months.
+            job: Study the storms from orbit and drop a cloud balloon.
+            why: A runaway greenhouse made it the hottest planet.
+            nasa: Magellan mapped it by radar. Nobody lands: the ground would melt lead.
+        button: Go to Venus
+        [goals]
+            launch safely: Launch safely
+            cruise safely: Survive the trip to Venus
+            reach orbit: Enter Venus orbit
+            release balloon: Release a cloud balloon
+            map storms: Map the storms
+            send storm data: Send the storm data home
+            leave orbit: Leave Venus orbit
+            land home: Land safely on Earth
+
+--- LAUNCH VEHICLES ---
+    (Note for writers: Real rockets with their real names (Lead Programmer, 2026-11-12; numbers put in at Step 11b, 2026-11-13). The ids small / medium / large stay the same in the data files. Cost and lift are in game_data.json, launch_vehicles.)
+
+    --- SMALL ---
+        name: Falcon 9
+        description: The cheapest: its booster lands and flies again. Most launch moments, tight timing.
+        button: Pick Falcon 9
+
+    --- MEDIUM ---
+        name: Atlas V 401
+        description: Launched the real MRO. Middle price, but it lifts the least. Normal timing.
+        button: Pick Atlas V 401
+
+    --- LARGE ---
+        name: Atlas V 541
+        description: The priciest (it launched Curiosity). Lifts a lot. Fewest moments, easy timing.
+        button: Pick Atlas V 541
+
+--- MISSIONS ---
+
+    --- MARS ICE ---
+        name: Map the ice on Mars
+        description: Send a spacecraft to orbit Mars and take pictures to find where the ice is. Future astronauts will need that water.
+        button: Start building
+
+--- CREW SUPPLIES ---
+    (Note for writers: The Crew supplies group on the arm dashboard (shown in Flight and Arrival only). names and units = the words on each row. of_word = the words between the amount left and the full size, for example "1250 kg of 1300".)
+    title: Crew supplies
+
+    --- NAMES ---
+        food: Food
+        water: Water
+        air: Air
+
+    --- UNITS ---
+        food: kg
+        water: L
+        air: kg
+    of word: of
+
+--- FLIGHT ---
+    (Note for writers: Words on the screen during Flight (Stage 3): the Life Support stations. prompts = the line shown near a station (after "Press E:"); the _done and _none lines show when there is nothing left to do. ration_panel = the Food station's little screen.)
+
+    --- PROMPTS ---
+        food: Food station: ration the food
+        food done: Food station: rationing is on
+        water: Water station: fix the leak
+        water none: Water station: no leak
+        air: Air station: run the oxygen generator
+        air done: Air station: the oxygen generator is running
+
+    --- RATION PANEL ---
+        title: FOOD STATION
+        body: Rationing means the crew eats a little less each day, so the food lasts longer. Once it is on, it stays on.
+        button: Start rationing
+        close hint: E or Esc = close
+    generator label: RUN THE OXYGEN GENERATOR
+    leak banner: WATER LEAK! Go to the Water station
+
+--- DASHBOARD ---
+    title: Mission dashboard
+    hint small: Tab = bigger
+    hint big: Tab = lower your arm
+
+--- TIMED PRESS TEST ---
+    (Note for writers: Words for the timed-press test bench (scenes/timed_press_test.tscn).)
+    title: Timed press test
+    label: PRESS NOW
+    start button: Start ring
+    key button: Key: {key} (click to switch)
+
+    --- KEY NAMES ---
+        space: Space
+        e: E
+    hint: Press {key} (or click) when the ring closes on the target.
+    result none: Result: press Start
+    result line: Result: {result}
+
+    --- RESULTS ---
+        Perfect: Perfect
+        Good: Good
+        Miss: Miss
+    windows line: Windows: Perfect {perfect} s, Good {good} s
+
+--- LAUNCH SCREEN ---
+    (Note for writers: Words for the Launch screen (Stage 2). moments = the names of the launch moments. cost_kinds = how a Miss cost is written ({amount} is a percent).)
+    title: Launch!
+    hint: Press SPACE (or click) when the ring closes on the target.
+    get ready: Get ready...
+    waiting: ...
+
+    --- MOMENTS ---
+        liftoff: Liftoff
+        max pressure: Max pressure
+        stage separation: Stage separation
+        fairing release: Fairing release
+        engine cutoff: Engine cutoff
+
+    --- RESULTS ---
+        Perfect: Perfect
+        Good: Good
+        Miss: Miss
+    summary title: Launch summary
+    no losses: No losses. A clean launch!
+    costs title: What the misses cost:
+    cost line: {moment}: {cost}
+
+    --- COST KINDS ---
+        fuel: lost {amount}% of the fuel
+        solar panel: solar panel {amount}% damaged
+        antenna: antenna {amount}% damaged
+        instruments: science instruments {amount}% damaged
+    next button: Start the flight
+    poll title: Go / no-go poll
+    poll line: {item}: {detail}
+    go word: GO
+    check word: CHECK
+
+    --- POLL ITEMS ---
+        rocket: Rocket
+        mass: Mass
+        orbit: Target orbit
+        blockers: Design
+        weather: Weather
+    mass fits: {mass} kg, the {rocket} can lift {capacity} kg
+    mass over: {mass} kg is MORE than the {rocket} can lift ({capacity} kg)
+    no blockers: no blockers
+    some blockers: {count} blocker(s) from Review
+    weather clear: clear skies
+    start button: Start the countdown
+    structure title: Structure check (from Hammering):
+    structure ok: Structure strength {strength}: everything held together.
+    structure shake: Structure strength {strength} is weak: the shaking loosened the {part} ({cost}).
+
+--- FLIGHT SCREEN ---
+    (Note for writers: Words for the Flight screen (PLAN.md section 9). {planet} = the mission's place name. Log lines: green = fine, amber = warning, red = loss. events = the lines for each flight event: good = fine, saved = high build quality fixed it, bad = a loss (always says why).)
+    title: Flight to {planet}
+    clock: Day {day} of {days}
+    speed button: Speed: {speed}x
+    next button: On to the mission report
+    earth: Earth
+
+    --- TILES ---
+        phase: Phase
+        signal: Signal delay
+        power: Power made / used
+        reserve: Cash reserve
+        data: Data sent home
+
+    --- PHASES ---
+        launch: Launch
+        cruise: Cruise
+        arrival: Arrival
+    signal value: {minutes} min
+    power value: {made} / {used} W
+    reserve value: {amount} million $
+    data value: {amount} Gb
+    log day: DAY {day}  
+
+    --- LINES ---
+        start: Launch complete. The spacecraft is on its way to {planet}.
+        damage: Launch damage: {what}.
+        no damage: Launch checks: no damage. All systems working.
+        routine: All systems normal. Cruising.
+        low quality: Rushed assembly: the fix costs {cost} million $ from the cash reserve.
+        arrived: Arrived at {planet}!
+        all good: Every system made it through the trip.
+        some bad: We made it, but {count} problem(s) will show in the mission report.
+
+    --- EVENTS ---
+        [solar flare]
+            good: Solar flare! The {computer} is protected against radiation. No harm done.
+            saved: Solar flare! The simple computer reset, but the careful assembly kept the data safe.
+            bad: Solar flare! The simple computer has no radiation protection. It reset: {days} day(s) of data lost.
+            alert: Solar flare coming! The simple computer has no radiation protection. Sound the flare alarm on the Bridge so the crew can shut it down safely.
+            fixed: Solar flare! You sounded the alarm in time: the crew shut the simple computer down safely and no data was lost.
+        [far from earth]
+            good: Halfway there. The signal to Earth is strong enough: {comms} Mb/s.
+            bad: Radio too weak for this distance ({comms} Mb/s, needs at least {limit}). Data rate cut to {percent}%.
+            alert: The signal is fading: our radio is too weak for this distance ({comms} Mb/s, needs at least {limit}). Re-aim the dish in the Comms Room.
+            fixed: You re-aimed the dish exactly at Earth in time. The weak radio still gets the data home.
+        [dust on panels]
+            good: Dust on the solar panels. There is spare power ({spare} W), so everything keeps running.
+            saved: Dust on the solar panels. Power is short, but the well-built panels still give enough.
+            bad: Dust on the solar panels. Only {spare} W spare, not enough: the {instrument} is switched off.
+            bad none: Dust on the solar panels. Only {spare} W spare: everything slows down. Data rate cut to {percent}%.
+            alert: Dust on the solar panels! Only {spare} W spare. Turn the panels to face the Sun in the Power Room before the battery runs low.
+            fixed: You turned the dusty panels straight at the Sun in time. Every instrument stays on.
+        [arrival burn]
+            good: Arrival burn: {fuel}% fuel left, enough for a smooth arrival.
+            bad: Arrival burn: only {fuel}% fuel left, not enough. A rough arrival: the mission loses {months} months of lifetime.
+            alert: Only {fuel}% fuel left for the arrival. Fly a careful course-correction burn on the Bridge to save fuel.
+            fixed: Your careful course-correction burn saved enough fuel for a smooth arrival.
+        [heat near sun]
+            good: Closer to the Sun, it gets hot. Our {thermal} get rid of the extra heat.
+            bad: Closer to the Sun, it gets hot. Heaters can't cool anything down: the {instrument} overheats and is switched off.
+            bad none: Closer to the Sun, it gets hot. Heaters can't cool anything down: everything slows down. Data rate cut to {percent}%.
+            alert: Closer to the Sun, it gets hot, and heaters can't cool anything down. Reset the hot breaker in the Power Room to shut off what is overheating.
+            fixed: You reset the hot breaker in time. Nothing overheated.
+        [lunar night]
+            good: Lunar night: no sunlight for about two Earth weeks. Our {battery} and {thermal} keep everything warm.
+            bad: Lunar night: no sunlight for about two Earth weeks. Our {battery} and {thermal} are not enough: a seismometer freezes. The mission loses {months} months of lifetime.
+            alert: Lunar night is coming: no sunlight for about two Earth weeks, and our {battery} and {thermal} are not enough. Switch to battery saver in the Power Room.
+            fixed: You switched to battery saver in time. The seismometers stay warm through the lunar night.
+    signal seconds: {seconds} s
+
+--- NASA ---
+    (Note for writers: Words for the NASA resources steps (NASA_RESOURCES_PLAN.md). Rules: 20 words or fewer per pop-up; a real word gets its kid meaning once. {level}, {nickname}, {word}, {n}, {total} are filled in by the game.)
+    cml up: CML {level}: {nickname}
+    cml strip: CML {level} · {nickname}
+    cml none: CML 0 · No idea yet
+    stamp flash: Dictionary stamp: {word} · {n} of {total}
+    tablet cml: Concept maturity: CML {level} of 4 ({nickname})
+    tablet segment: Mission segment: {name} ({meaning})
+    tablet dictionary hint: G: Space Dictionary
+    dictionary title: Space Dictionary · {n} of {total} stamps
+    dictionary locked: ???
+    dictionary newest: Newest stamp: {word}. {meaning} Real missions: {real}
+    dictionary close: G or Tab to close
+    dictionary bonus line: Collect every stamp for a +{points} score bonus.
+    office hours title: Office Hours
+    office hours key: O: Office Hours (a hint)
+    office hours button: Office Hours (a hint)
+    user segment line: User segment: here is what scientists learned from your data.
+    twin label: Your mission twin
+    twin line: {name}: {text}
+    real step label: Real teams: 
+    map views:
+        - Whole trip
+        - Follow the ship
+        - Destination
+    map view hint: Bridge map: 1 whole trip · 2 follow the ship · 3 destination
+    not possible tag: Won't work here
+    not possible prompt: {name} won't work here: {reason}
+    end of mission label: When the mission ends
+    conops title: ConOps (the plan in pictures)
+    conops steps:
+        - Launch
+        - Travel
+        - Arrive
+        - Do the science
+        - Send it home
+
+    --- DISCIPLINES ---
+        (Note for writers: The Mission Design Lab disciplines: each Design Room station is named for one (NASA_RESOURCES_PLAN.md N3).)
+        rocket: Launch Vehicle
+        orbit: Mission Design
+        launch window: Mission Design
+        structure: Structures
+        solar panel: Power
+        battery: Power
+        attitude control: Attitude Control
+        thermal control: Thermal
+        antenna: Communications
+        computer: Avionics
+        instruments: Payload
+    discipline progress: {discipline} station · {n} of {total}
+    payload meaning: Payload: the science tools your spacecraft carries.
+
+    --- GMAT TIP ---
+        text: NASA plans real spacecraft paths with free software called GMAT (General Mission Analysis Tool).
+        source: https://software.nasa.gov/software/GSC-19640-1 (NASA Software Catalog: GMAT is open source software for space mission design). Found by web search 2026-11-14: check it matches the challenge Resources tab.
+
+    --- EQUIPMENT ---
+        title: Verification: does it all add up?
+        list label: Equipment List
+        checks label: Checks
+        header:
+            - Item
+            - Mass (kg)
+            - Power (W)
+            - Cost (million $)
+        body: Spacecraft body
+        rocket: Rocket: {name}
+        orbit fuel: Orbit fuel: {name}
+        instrument: Payload: {name}
+        part: {discipline}: {card}
+        total: Total
+        none: -
+
+    --- END OF MISSION ---
+        [moon]
+            text: The seismometers keep listening until their power runs out.
+            source: Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+        [mars]
+            text: The orbiter stays in a high orbit, so it never crashes onto Mars.
+            source: Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+        [venus]
+            text: The ship heads home; the balloon drifts in the clouds until its batteries run out.
+            source: Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+
+--- LANDING ---
+    (Note for writers: Words for the landing animation (scripts/landing.gd). captions = one real fact per destination (source next to it; the Science & Data Lead checks it). {m} = the altitude readout, {percent} = how much speed is left to lose (Venus).)
+
+    --- TITLES ---
+        moon: Landing on the Moon
+        mars: Landing on Mars
+        venus: Arriving at Venus
+    altitude: Altitude: {m} m
+    speed: Braking burn: {percent}% to go
+    touchdown: TOUCHDOWN!
+    in orbit: IN ORBIT!
+
+    --- CAPTIONS ---
+        [moon]
+            title: No air, no parachute
+            text: The Moon has no air to slow a lander down, so its rocket engine has to brake all the way to the ground.
+            source: NASA: "The lack of atmosphere on the moon prevents the use of parachutes or aerobrakes to slow the descent": https://www.nasa.gov/stem-content/lunar-base-supply-egg-drop/
+        [mars]
+            title: Parachute, then rockets
+            text: Mars has thin air. The Phoenix lander used a parachute first, then rocket engines for the last part down.
+            source: NASA JPL Phoenix landing press kit (parachute at about 12.6 km, then pulsed descent thrusters to touchdown): https://www.jpl.nasa.gov/news/press_kits/phoenix-landing.pdf
+        [venus]
+            title: Slowing into orbit
+            text: Nobody lands on Venus. The ship fires its engine against its motion to slow down, so Venus's gravity can hold it in orbit.
+            source: NASA MAVEN orbit insertion: an engine burn "to slow the spacecraft so that it can be captured into Martian orbit": https://www.nasa.gov/image-article/mavens-mars-orbit-insertion/
+
+--- FLIGHT SHIP ---
+    (Note for writers: Words for the walkable ship during the flight (UPGRADE_PLAN_V2 step 21, scripts/flight.gd). stations = the floating label over each cyan pad and the calm task done there ({instrument} = the mission's key instrument). emergencies = design problems from the flight events: alert = the red line at the top, task = what E does. crew = emergencies that are not about the design: alert, task, the flight log line when it starts (log), when you fix it (fixed) and when time runs out (missed, says why and what it cost). {cost} = million $.)
+    day: Day {day} of {days}
+    press: E: {task}
+    all good: {label}: all good
+    skip: Enter: skip to arrival
+    goal trip: Fly to {planet}. Keep the ship running: do the yellow tasks, fix the red alerts.
+    goal fix: Fix it: {task}
+    task log: Crew: {task}. Done. Extra science data sent home.
+    voice start: This is our ship. Walk the rooms with WASD and press E at the glowing pads. The flight log is on the Bridge wall.
+    voice alert: Alarm! The marker shows where to go. I have {seconds} seconds.
+    voice fixed: Fixed it. Back to normal.
+    voice missed: Too late. That one will show up in the report.
+
+    --- STATIONS ---
+        [bridge burn]
+            label: Pilot seat
+            task: Check the course
+        [bridge flare]
+            label: Space weather
+            task: Check the space weather report
+        [power breaker]
+            label: Breakers
+            task: Check the breakers
+        [power solar]
+            label: Solar panels
+            task: Turn the solar panels toward the Sun
+        [science calibrate]
+            label: Instruments
+            task: Calibrate the {instrument}
+        [science samples]
+            label: Samples
+            task: Check the sample freezer
+        [comms dish]
+            label: Dish
+            task: Aim the dish at Earth
+        [comms send]
+            label: Data
+            task: Send the data packets
+        [life water]
+            label: Water
+            task: Refill the water tank
+        [life air]
+            label: Air
+            task: Swap the air filter
+        [life food]
+            label: Food
+            task: Hand out food
+
+    --- EMERGENCIES ---
+        [solar flare]
+            alert: SOLAR FLARE WARNING! Go to Space weather on the Bridge
+            task: Sound the flare alarm
+        [far from earth]
+            alert: SIGNAL FADING! Go to the Dish in the Comms Room
+            task: Re-aim the dish at Earth
+        [dust on panels]
+            alert: POWER DROP! Go to the Solar panels in the Power Room
+            task: Turn the panels to face the Sun
+        [arrival burn]
+            alert: LOW FUEL! Go to the Pilot seat on the Bridge
+            task: Fly the course-correction burn
+        [heat near sun]
+            alert: OVERHEATING! Go to the Breakers in the Power Room
+            task: Reset the hot breaker
+        [lunar night]
+            alert: LUNAR NIGHT COMING! Go to the Breakers in the Power Room
+            task: Switch to battery saver
+
+    --- CREW ---
+        [water leak]
+            alert: WATER LEAK! Go to the Water station in Life Support
+            task: Patch the water leak
+            log: A water pipe is leaking in Life Support.
+            fixed: You patched the water leak in time.
+            missed: Nobody patched the water leak: the repair costs {cost} million $ from the cash reserve.
+        [air filter]
+            alert: AIR FILTER CLOGGED! Go to the Air station in Life Support
+            task: Swap the air filter
+            log: The air filter is clogged. The air is getting stale.
+            fixed: You swapped the air filter in time. Fresh air.
+            missed: The air filter stayed clogged: cleaning the air system costs {cost} million $ from the cash reserve.
+        [breaker trip]
+            alert: BREAKER TRIPPED! Go to the Breakers in the Power Room
+            task: Reset the breaker
+            log: A breaker tripped. Part of the ship lost power.
+            fixed: You reset the breaker in time. Power is back.
+            missed: The breaker stayed off too long: fixing the burnt wiring costs {cost} million $ from the cash reserve.
+
+--- ARRIVAL SCREEN ---
+    (Note for writers: Words for the arrival walk. tasks = the task list, one group per mission (left side must match the task ids in destinations.json > arrival > tasks). marks = what goes before a task or goal: open, done, failed. prompts = the line in the middle of the screen when you stand on a task spot: do = you can do it now, done = already done, missing = an instrument is not packed, waiting = do another task first. sending and leave are shared ({planet} = the place name). The checklist goal names are in "destinations" > goals.)
+    tasks title: Tasks
+    checklist title: Mission checklist
+
+    --- MARKS ---
+        open: [ ]
+        done: [x]
+        failed: [!]
+
+    --- TASKS ---
+        [mars]
+            reach: Walk to the dig spot
+            drill: Run the ice drill
+            analyze: Analyze the sample and send the data home
+        [moon]
+            place 1: Place seismometer 1
+            place 2: Place seismometer 2
+            place 3: Place seismometer 3
+            point antenna: Point the antenna at Earth
+            send quakes: Watch the first quake and send the data home
+        [venus]
+            release balloon: Release the cloud balloon
+            aim camera: Aim the cloud camera at a storm
+            send wind: Read the wind data and send it home
+
+    --- PROMPTS ---
+        sending: Sending data home... {percent}%
+        leave: Press Enter to leave {planet}
+        [mars]
+            [reach]
+                done: The dig spot
+            [drill]
+                do: Hold E to drill. Let go in the green zone.
+                done: Ice sample taken!
+                missing: Dig spot: no ice drill packed
+            [analyze]
+                do: Press E: put the sample in the analyzer
+                done: Data sent home!
+                waiting: Analyzer: you need an ice sample first
+        [moon]
+            [place 1]
+                do: Press E: place seismometer 1
+                done: Seismometer 1 is listening
+                missing: No seismometer packed
+            [place 2]
+                do: Press E: place seismometer 2
+                done: Seismometer 2 is listening
+                missing: No seismometer packed
+            [place 3]
+                do: Press E: place seismometer 3
+                done: Seismometer 3 is listening
+                missing: No seismometer packed
+            [point antenna]
+                do: Hold E to turn the antenna. Let go when it points at Earth (green).
+                done: The antenna points at Earth
+            [send quakes]
+                do: Press E: watch for a quake and send the data
+                done: Quake data sent home!
+                waiting: Quake screen: place all 3 seismometers and point the antenna first
+        [venus]
+            [release balloon]
+                do: Press E: release the cloud balloon
+                done: The balloon is floating in the clouds
+                missing: Airlock: no balloon probe packed
+            [aim camera]
+                do: Hold E to turn the camera. Let go when the storm is in view (green).
+                done: The camera is watching the storm
+                missing: Camera console: no cloud camera packed
+            [send wind]
+                do: Press E: read the wind data and send it home
+                done: Wind data sent home!
+                waiting: Comms: release the balloon and aim the camera first
+    controls hint: WASD = walk    Mouse = look    Space = jump    E = use    Esc = free the mouse
+
+--- CUTSCENE RETURN ---
+    (Note for writers: The return-to-Earth slot (PLAN.md section 11). For now one line of text, then the report. The team makes a real cutscene later. One line per mission id.)
+
+    --- LINES ---
+        mars: The crew lifts off from Mars and heads home to Earth...
+        moon: The crew lifts off from the Moon. Earth grows bigger in the window...
+        venus: The ship fires its engines, leaves the yellow clouds of Venus behind, and heads home to Earth...
+    skip hint: Press Space to skip
+
+--- CUTSCENE INTRO ---
+    (Note for writers: Words for the intro cutscene in scenes/cutscene_intro.tscn.)
+    skip hint: Press Space to skip
+
+    --- SUBTITLES ---
+        (Note for writers: The subtitle lines at the bottom of the cutscene. Each line has a speaker name (shown in amber) and the words (shown in white). The AnimationPlayer calls show_subtitle with one of these names at the right time.)
+        [commander quit]
+            speaker: Chief Mission Designer
+            text: I quit!
+        [general who]
+            speaker: General
+            text: This mission launches on schedule. Who will run it?
+        [general need]
+            speaker: General
+            text: I need somebody. Anybody!
+        [general you]
+            speaker: General
+            text: You. I want you.
+
+--- CONTROLS ---
+    (Note for writers: UPGRADE_PLAN_V2 step 8. keys = the Controls panel (H). hints = the small line at the top of each screen (by scene name); a screen that is not listed shows hint_default. UPGRADE_PLAN_V3 E: a hint shows three keys at most; H shows the rest.)
+    title: Controls
+    close: Close (H)
+    muted: Sound off (M)
+    unmuted: Sound on (M)
+    [keys]
+        #1
+            :
+                - W A S D / arrows
+                - Walk
+        #2
+            :
+                - Space
+                - Jump · launch timed press
+        #3
+            :
+                - Shift
+                - Run
+        #4
+            :
+                - Mouse
+                - Look around
+        #5
+            :
+                - E
+                - Use / pick up / preview
+        #6
+            :
+                - 1, 2, 3
+                - Look at option 1, 2, 3 · Bridge map views
+        #7
+            :
+                - O
+                - Office Hours: a hint (Design Lab)
+        #8
+            :
+                - G
+                - Space Dictionary (your stamps)
+        #9
+            :
+                - Enter
+                - Confirm
+        #10
+            :
+                - Q
+                - Question (when you see Q ?)
+        #11
+            :
+                - Backspace
+                - Go back one choice
+        #12
+            :
+                - R
+                - Quick fix on the ship (costs later)
+        #13
+            :
+                - Tab
+                - Mission tablet (map, resources)
+        #14
+            :
+                - H
+                - Show controls
+        #15
+            :
+                - M
+                - Mute
+        #16
+            :
+                - F
+                - Full screen
+        #17
+            :
+                - Esc
+                - Pause / free the mouse
+    hint default: H controls · M mute · Esc pause
+
+    --- HINTS ---
+        start menu: 
+        cutscene intro: 
+        name: Type your name, then Enter
+        character room: E look · Enter confirm · H more keys
+        mission room: E look · Enter confirm · Q question · N notebook
+        design room: E look · Enter confirm · Q question · N notebook
+        mission school: Enter next · Q question
+        minigame clean: 
+        minigame assembly: 
+        minigame hammer: 
+        minigame fuel: 
+        launch: Space at the right moment · Q question · H more keys
+        flight: E use · Q question · Tab tablet
+        landing: Space, Enter or click to skip
+        arrival: E use · Q question · Tab tablet
+
+--- PAUSE ---
+    title: Paused
+    resume: Resume
+    controls: Controls
+    quit: Quit to start menu
+    volume title: Volume
+    Music: Music
+    SFX: Sound effects
+    Voice: Voices
+    close: Close
+
+--- START MENU ---
+    title: How Did We Get Here?
+    story:
+        - The chief mission designer just quit.
+        - The General needs someone. Anyone.
+        - Somehow, that someone is you.
+    start: Start
+    leaderboard: Leaderboard
+    controls: Controls
+    settings: Settings
+    credits: Credits
+    close: Close
+    team line: A NASA Space Apps Challenge 2026 game · Space Mission Design Game
+
+--- CREDITS ---
+    title: Credits
+    lines:
+        - Made by the Magikid team for the NASA Space Apps Challenge 2026.
+        - Lead Programmer · Art Designer · Head Writer · Video Editor · Science & Data Lead
+        - Coach: the team's coach.
+        - Launch and build screens inspired by Ms. Libby's game "Mission Orbit". Rebuilt in Godot: no code or art copied.
+        - Real mission numbers from NASA (sources in the game's data files).
+        - Planet maps: Earth, NASA Earth Observatory (Blue Marble). Mars, NASA / USGS Astrogeology (Viking mosaic). Moon, NASA's Scientific Visualization Studio (LRO). Venus, NASA/JPL (Magellan radar).
+        - Made with the Godot Engine. All sounds and music are made in code.
+
+--- LEADERBOARD ---
+    title: Leaderboard
+    empty: No missions flown on this computer yet. Be the first!
+    headers:
+        - #
+        - Name
+        - Character
+        - Mission
+        - Score
+        - Date
+    (Note for writers: Saved on this computer only.)
+    bot tag: (bot)
+    you tag: < you
+
+--- LAUNCH3D ---
+    (Note for writers: Words for the 3D launch (UPGRADE_PLAN_V2 step 16). prompts = the round ring buttons, one per launch moment (timing.json moment_ids). captions = the science box in the bottom-left: a title and one or two sentences of real science (see source).)
+
+    --- TILES ---
+        time: MISSION TIME
+        altitude: ALTITUDE
+        speed: SPEED
+        status: STATUS
+        cabin: CABIN
+
+    --- STATUS ---
+        pad: ON PAD
+        ascent: ASCENT
+        orbit: IN ORBIT
+        hold: HOLD
+        separated: SEPARATED
+        stable: STABLE
+    time format: T{sign}{minutes}:{seconds}
+    altitude format: {value} km
+    speed format: {value} km/h
+    site: Launch site: Cape Canaveral, Florida
+    rocket chip: Rocket: {rocket}
+    scrub: Scrub - back to design
+    skip: Skip
+    poll title: Go / No-Go Poll
+    go: GO
+    caution: CAUTION
+
+    --- POLL ITEMS ---
+        rocket: Rocket
+        mass: Mass vs capacity
+        orbit: Target orbit
+        design: Design check
+        weather: Weather
+    weather quiet: light winds, quiet Sun
+    all go: All stations GO.
+    caution line: Caution: {reason}
+    timeline title: Flight Timeline
+
+    --- CHIPS ---
+        countdown: Countdown
+        surprise: Surprise
+        orbit: Orbit
+        burn: Burn
+        release: Release
+        stable: Stable
+    go button: GO FOR LAUNCH
+
+    --- PROMPTS ---
+        liftoff: IGNITION
+        max pressure: THROTTLE DOWN
+        stage separation: STAGE
+        fairing release: FAIRING
+        engine cutoff: RELEASE
+        rebalance: REBALANCE
+    ring hint: Space or click when the ring closes
+
+    --- RESULTS ---
+        Perfect: PERFECT!
+        Good: GOOD
+        Miss: MISS
+    computer took over: Computer took over
+    engine out: ENGINE OUT!
+    debris title: DEBRIS ALERT
+    debris text: Space junk ahead! Wait for it to pass, or release the spacecraft now?
+    debris wait: WAIT
+    debris release: RELEASE NOW
+    hold detumble: HOLD SPACE TO DETUMBLE
+    spin line: Spin: {value}°/s
+    stable: STABLE
+    summary next: Fly to {planet}
+
+    --- CAPTIONS ---
+        [liftoff]
+            title: Liftoff!
+            text: The engines push hot gas down, and the gas pushes the rocket up. That is Newton's third law: every push has an equal push back.
+        [max pressure]
+            title: Max Q
+            text: About a minute after liftoff, the air presses hardest on the rocket. Throttling down for a moment keeps it from being damaged.
+        [stage separation]
+            title: Staging
+            text: The empty first stage drops away. With less weight to carry, the second stage can go much faster.
+        [fairing release]
+            title: Fairing release
+            text: High above most of the air, the nose cone is not needed any more. It splits open and falls away to save weight.
+        [orbit]
+            title: Orbit
+            text: In orbit you are falling around Earth all the time: you move sideways so fast that you keep missing the ground.
+        [burn]
+            title: Leaving Earth
+            text: One more burn speeds the spacecraft up enough to escape Earth's pull and head for {planet}.
+        [detumble]
+            title: Detumble
+            text: After separation the spacecraft can spin. Wheels inside it stop the spin so the antenna can point at Earth.
+    source: liftoff (Newton's third law): https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html; Max Q: https://www.nasa.gov/blogs/commercialcrew/2026/10/01/rocket-reaches-max-q-5/ and the SLS throttle-down: https://www.nasa.gov/wp-content/uploads/2026/01/sls-5558-artemis-ii-sls-reference-guide-final-review-508-012026.pdf; staging: https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/balloon_staging.html; fairing (protects the satellite from aerodynamic pressure and heating, then jettisoned): https://science.nasa.gov/blogs/pace/2024/02/01/pace-spacecraft-encapsulated-in-payload-fairing/; orbit (continuous free fall): https://science.nasa.gov/learn/basics-of-space-flight/chapter3-4/; detumble (reaction wheels point the spacecraft): https://science.nasa.gov/learn/basics-of-space-flight/chapter11-2/
+
+--- CHOICE ROOM ---
+    (Note for writers: Words for the 3D Choice Room (UPGRADE_PLAN_V2 steps 13-14). titles = the big title on the wall for each choice; room_names = the sign over the screen.)
+
+    --- ROOM NAMES ---
+        character: Who Are You?
+        mission: Mission Room
+        design: Mission Design Lab
+
+    --- WALL ---
+        (Note for writers: The wall screen's small words (UI_POLISH_PLAN_V4 Step 2). short_resources = the six names on the slim strip (short so they fit).)
+        back: Backspace · Back
+        next: Enter · Confirm
+        next instruments: Enter · Done packing
+        picked: Picked
+        packed: Packed
+        not here: Won't work here
+        more blockers: (+{n} more)
+        steps: {n} of {total}
+        right title: Your mission
+        right title mission: This mission
+        right title character: This person
+        [short resources]
+            budget: Budget
+            mass: Mass
+            power: Power
+            communications: Signal
+            data: Data
+            mission lifetime: Lifetime
+
+    --- TITLES ---
+        character: Who are you?
+        mission: Where are we going?
+        rocket: Pick a rocket
+        orbit: Pick an orbit
+        launch window: Pick a launch date
+        instruments: Pack the science instruments
+    part title: Pick the {part}
+
+    --- SHORT NAMES ---
+        character: Character
+        mission: Mission
+        rocket: Rocket
+        orbit: Orbit
+        launch window: Launch window
+        instruments: Instruments
+    progress: {name} · {n} of {total}
+    prompt preview: E: look at {name}
+    prompt toggle on: E: pack {name}
+    prompt toggle off: E: unpack {name}
+    prompt confirm: E or Enter: CONFIRM {name}
+    prompt confirm instruments: E or Enter: CONFIRM these instruments
+    prompt pick first: Walk to a pedestal and press E (or press 1, 2, 3)
+    prompt locked: This mission is locked.
+    console label: CONFIRM
+    previewing: Looking at: {name}
+    nothing previewed: Walk to a pedestal and press E, or press 1, 2 or 3.
+    view outside: Outside
+    view inside: Inside
+    tile: {before} → {after}
+    limit max: max {value}
+    limit min: min {value}
+    packed tag: PACKED
+    key tag: Needed for the goal!
+    locked tag: LOCKED
+    cost line: Cost: {value} million $
+    lift line: Lift: {value} kg
+    fuel line: Fuel to get there: {value} kg
+    difficulty line: Difficulty: {value}
+
+    --- MISSION LABELS ---
+        where: Where
+        job: The job
+        why: Why it matters
+        nasa: NASA has done this
+
+    --- STAFF LABELS ---
+        who: Who
+        knows: Knows
+        help: Help you get
+        difficulty: Difficulty
+
+    --- DIFFICULTY DOTS ---
+        easy: •    Easy
+        medium: • •    Medium
+        hard: • • •    Hard
+    trip line: Trip: about {days} days
+    goal line: Goal: {goal}
+    blockers title: Mission blockers:
+    no blockers: No blockers. This design can fly.
+    back hint: Backspace: back to {name}
+    confirmed: {name} locked in.
+    voice label: Inner voice:
+    hired line: {name}! You're hired. Don't break anything.
+    hired tag: HIRED: {name}
+    hired stamp: HIRED
+    hired card: From now on, you are {character}.
+    goal text: Choose the {name}
+    general name: General
+
+--- NOTEBOOK ---
+    (Note for writers: The voice learns (INNOVATION.md Feature B). When a mission or checkpoint fails, the character earns the word for the main cause. terms = the 10 challenge words with a one-sentence meaning. causes = which failure teaches which words (the first word not yet earned is taught, so the same failure twice teaches the next word). run = the line about THIS run; {blanks} come from the run's real numbers. Failures with no run line use their own report sentence (inner_voice.json resource_failures > what).)
+    title: {name}'s Notebook
+    progress: {n} of {total} words earned
+    locked: ??? (fail a mission to learn this word)
+    this run: What happened:
+    close: N or Esc to close
+    button: Notebook (N)
+    new word title: New word in your notebook: {word}
+    new word flash: New notebook word: {word}
+    known word title: Notebook word: {word} (already learned)
+    [terms]
+        #1
+            id: payload
+            word: Payload
+            meaning: The science instruments a spacecraft carries to do its job.
+        #2
+            id: launch_vehicle
+            word: Launch vehicle
+            meaning: The rocket that carries the spacecraft from the ground into space.
+        #3
+            id: orbit
+            word: Orbit
+            meaning: The curved path a spacecraft follows around a planet or moon.
+        #4
+            id: orbital_altitude
+            word: Orbital altitude
+            meaning: How high above the surface a spacecraft circles.
+        #5
+            id: payload_capacity
+            word: Payload capacity
+            meaning: The most mass a rocket can lift to where it is going.
+        #6
+            id: power_consumption
+            word: Power consumption
+            meaning: How much electric power the parts use, measured in watts.
+        #7
+            id: data_rate
+            word: Data rate
+            meaning: How fast data can be sent home, measured in megabits per second.
+        #8
+            id: attitude_control
+            word: Attitude control
+            meaning: The system that turns and points the spacecraft the right way.
+        #9
+            id: mission_lifetime
+            word: Mission lifetime
+            meaning: How long the spacecraft is built to keep working.
+        #10
+            id: trade_off
+            word: Trade-off
+            meaning: A choice where you gain one thing and give up another.
+
+    --- CAUSES ---
+        [mass]
+            words:
+                - payload_capacity
+                - launch_vehicle
+            run: Your spacecraft was {over} kg over the {rocket}'s payload capacity of {limit} kg.
+        [budget]
+            words:
+                - trade_off
+                - launch_vehicle
+            run: You spent {value} million $, which is {over} million $ over the {limit} million $ budget.
+        [power]
+            words:
+                - power_consumption
+            run: Your parts used {over} W more power than the solar panels made.
+        [power event]
+            words:
+                - power_consumption
+        [communications]
+            words:
+                - data_rate
+                - attitude_control
+            run: Your signal was {value} Mb/s, but the mission needed at least {limit} Mb/s.
+        [communications live]
+            words:
+                - data_rate
+                - attitude_control
+            run: Your signal dropped to {value} Mb/s, but the mission needed at least {limit} Mb/s.
+        [data]
+            words:
+                - payload
+                - trade_off
+            run: Your instruments made {value} Gb/day, but the goal needed at least {limit} Gb/day.
+        [data live]
+            words:
+                - payload
+                - trade_off
+            run: Your instruments sent {value} Gb/day, but the goal needed at least {limit} Gb/day.
+        [mission lifetime]
+            words:
+                - mission_lifetime
+            run: Your spacecraft was built for {value} months, but the mission needed {limit}.
+        [mission lifetime live]
+            words:
+                - mission_lifetime
+            run: Your spacecraft lasted {value} months, but the mission needed {limit}.
+        [missing instrument]
+            words:
+                - payload
+                - trade_off
+            run: You flew without the {instrument}, so the goal could not happen.
+        [flight far from earth]
+            words:
+                - data_rate
+                - attitude_control
+        [flight dust on panels]
+            words:
+                - power_consumption
+        [flight lunar night]
+            words:
+                - mission_lifetime
+        [flight arrival burn]
+            words:
+                - orbit
+                - orbital_altitude
+        [return depart]
+            words:
+                - orbit
+        [arrival send data]
+            words:
+                - data_rate
+        [arrival send quake data]
+            words:
+                - data_rate
+        [arrival send storm data]
+            words:
+                - data_rate
+        [arrival no drill]
+            words:
+                - payload
+        [arrival no seismometer]
+            words:
+                - payload
+        [arrival no balloon]
+            words:
+                - payload
+        [arrival no cloud camera]
+            words:
+                - payload
+
+--- BOTS ---
+    (Note for writers: Made-up names for the bot crewmates (UPGRADE_PLAN_V2 step 27). Never use a real person's name here.)
+    crew:
+        - Bolt
+        - Nova
+        - Pip
+
+--- TABLET ---
+    title: Mission tablet
+    resources: Resources
+    goal: Goal
+    timers: Running timers
+    no timers: No timers running.
+    map: Map
+    no map: No map on this screen.
+    close hint: Tab to close
+    ok mark: [OK]
+    bad mark: [X]
+    value line: {name}: {value} {unit}
+
+--- MISSION SCHOOL ---
+    (Note for writers: UPGRADE_PLAN_V3 B4: Mission School, the General's lesson after the briefing. One beat per resource: meaning (one sentence) + limit (one sentence, the numbers come from the data files: {value} {unit}, {rocket}). Last beat: the ripple demo. 13 lines in all. Head Writer: these are drafts in the General's gruff-teacher voice; the jokes are his, the facts stay true. The numbers must never be typed in by hand.)
+    title: Mission School
+    speaker: General
+
+    --- BEATS ---
+        [budget]
+            meaning: Budget is money. Every part costs some, and the rocket costs the most.
+            limit: You get {value} {unit}. Not a dollar more.
+        [mass]
+            meaning: Mass is weight. A rocket can only lift so much.
+            limit: Your limit is what your rocket lifts. The {rocket} lifts {value} {unit}.
+        [power]
+            meaning: Power is electricity. Solar panels make it, and every part eats it.
+            limit: Spare power must stay at {value} {unit} or more. Never below.
+        [communications]
+            meaning: Communications is how fast your radio talks to Earth.
+            limit: You need at least {value} {unit}, or your data stays stuck out there.
+        [data]
+            meaning: Data is the science your instruments collect every day.
+            limit: Collect at least {value} {unit}. Otherwise, why did we even go?
+        [mission lifetime]
+            meaning: Mission lifetime is how long your spacecraft keeps working.
+            limit: It must last at least {value} {unit}. Don't let it quit early.
+    ripple: Touch one thing, and everything else moves. That is your whole job.
+    ripple title: Ripple effect
+    trip line: Trip: about {days} days
+    beat dots: {n} of {total}
+    enter hint: Enter: next
+    skip hint: Enter: next · S: skip the lesson
+    tablet hint: L: Mission School again
+    replay close: Close
+    replay next: Next
+
+--- CHECKLIST ---
+    (Note for writers: UPGRADE_PLAN_V3 A3: the success checklist, grouped by mission phase. phases = the phase names. progress = '3 of 8 done'. now_label = the tablet heading for the current phase's items. return = the one line each for Depart and Home on the return screen and the report ({why} = the reason).)
+
+    --- PHASES ---
+        launch: Launch
+        cruise: Cruise
+        arrive: Arrive
+        land: Land
+        science: Science
+        data: Data
+        depart: Depart
+        home: Home
+    phase line: {phase}: {items}
+    progress: {done} of {total} done
+    now label: Checklist now
+
+    --- RETURN ---
+        depart ok: Smooth lift-off: enough fuel left to leave.
+        depart bad: Rough lift-off: fuel was low ({fuel}% left), so leaving was a struggle.
+        home ok: Smooth landing on Earth: the structure held together.
+        home bad: Rough landing: the structure was weak ({strength}%), so the ride home shook parts loose.
+
+--- QUESTION CARD ---
+    (Note for writers: UPGRADE_PLAN_V3 A2: the Q card. tag = the small sign when there is something to ask about ({word} = the glossary word). The card's own words come from the glossary (data/nasa_resources.json). astronaut_label = the Astronaut fact line (C4) when the card has one.)
+    tag: Q ?  {word}
+    real label: Real missions:
+    source label: Source:
+    astronaut label: Astronaut fact:
+    close: Q or Esc to close
+
+--- HUD ---
+    timer line: {label}: {seconds} s
+    waypoint: {label} · {meters} m
+
+--- YOUR FILE ---
+    (Note for writers: UPGRADE_PLAN_V2 step 11: the paper file after the character is chosen.)
+    folder label: PERSONNEL FILE · TOP SECRET
+    stamp: HIRED
+    name label: Name
+    who label: Who you are
+    difficulty label: Difficulty
+    job label: Your job
+    job: Design a space mission that really works, before the General notices you have never done this before.
+    resources label: The six things you must keep in balance
+
+    --- DIFFICULTY WORDS ---
+        easy: Easy
+        medium: Medium
+        hard: Hard
+
+    --- RESOURCE LINES ---
+        budget: Budget: the money. Every part and the rocket cost some.
+        mass: Mass: how heavy it all is. The rocket can only lift so much.
+        power: Power: what the solar panels make, minus what the parts use.
+        communications: Communications: how fast the radio can talk to Earth.
+        data: Data: how much science the instruments collect every day.
+        mission lifetime: Mission lifetime: how many months the spacecraft keeps working.
+    next: Next
+
+--- BRIEFING ---
+    (Note for writers: UPGRADE_PLAN_V2 step 11: the Mission Briefing after the mission is chosen. The General reads the first line. Facts here need the Science & Data Lead's check and a link (see source).)
+    folder label: MISSION BRIEFING
+    general name: General
+    purpose label: What it is for
+    why label: Why it matters
+    checklist label: Success checklist
+    start label: What you start with
+    tradeoff label: The main trade-off
+    based on label: Based on real missions
+    max line: {name}: at most {value} {unit}
+    min line: {name}: at least {value} {unit}
+    mass line: Mass: whatever your rocket can lift (you pick the rocket next)
+    trip line: Trip: about {days} days
+    checklist mark: [ ]
+    next: Start designing
+    (Note for writers: UPGRADE_PLAN_V3 B3: the briefing is four cards that type out one at a time (25 words or fewer each). card_titles = the four headings. cards (per mission) = why, tradeoff, real; card 2 is the checklist by phase, one line at a time. [b]...[/b] = a bold key word; card_questions = the Q card for each card (glossary ids). crew_note = the honest one-liner: no astronaut has been to Mars or Venus. enter_hint / card_dots = the bottom line.)
+    card titles:
+        - Why we are going
+        - What success looks like
+        - The big trade-off
+        - Real missions like this one
+    enter hint: Enter: finish the line · Enter again: next card
+    card dots: Card {n} of {total}
+    next card: Next
+
+    --- MISSIONS CARDS ---
+        [moon]
+            why: We go to the Moon to hear it [b]shake[/b]. Moonquakes show what is deep inside, like an X-ray.
+            tradeoff: The lunar night lasts two weeks with no sun. A bigger [b]battery[/b] keeps you alive, but adds mass and cost.
+            real: Apollo astronauts left [b]seismometers[/b] on the Moon. They heard moonquakes until 1977.
+            card questions:
+                - moon
+                - requirement
+                - battery
+                - instrument
+            crew note: 
+        [mars]
+            why: We go to Mars to find water [b]ice[/b]. Future astronauts could drink it, breathe it and make rocket fuel.
+            tradeoff: The ice drill is heavy and power-hungry. Every kilogram of [b]mass[/b] must still fit on your rocket.
+            real: MRO mapped Mars from orbit. The [b]Phoenix[/b] lander dug up real water ice in 2008.
+            card questions:
+                - mars
+                - requirement
+                - mass
+                - mission
+            crew note: No astronaut has been to Mars yet. Our crew there is a game-design choice.
+        [venus]
+            why: We go to Venus to chase its [b]storms[/b]. Learning why it got so hot helps us understand Earth's climate.
+            tradeoff: The balloon and the cloud camera need [b]power[/b] and money, and the radio must be strong enough to send it home.
+            real: Two VEGA balloons floated in Venus's clouds in 1985. NASA's [b]Magellan[/b] mapped Venus with radar.
+            card questions:
+                - venus
+                - requirement
+                - power
+                - mission
+            crew note: No astronaut has been to Venus. Our crew ship there is a game-design choice.
+
+    --- MISSIONS ---
+        [moon]
+            general: Listen up. We are going to the Moon to hear it shake.
+            purpose: Find out what is inside the Moon by listening to moonquakes.
+            why: Quakes travel through different rock in different ways. A network of seismometers works like an X-ray of the Moon's insides.
+            tradeoff: The lunar night lasts about two Earth weeks with no sunlight. A bigger battery keeps the instruments alive, but it is heavy and costs money.
+            based on: Apollo astronauts left seismometers on the Moon. They recorded moonquakes until 1977.
+        [mars]
+            general: Listen up. We are going to Mars to find water ice.
+            purpose: Find water ice under the ground on Mars and send the data home.
+            why: Ice could give future astronauts water, air and rocket fuel. It also tells us how the climate of Mars changed.
+            tradeoff: The ice drill is heavy and uses a lot of power. Every kilogram you add must still fit on the rocket.
+            based on: Mars Reconnaissance Orbiter (launched 2005) mapped Mars from orbit. The Phoenix lander (2008) dug up real water ice.
+        [venus]
+            general: Listen up. We are going to Venus to chase its storms.
+            purpose: Study the fast storms in the thick clouds of Venus, from orbit and with a balloon.
+            why: Venus is almost as big as Earth, but a runaway greenhouse effect made it the hottest planet. Learning why helps us understand our own climate.
+            tradeoff: The balloon and the cloud camera both need power and money, and the radio must be strong enough to send it all home.
+            based on: The Soviet VEGA balloons floated in the clouds of Venus in 1985. NASA's Magellan mapped Venus with radar.
+    source: moon (Apollo seismometers until 1977, moonquakes show the inside): https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01 and https://www.jpl.nasa.gov/missions/farside-seismic-suite/; lunar night 14 Earth days: https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf; mars (ice for drinking water, air and rocket fuel): https://www.nasa.gov/solar-system/planets/mars/nasa-is-locating-ice-on-mars-with-this-new-map/; MRO launched 2005: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A; Phoenix found water ice: https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/; venus (runaway greenhouse, hottest planet): https://science.nasa.gov/venus/venus-facts/; VEGA balloons 1985: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F; Magellan radar map: https://nssdc.gsfc.nasa.gov/planetary/magellan.html
+
+--- EXTRAS ---
+    (Note for writers: Words for the extra features added on 2026-11-14 (numbers and their sources: data/extras.json). The Real Mission Moments have their NASA sources in moments > sources.)
+    source: Real facts checked against NASA pages on 2026-11-15: see the sources in data/extras.json and in moments > sources below.
+
+    --- LAUNCH WINDOW ---
+        short name: Launch window
+        title: Pick a launch date
+        discipline: Mission Design
+        [names]
+            best: Best date
+            ok: OK date
+            poor: Poor date
+        [descriptions]
+            best: Earth and the target line up just right: the shortest trip and the least fuel. But the window is short, so the launch moments are tighter.
+            ok: A fair date. A normal trip, normal fuel, a normal launch window.
+            poor: The planets are badly placed: a longer trip (more food, water and air used) and extra fuel to carry. The window is wide, so the launch is easier.
+        trip line: Trip: {days} days
+        fuel line: Fuel: {sign}{value} kg
+        window line: Window: {word}
+        [window words]
+            best: short
+            ok: normal
+            poor: wide
+        did you know: Earth and Mars line up for a good launch only about every {months} months. Miss it and you wait two years!
+        did you know moon: Moon rockets can only leave about one week in every four, when the Moon is in the right spot. NASA's Artemis II had exactly that pattern.
+        confirmed: Launch date locked in: {name}.
+
+    --- LINEUP ---
+        height line: {meters} m tall = {buses} school buses
+        bus tag: The yellow block is a school bus, to scale.
+
+    --- TAP PART ---
+        hint: Click a part to learn its job
+        [jobs]
+            structure: Frame: holds everything together tightly
+            solar panel: Solar panels: make power from sunlight
+            antenna: Antenna: sends our data to Earth
+            thermal control: Heat control: not too hot, cold
+            battery: Battery: power for the dark
+            computer: Computer: the spacecraft's thinking brain
+            tanks: Fuel tanks: fuel for engine burns
+            attitude control: Pointing wheels: turn the spacecraft around
+            instruments: Instruments: do the mission's real science
+
+    --- PATCH ---
+        title: Design your mission patch
+        subtitle: Every NASA mission has a patch. The crew wears it, and it flies on the rocket.
+        shape title: Shape
+        color title: Color
+        icon title: Icon
+        [shapes]
+            circle: Circle
+            shield: Shield
+            hexagon: Hexagon
+        [icons]
+            rocket: Rocket
+            planet: Planet
+            star: Star
+            moon: Moon
+        next: Fly this patch
+        report title: Mission patch
+        where: It will be on your rocket, your suit, your report and the leaderboard.
+
+    --- PEANUTS ---
+        jar: Lucky peanuts: {count}  (E or click the jar)
+        empty: The jar is empty
+        ate: +1 lucky peanut (it changes nothing!)
+        fact: Since {year}, the team at NASA's Jet Propulsion Laboratory has eaten lucky peanuts before big moments. It changes nothing, but it is a fun tradition.
+
+    --- WEATHER ---
+        amber: strong winds high up
+        green after wait: calm again (you waited a day)
+        ask title: WEATHER IS AMBER
+        ask text: Strong winds high above the pad will shake the rocket. Launch now and the launch moments get tighter, or wait one day for {cost} million $. Real launches are often delayed for winds like these.
+        go now: Launch now
+        wait: Wait a day ({cost} M$)
+        waited log: We waited one day for better weather: {cost} million $.
+
+    --- TWO WAY FIX ---
+        prompt: Hold E: proper fix ({seconds} s)   ·   R: quick fix (costs later)
+        holding: Fixing properly... {percent}%
+        quick done: Quick fix done. It will cost us later.
+        quick log event: Quick fix on day {day} cost {amount} Gb of data later.
+        quick log crew: Quick fix on day {day} cost {amount} million $ in repairs later.
+        quick note: Quick patch: costs us later.
+
+    --- MOMENTS ---
+        title: Real Mission Moment:
+        solar flare: In 2003 huge solar storms hit spacecraft all over the solar system, and one science instrument on Mars Odyssey stopped working.
+        far from earth: Voyager 1 is so far away that its radio signal takes almost a whole day to reach Earth.
+        dust on panels: Dust on its solar panels ended NASA's InSight lander on Mars in 2022.
+        arrival burn: In 1999 Mars Climate Orbiter was lost at arrival because one team used pounds and another used metric units.
+        heat near sun: Parker Solar Probe hides behind a heat shield that gets almost 1,400 degrees Celsius hot, while the instruments behind it stay cool.
+        lunar night: A night on the Moon lasts about 14 Earth days, so landers need heaters and batteries to survive it.
+        water leak: In 2013 water leaked into an astronaut's helmet during a spacewalk outside the space station.
+        air filter: On Apollo 13 the crew built an air filter out of a box, tape and plastic bags to stay alive.
+        breaker trip: Apollo 12 was hit by lightning twice during launch. One switch flip, SCE to AUX, brought its data back.
+        [sources]
+            solar flare: Mars Odyssey MARIE failed during the 28 October 2003 solar storm: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=2001-013A-03
+            far from earth: "a radio signal takes about 22 1/2 hours to reach Voyager 1": https://www.jpl.nasa.gov/news/nasas-voyager-1-resumes-sending-engineering-updates-to-earth/
+            dust on panels: InSight retired in December 2022 after dust on its solar panels drained its power: https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/
+            arrival burn: Mars Climate Orbiter: data in pound-seconds instead of Newton-seconds (Mishap Investigation Board): https://llis.nasa.gov/llis_lib/pdf/1009464main1_0641-mr.pdf
+            heat near sun: The heat shield reaches nearly 2,500 F (about 1,377 C): https://www.nasa.gov/solar-system/traveling-to-the-sun-why-wont-parker-solar-probe-melt/
+            lunar night: "a lunar night lasts 14 Earth days": https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf
+            water leak: EVA 23, 16 July 2013: water filled an astronaut's helmet: https://www.nasa.gov/general/10-years-ago-eva-23-how-a-high-visibility-close-call-cut-short-a-spacewalk/
+            air filter: Apollo 13 CO2 adapter from canisters, plastic bags, cardboard and tape: https://www.nasa.gov/history/afj/ap13fj/15day4-mailbox.html
+            breaker trip: Apollo 12 lightning and "SCE to Aux": https://www.nasa.gov/history/50-years-ago-return-to-the-moon/
+
+    --- ZERO G ---
+        tag: Zero-g indicator
+
+    --- SPOTTING ---
+        prompt: E: snap a photo of {name}
+        [names]
+            earth: Earth
+            moon: the Moon
+            sun: the Sun
+            mars: Mars
+            venus: Venus
+        got: Spotted {name}! ({count} of {total} sightings)
+        got again: Another photo of {name}.
+        report title: Window postcards
+        sightings line: Sightings: {list}
+        none: No postcards this time. Next trip, look out a window and press E!
+
+    --- ASK CREW ---
+        prompt: E: ask the crew
+        speaker: Crew
+        [rooms]
+            bridge: This is the Bridge. We steer, and we plan the big engine burns here.
+            power room: The Power Room. Solar panels and batteries keep every system awake.
+            science bay: The Science Bay. Our instruments get tested here on the way.
+            comms room: The Comms Room. The big dish sends our data home to Earth.
+            life support: Life Support. Food, water and air for everyone on board.
+            hallway: This hallway joins every room. Follow the glowing pads when there is a job.
+            character: Welcome! Pick who you are. Each one makes the game easier or harder.
+            mission: Each globe is a mission. The goal decides everything you build after.
+            design: Every part changes the six numbers. Watch the wall screen when you preview one.
+
+    --- PART JOBS ---
+        FIN: keeps it straight
+        TANK: holds the fuel
+        BOLT: holds parts together
+        LEG: stands it up
+        DISH: talks to Earth
+        WIRE: carries the power
+        VENT: lets gas out
+        CAMERA: takes the pictures
+        ANTENNA: talks to Earth
+        BATTERY: power for darkness
+        THRUSTER: small steering pushes
+        NOSE CONE: cuts through air
+        COMPUTER: the spacecraft's brain
+        RADIATOR: throws heat away
+        ENGINE BELL: aims the push
+        SOLAR PANEL: power from sunlight
+        HEAT SHIELD: blocks burning heat
+        STAR TRACKER: steers by stars
+        REACTION WHEEL: spins to turn
+        FUEL TANK: holds the fuel
+        SPECTROMETER: finds what's inside
+        LANDING LEG: soft touchdown legs
+    mostly fuel: Fuel = {percent}% of the rocket's weight on the pad
+
+    --- SIGNAL DELAY ---
+        seconds: {value} seconds
+        minutes: {value} minutes
+
+    --- ICE RACE ---
+        timer: Ice sample turning to gas
+
+    --- CLEAN ---
+        title: Clean Room
+        how to: Hold the mouse button and wipe the dust specks off the instrument before time runs out.
+        steps:
+            - Dust specks land on the instrument.
+            - Hold the mouse button and move over them to wipe them off.
+            - Wipe as many as you can before the timer ends.
+        real step: Real teams call this Planetary Protection: spacecraft are built in clean rooms so Earth germs don't travel to Mars. On a crewed ship, keeping dust and germs off the gear goes on all trip long.
+        result name: CLEANLINESS
+        flight task: Wipe the dust off the instruments
+        flight goal: Halfway there! Go to Instruments in the Science Bay and clean them
+        flight log: Halfway there. Dust is floating onto the instruments in the Science Bay.
+        flight done: Instruments cleaned. CLEANLINESS: {score}.
+        flight missed: Nobody cleaned the instruments on the way. CLEANLINESS: {score}.
+        status: Wiped: {count} of {total}
+        instrument: INSTRUMENT
+        example word: WIPE

@@ -1,0 +1,134 @@
+{
+  "_readme": "Numbers for the extra features added on 2026-11-14 (the \"more stuff\" list: launch window, mission patch, clean room, lucky peanuts, weather call, zero-g toy, two-way fixes, window spotting and postcards, footprints, the vanishing Mars ice, the rocket line-up, tap a part, mostly fuel, ask the crew). The words are in data/story.json \"extras\" and data/inner_voice.json \"extras\". Real gravity is in data/destinations.json (arrival > gravity_scale) and the radio delay in destinations.json (signal_delay_minutes). Every made-up number is marked PLACEHOLDER until the team passes it.",
+  "launch_window": {
+    "_readme": "The Launch window station in the Design Room (after the orbit). Each date: trip_factor = the trip takes this many times the mission's trip_days (a longer trip uses more food, water and air on the ship); effects = added to the six resources (mass = extra fuel for a poorer path); tightness_factor = the launch rings' tightness is multiplied by this (bigger = smaller timing windows; the best date has a short window, so the launch moments are tighter; a poor date has a wide one). default = the date used before the player picks one (it changes nothing, so old builds stay the same).",
+    "default": "ok",
+    "order": ["best", "ok", "poor"],
+    "options": {
+      "best": { "trip_factor": 0.85, "effects": { "budget": 0, "mass": -60 }, "tightness_factor": 1.25 },
+      "ok": { "trip_factor": 1.0, "effects": { "budget": 0, "mass": 0 }, "tightness_factor": 1.0 },
+      "poor": { "trip_factor": 1.3, "effects": { "budget": 8, "mass": 120 }, "tightness_factor": 0.8 }
+    },
+    "mars_every_months": 26,
+    "source": "trip_factor, effects and tightness_factor: PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. mars_every_months: \"about once every 26 months they are aligned in a way that allows the most energy-efficient trip to Mars\": https://mars.nasa.gov/msl/timeline/launch/launch-windows/ (also https://www.nasa.gov/news-release/nasa-suspends-2016-launch-of-insight-mission-to-mars/: \"only a few weeks every 26 months\"). Moon windows: NASA Artemis II, \"approximately one week of launch opportunities, followed by three weeks without\": https://www.nasa.gov/wp-content/uploads/2026/01/artemis-ii-mission-availability.pdf"
+  },
+  "patch": {
+    "_readme": "NOT USED since 2026-11-14 (UPGRADE_PLAN_V3 A1 removed the patch everywhere; the maker is in scenes/archive and scripts/archive). The mission patch maker (scenes/patch_maker.tscn). shapes, icons = the choices (their names are in story.json extras > patch). colors = the patch colors to pick from. default = the patch before the player makes one. texture_pixels = how big the patch picture is when it goes on the rocket and the suit. preview_pixels = the big patch on the maker screen. suit_patch_meters = the patch's size on the suit.",
+    "shapes": ["circle", "shield", "hexagon"],
+    "icons": ["rocket", "planet", "star", "moon"],
+    "colors": ["#1f4fa3", "#c0392b", "#1e8449", "#7d3c98", "#d35400", "#17202a"],
+    "border_color": "#f2c14e",
+    "default": { "shape": "circle", "color": 0, "icon": "rocket" },
+    "texture_pixels": 256,
+    "preview_pixels": 300,
+    "suit_patch_meters": 0.16,
+    "source": "Game-design choice (look only)."
+  },
+  "peanuts": {
+    "_readme": "The lucky peanut jar on the launch screen. jar_count = peanuts in the jar. They change nothing in the game.",
+    "jar_count": 12,
+    "since_year": 1964,
+    "source": "jar_count: game-design choice. since_year: JPL's lucky peanuts started with Ranger 7 on July 28, 1964: https://science.nasa.gov/missions/what-are-jpls-lucky-peanuts/"
+  },
+  "weather": {
+    "_readme": "The wait-or-go weather call on the launch pad. amber_chance = how often the weather is amber (0 to 1). On amber, GO FOR LAUNCH asks: launch now (the launch rings get tighter: tightness x go_tightness_factor) or wait a day (wait_cost million $ come out of the cash reserve for the flight, and the weather turns green).",
+    "amber_chance": 0.5,
+    "go_tightness_factor": 1.3,
+    "wait_cost": 6,
+    "source": "PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass."
+  },
+  "zero_g_toy": {
+    "_readme": "The little plush that floats up on the Bridge when the flight starts (a zero-g indicator). position = where it floats [x, y, z] (ship map, game_data.json ship); rise_seconds = how long it takes to float up from the console; bob_meters and spin_degrees_per_second = how it drifts. Colors are web color codes. Looks only.",
+    "position": [1.5, 1.9, -12.4],
+    "start_height": 1.15,
+    "rise_seconds": 2.5,
+    "bob_meters": 0.12,
+    "spin_degrees_per_second": 25,
+    "body_color": "#f5d76e",
+    "ear_color": "#e59866",
+    "source": "Look: game-design choice. The idea: crews fly a small plush toy as a zero-gravity indicator (ZGI), for example the Artemis II mascot \"Rise\": https://www.nasa.gov/general/moonmascot/ and a Soyuz crew's toy cat: https://www.nasa.gov/image-article/cosmonaut-oleg-novitskiy-holds-up-zero-g-indicator/"
+  },
+  "two_way_fix": {
+    "_readme": "Every ship emergency has two fixes. Proper fix: hold E for proper_hold_seconds (it costs nothing). Quick fix: press Q, done at once, but it costs something later: at the end of the trip the flight log says what. quick_costs: event = a design emergency costs data_gb of data sent home; crew = a crew emergency costs cash million $ from the cash reserve.",
+    "proper_hold_seconds": 5,
+    "quick_costs": { "event": { "data_gb": 3 }, "crew": { "cash": 4 } },
+    "source": "PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass."
+  },
+  "spotting": {
+    "_readme": "Window spotting and postcards on the ship. Stand near a window (window_reach_meters), look at Earth, the Moon, the Sun or the destination (within look_degrees) and press E: a sighting is collected and a postcard (a photo of the view) is saved for the report (at most max_postcards). Earth sits behind the ship (seen from the back windows) and shrinks during the trip from earth_start_degrees to earth_end_degrees on screen; the Moon sits next to it. The Sun is far off to one side. Sizes and colors: looks only.",
+    "window_reach_meters": 4.5,
+    "look_degrees": 8,
+    "max_postcards": 3,
+    "earth_start_degrees": 30,
+    "earth_end_degrees": 3,
+    "earth_radius": 6,
+    "earth_color": "#3d7fd9",
+    "moon_offset": [14, 4, 0],
+    "moon_radius_share": 0.27,
+    "moon_color": "#c8c8c8",
+    "sun_direction": [1, 0.15, 0.35],
+    "sun_distance": 180,
+    "sun_radius": 9,
+    "sun_color": "#fff2a8",
+    "postcard_pixels": [320, 180],
+    "source": "Game-design choice (look and layout only)."
+  },
+  "ask_crew": {
+    "_readme": "Ask the crew: the staff carry a \"?\" bubble; stand within reach_meters of one and press E for one line about the room they are in (story.json extras > ask_crew). bubble_height = how high the \"?\" floats over their feet.",
+    "reach_meters": 2.2,
+    "bubble_height": 2.05,
+    "bubble_color": "#ffd24d",
+    "source": "Game-design choice."
+  },
+  "footprints": {
+    "_readme": "Footprints on the planet. spacing_meters = a print every this many meters walked; size = [width, length] of one print in meters; max_prints = the most prints kept (the oldest goes first). life_seconds per destination: 0 = they stay forever (the Moon has no wind), a number = they fade away in that many seconds (Mars has wind). color_darken = how much darker than the ground a print is (0 to 1).",
+    "spacing_meters": 0.75,
+    "size": [0.16, 0.3],
+    "max_prints": 400,
+    "life_seconds": { "moon": 0, "mars": 25 },
+    "color_darken": 0.35,
+    "source": "spacing, size, max_prints, color_darken and the 25-second Mars fade: game-design choice. Moon prints staying: \"Barring a chance meteorite impact, these impressions in the lunar soil will probably last for millions of years\": https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_11_30th.html; \"there is no wind or rain to erode the surface\" (LRO still sees Apollo tracks): https://science.nasa.gov/solar-system/moon/10-cool-things-nasas-lunar-reconnaissance-orbiter-is-teaching-us-about-the-moon/"
+  },
+  "ice_race": {
+    "_readme": "Race the ice (Mars): after_task = the task that drills the ice, send_task = the analyzer task. Once the ice is drilled, the sample slowly turns to gas. vanish_seconds = how long until it is gone; the analyze task then sends data_gb x the share of ice left, never less than min_share. carry_size = the ice cube's size in meters, floating by the player.",
+    "after_task": "drill",
+    "send_task": "analyze",
+    "vanish_seconds": 20,
+    "min_share": 0.3,
+    "carry_size": 0.35,
+    "carry_offset": [0.45, 1.3, -0.3],
+    "source": "vanish_seconds, min_share: PLACEHOLDER: game-design choice (2026-11-14). The idea: in June 2008 \"dice-size crumbs of bright material have vanished from inside a trench\" dug by Phoenix; it was water ice that sublimated over four days: https://www.jpl.nasa.gov/news/bright-chunks-at-phoenix-landers-mars-site-must-have-been-ice/"
+  },
+  "rocket_lineup": {
+    "_readme": "The rocket line-up in the Design Room: a school bus stands by each rocket, at the same scale, so its size makes sense. real_height_meters = each rocket's real height; bus = a school bus's real size [length, height, width] in meters. Colors: looks only.",
+    "real_height_meters": { "small": 70, "medium": 57.3, "large": 60 },
+    "bus": [13.2, 3.2, 2.5],
+    "bus_color": "#f7c600",
+    "window_color": "#22303f",
+    "source": "Falcon 9: \"70 meters (229.6 feet)\": https://www.nasa.gov/humans-in-space/spaceships-and-rockets/commercial-crew-rockets/; Atlas V 401: \"188 feet (57.3 meters)\": https://science.nasa.gov/resource/atlas-v-401-rocket/; Atlas V 541 (Mars 2020): \"about 197 feet (60 meters)\": https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/; bus length 13.2 m: Hubble is 43.5 feet long, \"about the size of a school bus\": https://science.nasa.gov/mission/hubble/observatory/design/ (the bus height and width are game-design choices, look only)."
+  },
+  "tap_part": {
+    "_readme": "Tap a part: in the Design Room's Inside view, click a part of the spacecraft on the display stand for its job in five words. pick_pixels = how close to the middle of the screen (where you look) a part must be.",
+    "pick_pixels": 90,
+    "source": "Game-design choice."
+  },
+  "mostly_fuel": {
+    "_readme": "The Fueling gauge also shows how much of a rocket's weight on the pad is fuel (fuel_share per rocket, 0 to 1).",
+    "fuel_share": { "small": 0.85, "medium": 0.85, "large": 0.85 },
+    "source": "NASA: \"the most cleverly engineered, efficient rocket is still about 85% fuel by mass\": https://science.nasa.gov/learn/basics-of-space-flight/chapter14-1/; full-scale rockets are \"typically 80 – 85%\" propellant: https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/model-rockets-and-real-rockets/ (the same 85% for each rocket: no per-rocket NASA figure was found)."
+  },
+  "clean_room": {
+    "_readme": "The Clean Room: since 2026-11-14 it is a task HALFWAY THROUGH THE FLIGHT, not a build job. At flight_at (0-1 of the trip) a yellow task opens at flight_station; walking there and pressing E opens the minigame on top of the ship (the trip pauses while you clean). Dust specks land on the instrument; hold the mouse button and wipe them off before time runs out. duration_seconds = one turn; specks = how many land in one turn; spawn_every_seconds = a new speck this often; wipe_radius_pixels = the cloth's size; speck_size_pixels = how big a speck is. Score = specks wiped / specks x 100. The team average becomes CLEANLINESS (it counts in the teamwork score). If the ship arrives and nobody cleaned, CLEANLINESS is missed_score. Skipping the trip (Enter, after the first trip) costs nothing.",
+    "becomes": "cleanliness",
+    "flight_at": 0.5,
+    "flight_station": "science_calibrate",
+    "missed_score": 0,
+    "duration_seconds": 25,
+    "specks": 30,
+    "spawn_every_seconds": 0.7,
+    "wipe_radius_pixels": 40,
+    "speck_size_pixels": 9,
+    "instrument_size_pixels": [560, 320],
+    "source": "Numbers: PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. The idea: spacecraft are assembled in clean rooms with strict cleaning to keep Earth microbes off them (planetary protection): https://solarsystem.nasa.gov/docs/MSL%20Plan%20Prot%20Fact%20Sheet%20ApprovedRev1%208-3-12.pdf and https://planetaryprotection.jpl.nasa.gov/research"
+  }
+}

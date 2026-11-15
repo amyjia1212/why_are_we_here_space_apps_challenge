@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/choice_room.tscn" id="1_base"]
+
+[node name="DesignRoom" instance=ExtResource("1_base")]
+room_kind = "design"

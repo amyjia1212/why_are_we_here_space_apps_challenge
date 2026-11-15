@@ -1,0 +1,110 @@
+{
+  "_readme": "Numbers for the player count screen and the three build minigames (PLAN.md section 7). Each minigame gives every player a score from 0 to 100; the team average becomes one mission number (\"becomes\"): build quality, structure strength or fuel loaded. Flight and launch use those numbers from TASKS.md step 7 on. All numbers here are game-design choices, not NASA numbers, and wait for the team's pass after playtesting. The words are in data/story.json (\"player_count_screen\" and \"minigames\").",
+  "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (the team tunes them after playtesting)",
+  "button_delay_seconds": 0.8,
+  "_button_delay_readme": "How long the turn and score screens wait before their button works, so a player still pressing keys from the game doesn't skip the screen by accident. Game-design choice (2026-11-13).",
+  "players": {
+    "_readme": "max = the most players on one computer (they take turns). card_width = how wide each card is on the How many players? screen, in pixels.",
+    "max": 4,
+    "card_width": 260
+  },
+  "tutorial": {
+    "_readme": "The tutorial card before each minigame (UPGRADE_PLAN_V2 step 17). example_height_pixels = how tall the tiny moving example is.",
+    "example_height_pixels": 120,
+    "source": "Game-design choice (look only)."
+  },
+  "assembly": {
+    "_readme": "Type the name of the part being bolted on (UPGRADE_PLAN_V2 step 18). Harder characters get longer words and less time. levels: easy = Scientist, medium = Janitor, hard = Student. words = the part names for that level (spaces are skipped while typing). duration_seconds = how long one turn lasts. target_parts = finished words for a full 100 score. wrong_key_freeze_seconds = how long a wrong key freezes you. part_shapes = which 3D shape snaps onto the workshop rocket for each word (fin, tank, rod, panel, dish, box); a word not listed gets a box.",
+    "becomes": "build_quality",
+    "wrong_key_freeze_seconds": 0.5,
+    "levels": {
+      "easy": { "duration_seconds": 30, "target_parts": 10, "words": ["FIN", "TANK", "BOLT", "LEG", "DISH", "WIRE", "VENT", "CAMERA"] },
+      "medium": { "duration_seconds": 30, "target_parts": 8, "words": ["ANTENNA", "BATTERY", "THRUSTER", "NOSE CONE", "COMPUTER", "RADIATOR", "ENGINE BELL"] },
+      "hard": { "duration_seconds": 28, "target_parts": 6, "words": ["SOLAR PANEL", "HEAT SHIELD", "STAR TRACKER", "REACTION WHEEL", "FUEL TANK", "SPECTROMETER", "LANDING LEG"] }
+    },
+    "part_shapes": {
+      "FIN": "fin", "LEG": "fin", "LANDING LEG": "fin",
+      "TANK": "tank", "FUEL TANK": "tank", "BATTERY": "tank", "ENGINE BELL": "tank",
+      "ANTENNA": "rod", "BOLT": "rod", "WIRE": "rod", "STAR TRACKER": "rod",
+      "SOLAR PANEL": "panel", "RADIATOR": "panel", "HEAT SHIELD": "panel",
+      "DISH": "dish", "NOSE CONE": "dish"
+    },
+    "part_color": "#ffb347",
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), words and times changed at UPGRADE_PLAN_V2 step 18 (2026-11-14), waiting for the team's pass"
+  },
+  "hammer": {
+    "_readme": "Hammer the nails on the rocket panel (UPGRADE_PLAN_V2 step 19). nails_per_turn = how many nails pop up in one turn (the 'Nails left' count). spawn_every_seconds = a new nail every this many seconds. nail_life_seconds = how long a nail stays before it slides back out (a miss). hit_radius_pixels = how close to a nail a click must be. nail_size_pixels = how big a nail head looks. dent_limit = the most dents shown at once (looks only; dents cost no points). Score = nails hit / nails_per_turn x 100.",
+    "becomes": "structure_strength",
+    "nails_per_turn": 24,
+    "spawn_every_seconds": 0.9,
+    "nail_life_seconds": 1.8,
+    "hit_radius_pixels": 46,
+    "nail_size_pixels": 40,
+    "dent_limit": 30,
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), changed at UPGRADE_PLAN_V2 step 19 (2026-11-14), waiting for the team's pass"
+  },
+  "fuel": {
+    "_readme": "Drag the valve to the target angle, counterclockwise from the Start mark (0 degrees, on the right). rounds = how many targets per turn. round_seconds = time for one target (when it runs out, the valve's angle counts). min_angle and max_angle = the smallest and biggest target, in degrees. points_lost_per_degree = 100 points minus this for each degree you are off. result_seconds = how long the round's result shows. show_live_angle = true shows the angle while you drag (easier). dial_radius_pixels and handle_radius_pixels = the size of the valve on screen.",
+    "becomes": "fuel_loaded",
+    "rounds": 3,
+    "round_seconds": 8,
+    "min_angle": 30,
+    "max_angle": 330,
+    "points_lost_per_degree": 2,
+    "result_seconds": 1.8,
+    "show_live_angle": false,
+    "dial_radius_pixels": 130,
+    "handle_radius_pixels": 22,
+    "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass"
+  },
+  "voice": {
+    "_readme": "What the inner voice says on a minigame's results screen (lines in data/inner_voice.json, \"minigames\"). A team average of good_at or more gets the \"good\" line, below bad_below gets the \"bad\" line, anything between gets the \"ok\" line. good_at is also where a Fueling round beeps good instead of bad. Matches the flight's build_quality numbers in events.json (75 and 40).",
+    "good_at": 75,
+    "bad_below": 40,
+    "source": "Game-design choice (TASKS.md step 14, 2026-11-13)."
+  },
+  "workshop": {
+    "_readme": "The 3D workshop behind every minigame (scripts/workshop_background.gd, TASKS.md step 12). Looks only: nothing here changes a score. Sizes and positions are in meters, [x, y, z]; the camera looks toward -z, and the back wall is at z = wall[1]. wall = [height, z]. Colors are web color codes. rocket: stages_shown = how many body stages stand up in each minigame (Assembly shows 1, and the top stage and nose wait on the floor at waiting_parts_offset [x, z] from the rocket). workers: scene = which toy-like person; path = the points they walk between (they work at each point for work_seconds); walk_speed in meters per second; work_face_degrees = which way they face while working (the person faces -z at 0; 180 = toward the camera, -90 = to the right, 90 = to the left); work_sound = a sound (data/game_data.json \"sounds\") played when this worker starts a job; radio_every_seconds = how often the workshop radio beeps (PLAN.md section 7: clanks, drills, radio chatter); carry = holds a crate; lift = stands on a platform that rides with them (give the path points different heights).",
+    "camera_position": [0, 3.6, 11],
+    "camera_look_at": [0, 3.0, -2],
+    "camera_fov": 55,
+    "sky_color": "#0a1633",
+    "ambient_color": "#c8d4ff",
+    "ambient_energy": 0.6,
+    "sun_energy": 1.2,
+    "floor_size": [30, 20],
+    "floor_color": "#4a505a",
+    "wall": [10, -6],
+    "wall_color": "#2a3550",
+    "stripe_color": "#ff9933",
+    "crate_color": "#c9a227",
+    "radio_every_seconds": 11,
+    "rocket": {
+      "position": [2.5, 0, -2.5],
+      "radius": 0.9,
+      "stage_height": 3.0,
+      "nose_height": 1.6,
+      "body_color": "#eeeeee",
+      "stripe_color": "#ff9933",
+      "fin_color": "#7a8290",
+      "nose_color": "#d94a3a",
+      "scaffold_color": "#ffd24d",
+      "stages_shown": { "clean": 1, "assembly": 1, "hammer": 2, "fuel": 2 },
+      "waiting_parts_offset": [-6.5, 2.5]
+    },
+    "fuel_tank": {
+      "offset": [3.6, 0, 0.5],
+      "radius": 0.8,
+      "height": 2.2,
+      "color": "#9aa0a8",
+      "hose_color": "#ff9933"
+    },
+    "workers": [
+      { "scene": "res://scenes/characters/staff1.tscn", "path": [[-6, 0, -1], [-1.5, 0, -1.5]], "walk_speed": 1.2, "work_seconds": 2.5, "work_face_degrees": 180, "carry": true },
+      { "scene": "res://scenes/characters/staff2.tscn", "path": [[0.8, 0, 0.2], [4.2, 0, 0.2]], "walk_speed": 0.9, "work_seconds": 3.0, "work_face_degrees": 180, "work_sound": "drill" },
+      { "scene": "res://scenes/characters/staff3.tscn", "path": [[-0.5, 0, -2.5], [-0.5, 3, -2.5]], "walk_speed": 0.6, "work_seconds": 2.0, "work_face_degrees": -90, "lift": true },
+      { "scene": "res://scenes/characters/janitor.tscn", "path": [[-8, 0, 1.5], [-3, 0, 2]], "walk_speed": 0.7, "work_seconds": 3.5, "work_face_degrees": 180 }
+    ],
+    "source": "Game-design choice (look and layout only)."
+  }
+}

@@ -1,0 +1,959 @@
+﻿HOW DID WE GET HERE? - ALL SOURCES IN THE GAME
+Made 2026-11-15 for the team and the submission form. Plain text: open it in Notepad (turn on Format > Word Wrap).
+
+What is in this file:
+  PART 1  The six numbers that still needed a source: what a web search found (2026-11-15) and what to do.
+  PART 2  Outside pictures used in the game (the four planet maps). All sounds and music are made in code.
+  PART 3  Every source note in the game's data files, file by file. "PLACEHOLDER" = still waiting for a source
+          or for the team to agree it is a game-design choice.
+  PART 4  Every web link in the data files, A to Z.
+Other places with sources: REFERENCES.md (outside files), STEP11_TABLES.md (the rocket and instrument tables),
+AGENT_SOURCE.md section 9 (NASA data used), INNOVATION.md section 4 (numbers used in the hints).
+
+How to fix a number: open the data file named in Part 3, find the line (Ctrl+F), change the value and paste the
+link into its "source" text. If no real source exists, keep the number and write "Game-design choice: <reason>"
+in its "source" text instead, once the team agrees. Hints and screens update by themselves.
+
+
+====================================================================================================
+  PART 1: THE SIX OPEN NUMBERS (web search 2026-11-15, by Claude; the Science & Data Lead checks each one)
+====================================================================================================
+Nothing in the game was changed by this search. The values below are what real missions did, so the team can
+decide to keep the game value as a game-design choice "inside the real range", or change it.
+
+1) Mars HIGH orbit fuel: game value 800 kg (data/destinations.json > mars > orbits > high > fuel_mass)
+   Found: Mars Odyssey burned 262.8 kg of propellant for its Mars orbit insertion, then used aerobraking
+   (NASA press release, on an NSSDC page): https://nssdc.gsfc.nasa.gov/planetary/text/mo2001_pr_20011018.txt
+   MRO carried 1,149 kg (already the game's LOW orbit value): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+   Suggestion: 800 kg sits between Odyssey (262.8 kg) and MRO (1,149 kg). Write it as "Game-design choice inside
+   the real range: Mars Odyssey 262.8 kg (NSSDC), MRO 1,149 kg (NSSDC)".
+
+2) Moon orbit fuel: game values low 600 kg, high 400 kg (data/destinations.json > moon > orbits)
+   Found: Lunar Reconnaissance Orbiter (low polar Moon orbit) carried about 894-898 kg of hydrazine; NASA PDS/NAIF
+   catalog says 894 kg: https://naif.jpl.nasa.gov/pub/naif/pds/data/lro-l-spice-6-v1.0/lrosp_1000/catalog/insthost.cat
+   Archived NSSDC page (launch mass about 1,846 kg, dry mass under 949 kg):
+   https://webarchive.library.unt.edu/web/20130222001006/http://nssdc.gsfc.nasa.gov/database/MasterCatalog?sc=LUNARRO
+   LADEE (a small Moon orbiter) launched with 134.5-135 kg of fuel; NASA press kit:
+   https://smd-cms.nasa.gov/wp-content/uploads/2023/05/ladee-press-kit-08292013.pdf
+   (also The Planetary Society: https://www.planetary.org/articles/09051700-ladee-prelaunch-facts)
+   Suggestion: 400-600 kg sits between LADEE (135 kg) and LRO (894 kg). Write it as a game-design choice inside
+   that range, with both links. Check the 134.5 kg line in the LADEE press kit first.
+
+3) Venus orbit fuel: game values low 1300 kg, high 900 kg (data/destinations.json > venus > orbits)
+   Found: ESA's Venus Express carried 570 kg of propellant (354 kg MON, 216 kg MMH), more than 70% used for the
+   Venus orbit insertion burn: https://sci.esa.int/documents/34571/36233/1567256526094-SivacWeb.pdf
+   and https://www.esa.int/Science_Exploration/Space_Science/Venus_Express/Venus_Express_propellant_loading_completed
+   NASA's Magellan used a solid rocket motor (Star 48B) with about 2,014 kg of propellant to enter Venus orbit.
+   Only found on a fan wiki (https://nasa.fandom.com/wiki/Magellan_(spacecraft)): NOT good enough. Check NSSDC entry
+   1989-033B (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1989-033B) before using it.
+   Suggestion: 900-1300 kg sits between Venus Express (570 kg) and Magellan (about 2,014 kg). Game-design choice
+   inside that range once the Magellan number is checked on NSSDC.
+
+4) Ice drill power: game value 100 W (data/destinations.json > mars > instruments > ice_drill > effects > power)
+   Found: no NASA ice drill has flown to Mars, and no wattage was found for Phoenix's robotic arm or
+   Perseverance's coring drill. For scale: Perseverance's whole power source makes about 110 W
+   (NASA/JPL Mars 2020 quick facts: https://www.jpl.nasa.gov/news/press_kits/mars_2020/landing/quick_facts).
+   Phoenix press kit (to check for arm power): https://www.nasa.gov/pdf/181835main_phoenix-launch-presskit.pdf
+   Suggestion: keep 100 W and write "Game-design choice: no Mars ice drill has flown; a drill is one of the most
+   power-hungry instruments (for scale, Perseverance's whole power source makes about 110 W, NASA JPL)".
+
+5) Moon signal limit: game value 0.1 Mb/s (data/destinations.json > moon > limits > communications)
+   Found: LRO's S-band radio sends 125 bits/s up to 1,093 kbps (about 1.1 Mb/s); its Ka-band sends 100 Mbps
+   (NASA PDS catalog): https://pds.nasa.gov/data/pds3/backup/201501-glmmmmmopr/lroRss/zzold/inst.cat
+   Suggestion: 0.1 Mb/s (= 100 kbps) is inside LRO's S-band range. Write it as "Game-design choice inside a real
+   range: LRO S-band 0.000125 to 1.093 Mb/s (NASA PDS)".
+
+6) Atlas V 401 lift to Mars: game value 2315 kg (data/game_data.json > launch_vehicles > vehicles > medium > capacity)
+   Already sourced: NTRS 20130013405 (https://ntrs.nasa.gov/api/citations/20130013405/downloads/20130013405.pdf).
+   Found: ULA's MAVEN booklet shows the Atlas V 401 sent MAVEN on a C3 of 12.2 km2/s2 (the same kind of Mars
+   trip): https://www.ulalaunch.com/docs/default-source/news-items/av_maven_mob.pdf
+   The search could not open the 2315 kg line itself. The Science & Data Lead still opens the NTRS PDF and finds
+   the line (search the PDF for "2315" or "2,315").
+
+
+====================================================================================================
+  PART 2: OUTSIDE PICTURES (same as REFERENCES.md)
+====================================================================================================
+  assets/planets/earth.jpg  NASA Blue Marble (Visible Earth image 57730): http://visibleearth.nasa.gov/view.php?id=57730
+                            copy: https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg  Public domain, NASA Earth Observatory
+  assets/planets/moon.jpg   NASA SVS CGI Moon Kit (LRO LROC color): https://svs.gsfc.nasa.gov/4720  Credit: NASA's Scientific Visualization Studio
+  assets/planets/venus.jpg  Magellan radar map, NASA/JPL: https://commons.wikimedia.org/wiki/File:Cylindrical_Map_of_Venus.jpg  Public domain
+  assets/planets/mars.jpg   Viking MDIM 2.1 mosaic, USGS/NASA: https://astrogeology.usgs.gov/search/map/mars_viking_colorized_global_mosaic_232m
+                            copy: https://commons.wikimedia.org/wiki/File:Mars_Viking_MDIM21_ClrMosaic_1km.jpg  Public domain
+  Sounds and music: made in code by the team (no outside files).
+
+
+====================================================================================================
+  PART 3: EVERY SOURCE NOTE IN THE DATA FILES  (the [path] says where it is: file > section > line)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+  data/audio.json
+----------------------------------------------------------------------------------------------------
+  [source]
+      Game-design choice. All sounds and music are generated in code (made by the team, free to use).
+
+----------------------------------------------------------------------------------------------------
+  data/destinations.json
+----------------------------------------------------------------------------------------------------
+  [destinations > moon > locked > source]
+      Game-design choice (PLAN.md section 15, step 10): the Moon unlocks in Phase 2.
+  [destinations > moon > arrival type > source]
+      Game-design choice (PLAN.md section 5): the crew lands and places seismometers.
+  [destinations > moon > crew > source]
+      Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Moon and Mars carry a crew on a lander.
+  [destinations > moon > goals > source]
+      Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14).
+  [destinations > moon > orbits > low > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Less than Mars: a game-design guess with no source.
+  [destinations > moon > orbits > high > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel.
+  [destinations > moon > orbits > polar > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a low orbit that passes over the poles.
+  [destinations > moon > instruments > seismometer > source]
+      Apollo 15 Passive Seismic Experiment (Step 11b, 2026-11-13). mass 11.5 kg, power 7.1 W average, data 0.712 kbps (= 0.06 Gb/day): https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01; budget: no public source (game value)
+  [destinations > moon > instruments > camera basic > source]
+      Same camera as the Mars basic camera (MRO Context Camera, CTX): see destinations.json > mars > instruments > camera_basic for the sources. Using it at the Moon is a game-design choice.
+  [destinations > moon > instruments > heat flow probe > source]
+      Apollo 15 Heat Flow Experiment (Step 11b, 2026-11-13). mass 5.5 kg, power 3.9 W: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-06; budget: no public source (game value); data: game-design choice
+  [destinations > moon > instruments > laser reflector > source]
+      Apollo Laser Ranging Retroreflector (Step 11b, 2026-11-13). power 0 and data 0: it is a mirror, it needs no power and sends nothing (lasers from Earth bounce off it). mass: PLACEHOLDER, kept at 5 kg until the Science & Data Lead checks NSSDC's 77 kg, which looks high: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1969-059C-04; budget: no public source (game value)
+  [destinations > moon > key instruments > source]
+      Team decision, PLAN.md section 5 (2026-11-11): the seismometer is the Moon key instrument.
+  [destinations > moon > default instruments > source]
+      Game-design choice (2026-11-12): like Mars, the start build packs only the basic camera, so a new player sees the key instrument blocker at Review.
+  [destinations > moon > arrival > source]
+      Game-design choice (layout and look). gravity_scale = the real Moon's gravity, 0.165 of Earth's: "1.62 m/sec² = .165 Earth gravity", https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/moon/ (team decision 2026-11-14, Real gravity jumps: a jump is about six times higher and lasts about 5 seconds; before that the game used 0.35). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass.
+  [destinations > moon > report > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [destinations > moon > not possible > instruments > #1 > source]
+      NASA: the Moon's exosphere "is much too thin to produce weather as we know it on Earth": https://science.nasa.gov/moon/weather-on-the-moon/
+  [destinations > moon > twins > list > #1 > source]
+      NASA NSSDCA, Apollo 17 Heat Flow experiment: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1972-096C-01; Apollo 15 and 17 results: https://ntrs.nasa.gov/citations/20120013627
+  [destinations > moon > twins > list > #2 > source]
+      NASA ILRS, Lunar laser ranging to the Apollo 11, 14 and 15 reflectors, still done today: https://ilrs.gsfc.nasa.gov/science/scienceContributions/lunar.html
+  [destinations > moon > twins > list > #3 > source]
+      NASA NSSDCA: the Apollo 15 Passive Seismic Experiment was turned off on 30 September 1977 as part of the ALSEP station shutdown: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01
+  [destinations > moon > default orbit > source]
+      Game-design choice (2026-11-12): the orbit used if you press Play on a later screen without picking one.
+  [destinations > moon > limits from > source]
+      Game-design choice (2026-11-12): the Moon's limits are moon_quakes in game_data.json.
+  [destinations > moon > trip days > source]
+      Apollo 8 (Step 11b, 2026-11-13): "The fastest of these was Apollo 8, which took just under three days to go from Earth orbit to orbit around the Moon." https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/
+  [destinations > moon > signal delay minutes > source]
+      Apollo 12 radio delay, 1.3 seconds (= 0.0217 minutes) (Step 11b, 2026-11-13): "In the following, we use 1.3 seconds." https://www.nasa.gov/history/alsj/a12/A12Audio_Moon_Houston.html; start 0: game-design choice (next to Earth)
+  [destinations > mars > locked > source]
+      Game-design choice (PLAN.md section 15): Mars is built first.
+  [destinations > mars > arrival type > source]
+      Game-design choice (PLAN.md section 5): the crew lands, drills and samples ice.
+  [destinations > mars > crew > source]
+      Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Moon and Mars carry a crew on a lander.
+  [destinations > mars > goals > source]
+      Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14).
+  [destinations > mars > orbits > low > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Low orbit uses MRO's real 1,149 kg (MRO really ended in a low orbit).
+  [destinations > mars > orbits > high > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel than MRO's low one.
+  [destinations > mars > orbits > polar > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a polar orbit here is a low orbit that passes over the poles.
+  [destinations > mars > instruments > ice drill > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [destinations > mars > instruments > camera basic > source]
+      MRO Context Camera (CTX). mass ("3 kilograms") and power ("7 watts (imaging)"): https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/; data ("approximately 3.5 Tb" in the primary mission: 3,500 Gb / about 730 days = 4.8 Gb/day): https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf; budget: no public source. (Moved here from the camera part in game_data.json on 2026-11-12.)
+  [destinations > mars > instruments > camera high res > source]
+      MRO HiRISE camera. mass ("65 kilograms") and power ("60 watts"): https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/; data ("more than 12 Tb of HiRISE data during the 2-year" primary mission: 12,000 Gb / 730 days = 16.4 Gb/day; science paper by the HiRISE team, McEwen et al. 2007, JGR): https://boris.unibe.ch/25369/1/2005JE002605.pdf; budget: no public source. (Moved here from the camera part in game_data.json on 2026-11-12.)
+  [destinations > mars > instruments > ground radar > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [destinations > mars > key instruments > source]
+      Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker (AGENT_SOURCE.md, 2026-11-12).
+  [destinations > mars > default instruments > source]
+      Game-design choice (2026-11-12): the start build packs the basic camera only (the same as the old default camera), so a new player sees the drill blocker at Review.
+  [destinations > mars > arrival >  gravity source]
+      Real gravity jumps (team decision 2026-11-14): Mars' surface gravity is 3.73 m/s², Earth's 9.80 m/s²: 3.73 / 9.80 = 0.38. NASA Mars Fact Sheet: https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html
+  [destinations > mars > arrival > source]
+      Game-design choice (layout and look). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass.
+  [destinations > mars > report > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [destinations > mars > twins > list > #1 > source]
+      NASA/JPL: HiRISE "is the most powerful telescopic camera ever sent to another planet": https://www.jpl.nasa.gov/images/pia12112-polygons-crater-layers-and-defrosting-dunes/
+  [destinations > mars > twins > list > #2 > source]
+      NASA: MRO's ground-penetrating radar found buried ice under Utopia Planitia: https://science.nasa.gov/photojournal/scalloped-terrain-led-to-finding-of-buried-ice-on-mars/
+  [destinations > mars > twins > list > #3 > source]
+      NASA JPL, NASA Phoenix Mars Lander Confirms Frozen Water (2008): https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/
+  [destinations > mars > default orbit > source]
+      Game-design choice (2026-11-11): the orbit used if you press Play on a later screen without picking one.
+  [destinations > mars > limits from > source]
+      Game-design choice (2026-11-11): for now Mars uses the mars_ice limits in game_data.json (the MRO orbiter numbers). Steps 3 and 4 in TASKS.md change them.
+  [destinations > mars > trip days > source]
+      MRO, 12 Aug 2005 to 10 Mar 2006 = 210 days (Step 11b, 2026-11-13): "Launch Date: 2005-08-12" ... "Mars Reconnaissance Orbiter reached Mars and went into orbit on 10 March 2006." https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  [destinations > mars > signal delay minutes > source]
+      Mars radio delay (Step 11b, 2026-11-13). It is 3 to 22 minutes depending on where the planets are ("it takes between 3 and 22 minutes for commands to reach Perseverance": https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/). end 11.4 = Perseverance's real landing day, 11 minutes 22 seconds: https://science.nasa.gov/blogs/perseverance-mars-rover/2021/02/18/perseverance-will-land-on-mars-today/; start 0.1: game-design choice (next to Earth)
+  [destinations > mars > flight legs > source]
+      GAME_PLAN.md section 6b DEFAULT (3 legs). Game-design choice, not a NASA number.
+  [destinations > mars > flight leg seconds > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (how many real seconds one Flight leg lasts)
+  [destinations > venus > locked > source]
+      Game-design choice (PLAN.md section 15, step 10): Venus unlocks in Phase 2.
+  [destinations > venus > orbits > low > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). More than Mars: a game-design guess with no source.
+  [destinations > venus > orbits > high > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). A higher orbit needs less fuel.
+  [destinations > venus > orbits > polar > fuel mass > source]
+      PLACEHOLDER: game-design choice scaled to a real mission (Step 11b, 2026-11-13), waiting for the team's pass. MRO really carried 1,149 kg of propellant to slow into Mars orbit: "The maximum spacecraft mass is 2180 kg, which includes 1149 kg of propellants" (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A). Same as low: a low orbit that passes over the poles.
+  [destinations > venus > instruments > cloud camera > source]
+      Pioneer Venus Orbiter Cloud Photopolarimeter (Step 11b, 2026-11-13). mass 5 kg, power 5.4 W: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1978-051A-06; budget: no public source (game value); data: game-design choice
+  [destinations > venus > instruments > balloon probe > source]
+      Vega 1 balloon (Step 11b, 2026-11-13). mass 21.5 kg total (12.5 kg balloon and tether, 6.9 kg gondola, 2.1 kg helium): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F; power 0: it ran on its own batteries, not the ship's power; budget: no public source (game value); data: game-design choice
+  [destinations > venus > instruments > radar mapper > source]
+      Magellan radar (Step 11b, 2026-11-13). power 210 W average: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1989-033B-01; mass 154 kg, the whole 17-unit radar from JPL's Magellan guide (NSSDC lists 15.2 kg for one part; the Science & Data Lead picks); budget: no public source (game value); data: game-design choice
+  [destinations > venus > instruments > spectrometer > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [destinations > venus > key instruments > source]
+      Team decision, PLAN.md section 5 (2026-11-11): the Venus key instruments are the cloud camera and the balloon probe.
+  [destinations > venus > default instruments > source]
+      Game-design choice (2026-11-12): like the other missions, the start build packs no key instrument, so a new player sees the blockers at Review.
+  [destinations > venus > arrival > source]
+      Game-design choice (layout and look). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass.
+  [destinations > venus > report > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [destinations > venus > not possible > orbit > #1 > source]
+      NASA Venus facts: the surface is about 872 F (467 C), "hot enough to melt lead", and the longest lander survived about two hours: https://science.nasa.gov/venus/venus-facts/
+  [destinations > venus > not possible > instruments > #1 > source]
+      NASA Venus facts (surface about 467 C): https://science.nasa.gov/venus/venus-facts/
+  [destinations > venus > twins > list > #1 > source]
+      NASA NSSDCA: Magellan's radar mapped 98% of the surface: https://nssdc.gsfc.nasa.gov/planetary/magellan.html
+  [destinations > venus > twins > list > #2 > source]
+      NASA: DAVINCI will "measure atmospheric composition throughout the entire descent": https://science.nasa.gov/mission/davinci/davinci-science/
+  [destinations > venus > twins > list > #3 > source]
+      NASA NSSDCA, Vega 1 Balloon (released 11 June 1985, floated at about 54 km): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F
+  [destinations > venus > default orbit > source]
+      Game-design choice (2026-11-12): the orbit used if you press Play on a later screen without picking one.
+  [destinations > venus > limits from > source]
+      Game-design choice (2026-11-12): the Venus limits are venus_storms in game_data.json.
+  [destinations > venus > trip days > source]
+      Pioneer Venus Orbiter, 20 May to 4 Dec 1978 = 198 days (Step 11b, 2026-11-13): "May 20, 1978: Launch" ... "the spacecraft entered an elliptical orbit around Venus at 15:58 UT Dec. 4, 1978." https://science.nasa.gov/mission/pioneer-venus-1/
+  [destinations > venus > signal delay minutes > source]
+      Game-design choice inside the real range (Step 11b, 2026-11-13): Venus is 38.2 to 261.0 million km from Earth (https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html), so radio takes about 2.1 to 14.5 minutes one way. 6 minutes sits inside that range. start 0.1: game-design choice
+  [destinations > venus > arrival type > source]
+      Team decision, PLAN.md sections 2 and 5 (2026-11-11): nobody lands on Venus. The crew ship stays in orbit and releases a cloud balloon.
+  [destinations > venus > crew > source]
+      Game-design choice, PLAN.md section 5 DEFAULT (2026-11-11): Venus has a crew ship in orbit.
+  [destinations > venus > goals > source]
+      Team decision, PLAN.md sections 2 and 5 (2026-11-11); grown to 8 items grouped by phase, UPGRADE_PLAN_V3 A3 (2026-11-14). Venus has no land item: nobody lands on Venus.
+
+----------------------------------------------------------------------------------------------------
+  data/events.json
+----------------------------------------------------------------------------------------------------
+  [launch events > engine out > source]
+      PLACEHOLDER: game-design choice (Upgrade step 16, 2026-11-14), waiting for the team's pass
+  [launch events > debris alert > source]
+      PLACEHOLDER: game-design choice (Upgrade step 16, 2026-11-14), waiting for the team's pass
+  [flight > flight seconds > source]
+      Game-design choice (PLAN.md section 9: repeat players use the 4x button).
+  [flight > ship > source]
+      PLACEHOLDER: game-design choice proposed at UPGRADE_PLAN_V2 step 21 (2026-11-14), not searched yet, waiting for the team's pass (timers, costs and bonuses are for game feel, not NASA numbers)
+  [flight > fast speed > source]
+      Game-design choice (PLAN.md section 9: 1x / 4x).
+  [flight > type chars per second > source]
+      Game-design choice.
+  [flight > phase cruise from > source]
+      Game-design choice.
+  [flight > phase arrival from > source]
+      Game-design choice.
+  [flight > cruise data share > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [flight > routine at > source]
+      Game-design choice.
+  [flight > build quality > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (, PLAN.md section 7: high build quality fixes small problems, low build quality costs reserve money)
+  [flight > events > solar flare > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: a better or best computer is protected against radiation; a simple one resets and loses data_lost_days of data)
+  [flight > events > far from earth > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: if communications is below the mission's limit, the data rate is cut by this factor)
+  [flight > events > dust on panels > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: with less spare power than min_spare_power, the most power-hungry instrument that is not the key instrument is switched off; with none to switch off, the data rate is cut by no_instrument_data_rate_factor)
+  [flight > events > arrival burn > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: fuel left = Fueling score minus fuel lost at launch; below min_fuel the arrival is rough and the mission loses lifetime_months_lost)
+  [flight > events > heat near sun > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: Venus is closer to the Sun, so it is hotter; with heaters only (no way to get rid of heat), the most power-hungry instrument that is not a key instrument overheats and is switched off; with none to switch off, the data rate is cut by no_instrument_data_rate_factor)
+  [flight > events > lunar night > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: the long lunar night has no sunlight, so it passes only with a battery bigger than the small one AND heat control better than heaters only; otherwise a seismometer freezes and the mission loses lifetime_months_lost. A lunar night is about two Earth weeks: https://science.nasa.gov/moon/moonlight/)
+  [events > water leak > station > source]
+      Game-design choice: the Water station in the Life Support room (A10).
+  [events > water leak > start after seconds > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (seconds after the Flight leg starts)
+  [events > water leak > drain liters per second > source]
+      PLACEHOLDER (extra water lost every real second until the leak is fixed; a leak fixed within about 30 s of the warning leaves the water out of the red)
+  [events > water leak > fix > source]
+      Game-design choice: press E at the Water station.
+
+----------------------------------------------------------------------------------------------------
+  data/extras.json
+----------------------------------------------------------------------------------------------------
+  [launch window > source]
+      trip_factor, effects and tightness_factor: PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. mars_every_months: "about once every 26 months they are aligned in a way that allows the most energy-efficient trip to Mars": https://mars.nasa.gov/msl/timeline/launch/launch-windows/ (also https://www.nasa.gov/news-release/nasa-suspends-2016-launch-of-insight-mission-to-mars/: "only a few weeks every 26 months"). Moon windows: NASA Artemis II, "approximately one week of launch opportunities, followed by three weeks without": https://www.nasa.gov/wp-content/uploads/2026/01/artemis-ii-mission-availability.pdf
+  [patch > source]
+      Game-design choice (look only).
+  [peanuts > source]
+      jar_count: game-design choice. since_year: JPL's lucky peanuts started with Ranger 7 on July 28, 1964: https://science.nasa.gov/missions/what-are-jpls-lucky-peanuts/
+  [weather > source]
+      PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass.
+  [zero g toy > source]
+      Look: game-design choice. The idea: crews fly a small plush toy as a zero-gravity indicator (ZGI), for example the Artemis II mascot "Rise": https://www.nasa.gov/general/moonmascot/ and a Soyuz crew's toy cat: https://www.nasa.gov/image-article/cosmonaut-oleg-novitskiy-holds-up-zero-g-indicator/
+  [two way fix > source]
+      PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass.
+  [spotting > source]
+      Game-design choice (look and layout only).
+  [ask crew > source]
+      Game-design choice.
+  [footprints > source]
+      spacing, size, max_prints, color_darken and the 25-second Mars fade: game-design choice. Moon prints staying: "Barring a chance meteorite impact, these impressions in the lunar soil will probably last for millions of years": https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_11_30th.html; "there is no wind or rain to erode the surface" (LRO still sees Apollo tracks): https://science.nasa.gov/solar-system/moon/10-cool-things-nasas-lunar-reconnaissance-orbiter-is-teaching-us-about-the-moon/
+  [ice race > source]
+      vanish_seconds, min_share: PLACEHOLDER: game-design choice (2026-11-14). The idea: in June 2008 "dice-size crumbs of bright material have vanished from inside a trench" dug by Phoenix; it was water ice that sublimated over four days: https://www.jpl.nasa.gov/news/bright-chunks-at-phoenix-landers-mars-site-must-have-been-ice/
+  [rocket lineup > source]
+      Falcon 9: "70 meters (229.6 feet)": https://www.nasa.gov/humans-in-space/spaceships-and-rockets/commercial-crew-rockets/; Atlas V 401: "188 feet (57.3 meters)": https://science.nasa.gov/resource/atlas-v-401-rocket/; Atlas V 541 (Mars 2020): "about 197 feet (60 meters)": https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/; bus length 13.2 m: Hubble is 43.5 feet long, "about the size of a school bus": https://science.nasa.gov/mission/hubble/observatory/design/ (the bus height and width are game-design choices, look only).
+  [tap part > source]
+      Game-design choice.
+  [mostly fuel > source]
+      NASA: "the most cleverly engineered, efficient rocket is still about 85% fuel by mass": https://science.nasa.gov/learn/basics-of-space-flight/chapter14-1/; full-scale rockets are "typically 80 – 85%" propellant: https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/model-rockets-and-real-rockets/ (the same 85% for each rocket: no per-rocket NASA figure was found).
+  [clean room > source]
+      Numbers: PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. The idea: spacecraft are assembled in clean rooms with strict cleaning to keep Earth microbes off them (planetary protection): https://solarsystem.nasa.gov/docs/MSL%20Plan%20Prot%20Fact%20Sheet%20ApprovedRev1%208-3-12.pdf and https://planetaryprotection.jpl.nasa.gov/research
+
+----------------------------------------------------------------------------------------------------
+  data/game_data.json
+----------------------------------------------------------------------------------------------------
+  [stages > source]
+      Game-design choice by the coach. It is NOT a NASA number.
+  [setup > source]
+      Game-design choice. It is NOT a NASA number.
+  [missions > mars ice > limits > budget > source]
+      MAVEN's total cost (our mission gets MAVEN's money, less than MRO's $720M). value ("Cost: $671 million over its full life cycle.", MAVEN press kit, Quick Facts, page 4): https://mars.nasa.gov/files/resources/MAVEN_PressKit_Final.pdf; warning and bar_max: game-design choice
+  [missions > mars ice > limits > mass > source]
+      Team decision, PLAN.md section 6d (2026-11-11): the mass must fit what the picked rocket can lift (its capacity in "launch_vehicles"), so there is no fixed number here. warning_fraction = the row turns yellow above this share of the capacity (0.92 = 92%); bar_max_fraction = the bar is full at this share (1.1 = 110%). Both fractions: game-design choice. (Before 2026-11-11 the limit was MRO's dry mass, 1,031 kg.)
+  [missions > mars ice > limits > power > source]
+      value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice (warning 250 makes every small solar panel build yellow)
+  [missions > mars ice > limits > communications > source]
+      What MRO could still send when Mars is farthest from Earth. value ("expected to send data to a 34-meter antenna on Earth at a rate of about 600 kilobits per second" = 0.6 Mb/s): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; warning and bar_max: game-design choice
+  [missions > mars ice > limits > data > source]
+      value: game-design choice (just under the basic camera's 4.8 Gb/day, so the basic camera only passes if it is switched off for a short time at most, about 10 seconds; MRO's planned "26 terabits or more" is all six instruments, not one camera); warning and bar_max: game-design choice
+  [missions > mars ice > limits > mission lifetime > source]
+      MRO's primary science phase. value ("a low-altitude orbit around Mars for two years"; "Primary science phase: November 2006 to December 2008"): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; warning and bar_max: game-design choice
+  [missions > moon quakes > limits > budget > source]
+      Game-design choice (Step 11b, 2026-11-13; the team checks it). The real small lunar orbiter LADEE cost about $263 million for its whole life (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2013-047A), too little for the game's parts (the body alone is about $280 million), so the Moon keeps $620 million.
+  [missions > moon quakes > limits > mass > source]
+      Team decision, PLAN.md section 6d: the mass must fit what the picked rocket can lift. Fractions: game-design choice.
+  [missions > moon quakes > limits > power > source]
+      value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice
+  [missions > moon quakes > limits > communications > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (the Moon is close, so a small antenna is enough)
+  [missions > moon quakes > limits > data > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [missions > moon quakes > limits > mission lifetime > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [missions > venus storms > limits > budget > source]
+      Game-design choice inside the real range (Step 11b, 2026-11-13). NASA's Venus missions DAVINCI and VERITAS were each capped at about $500 million, "excluding launch vehicle funding or the cost of post-launch operations" (https://www.jpl.nasa.gov/news/nasa-selects-2-missions-to-study-lost-habitable-world-of-venus/). $500 million plus one of the game's real rockets ($80.4 to $243 million) is $580 to $743 million; $700 million sits inside that range. (650 was tested and left Atlas V 401 builds no way to win.)
+  [missions > venus storms > limits > mass > source]
+      Team decision, PLAN.md section 6d: the mass must fit what the picked rocket can lift. Fractions: game-design choice.
+  [missions > venus storms > limits > power > source]
+      value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice
+  [missions > venus storms > limits > communications > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [missions > venus storms > limits > data > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [missions > venus storms > limits > mission lifetime > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [report > warning row share source]
+      PLACEHOLDER: game-design choice (Upgrade Step 1, 2026-11-14), waiting for the team's pass
+  [report > return rules > source]
+      PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. home_min_structure matches the launch's structure check (timing.json structure_check min_strength 60).
+  [report > source]
+      weights: PLAN.md section 11 DEFAULT (game-design choice). max_lines, good_teamwork, return_seconds: game-design choice.
+  [characters > source]
+      Game-design choice by the coach (AGENT_SOURCE.md section 2, 2026-11-10): Scientist = easy, Janitor = medium, Student = hard. It is NOT a NASA number.
+  [suit > source]
+      Game-design choice (look only).
+  [sounds > source]
+      Game-design choice (sound look and feel only).
+  [arrival props > source]
+      Game-design choice (look only).
+  [launch vehicles > vehicles > small > source]
+      SpaceX Falcon 9 (Step 11b, 2026-11-13). cost ("The total cost for NASA to launch PACE is approximately $80.4 million"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/; capacity ("Mars: 4,020 kg"): https://public.ksc.nasa.gov/LspEducation/Launches/LSP%20Fleet/SpaceXLaunchVehicles. Note: the real Falcon 9 is the cheapest AND lifts a lot (reusable rockets made launches cheaper). Its game trade-off is the launch timing (data/timing.json), a game-design choice. The card id stays "small" so old saves still work.
+  [launch vehicles > vehicles > medium > source]
+      ULA Atlas V 401, the rocket that really launched MRO (Step 11b, 2026-11-13). cost ("The total cost for NASA to launch Lucy is approximately $148.3 million"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/; capacity (2,315 kg at Mars-departure energy C3 = 12): https://ntrs.nasa.gov/api/citations/20130013405/downloads/20130013405.pdf (Science & Data Lead: please confirm this line in the PDF)
+  [launch vehicles > vehicles > large > source]
+      ULA Atlas V 541 (Step 11b, 2026-11-13). cost ("The total cost for NASA to launch Mars 2020 is approximately $243 million"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/; capacity (Mars Science Laboratory, 4,050 kg launched toward Mars): https://descanso.jpl.nasa.gov/monograph/series13/DeepCommo_Chapter8--141029.pdf
+  [spacecraft base > source]
+      Step 11b (2026-11-13): budget 335 became 276.7 because the medium rocket is now the real Atlas V 401 ($148.3 million instead of the old placeholder $90 million): 490 - 148.3 - 65 = 276.7, so the medium-rocket total is unchanged. Team decision (AGENT_SOURCE.md, 2026-11-12): the simple structure, battery, attitude control and computer cards (all PLACEHOLDER: budget 30 + 10 + 15 + 10 = 65, mass 120 + 20 + 15 + 8 = 163, power -20 - 15 = -35) were taken out of the numbers below. Before that: MRO spacecraft without the swappable parts. budget was 400 = 490 minus the medium rocket's cost of 90 (the rocket's cost is taken OUT of the base, see "launch_vehicles"; the rocket's 90 is PLACEHOLDER). So the total with the medium rocket is still exactly 490, the same as before the rocket question. The 490 comes from: ("Cost: About $720 million total, consisting approximately of $450 million spacecraft development and science instruments; $90 million launch; $180 million mission operations"; minus the game costs of MRO's parts, large solar 70 + high resolution camera 110 + large antenna 50 = 230: 720 - 230 = 490) and mass ("139 kilograms ... science payload, 892 kilograms ... other dry weight" = 1,031 kg dry; minus MRO's solar arrays 96.6, HiRISE 65 and 3 m antenna 20.7: 1,031 - 96.6 - 65 - 20.7 = 848.7; the 3 kg CTX camera stays in the base): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; power: no public source; communications and data: game-design choice (the body sends and collects nothing by itself); mission_lifetime: game-design choice
+  [parts > structure > versions > small > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base.
+  [parts > structure > versions > medium > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > structure > versions > large > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > solar panel > versions > small > source]
+      Mars Odyssey solar array. mass: https://ntrs.nasa.gov/api/citations/20030065626/downloads/20030065626.pdf; power: https://www.jpl.nasa.gov/news/press_kits/odysseyarrival.pdf; budget: no public source; mission_lifetime: game-design choice
+  [parts > solar panel > versions > medium > source]
+      MAVEN solar arrays. power: https://www.nasa.gov/wp-content/uploads/2015/03/mavenfactsheet_final20130610.pdf; mass: no public source; budget: no public source; mission_lifetime: game-design choice
+  [parts > solar panel > versions > large > source]
+      MRO solar arrays, both wings. mass (2 x 48.3 kg): https://ntrs.nasa.gov/api/citations/20070029236/downloads/20070029236.pdf; power: https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; budget: no public source; mission_lifetime: game-design choice
+  [parts > battery > versions > small > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base.
+  [parts > battery > versions > medium > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > battery > versions > large > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > attitude control > versions > simple > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base.
+  [parts > attitude control > versions > better > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). Game-design idea: better pointing aims the antenna and instruments more exactly, so a little more data and signal.
+  [parts > attitude control > versions > best > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > thermal control > versions > heaters > source]
+      All MRO heaters. power (the page says "As much as 300 watts of power are used to run heaters"; 300 W is that figure, not a sum): https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/; budget and mass: game-design choice (0: the heaters are counted in spacecraft_base). Until 2026-11-12 this was the heater in "reroute_power".
+  [parts > thermal control > versions > louvers > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > thermal control > versions > radiators > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [parts > antenna > versions > small > source]
+      Mars Odyssey 1.3 m high-gain antenna. mass ("Mass (kg) 3.150"; the catalog says "Masses of MGA and HGA are combined", so this is the high-gain antenna plus the small medium-gain antenna on it): https://pds-geosciences.wustl.edu/ody/ody-m-rss-1-raw-v1/odrs_0299/catalog/inst.cat; communications ("maximum supported data rate of 124.425 kbps" = 0.124 Mb/s): https://discovery.larc.nasa.gov/PDF_FILES/28Mars_Relay_Description.pdf; power: game-design choice, same 172 W amplifier as MRO (power used, electricity in; Odyssey really sends with "a 15 W Solid State Power Amplifier", from the Mars Relay Description link above; 172 W is the MRO figure): https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf; budget: no public source
+  [parts > antenna > versions > medium > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (budget, mass, communications). power: same 172 W amplifier as the other two antennas (game-design choice, see the small antenna).
+  [parts > antenna > versions > large > source]
+      MRO 3 m high-gain antenna. mass (Table 2-1: "HGA prime reflector 19.1" + "Antenna feed assembly 1.6" = 20.7 kg) and power (Table 2-1, X-band TWTA "Spacecraft power input, W" 172; power used, electricity in; its radio power out is 100 W): https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf; communications (same document: "rates as high as 6 Mbps"; NASA's Mars Relay Description gives a maximum of 5.2 Mbps: https://discovery.larc.nasa.gov/PDF_FILES/28Mars_Relay_Description.pdf); budget: no public source
+  [parts > computer > versions > simple > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base.
+  [parts > computer > versions > better > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). Game-design idea: a faster computer squeezes (compresses) more science into the same data.
+  [parts > computer > versions > best > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
+  [events > power low > source]
+      MRO passing through Mars' shadow. solar_drop_percent ("a pair of nickel-hydrogen batteries to fill in when the spacecraft is in the shadow of a planet": in shadow the solar panels make no power): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; storm_seconds: game-design choice (20 s of the 60 s walk is about one third, like the real shadow: "currently for about 40 minutes of every two-hour orbit", 40 of 112 minutes; this one shadow stands for every real shadow, sped up): https://www.jpl.nasa.gov/news/news.php?feature=7059; battery_power: game-design choice (MRO's real batteries are bigger: "two nickel-hydrogen rechargeable batteries, each with an energy storage capacity of 50 ampere-hours -- at 32 volts that's 1,600 watts for one hour" and "only about 40 percent of the battery capacity is ever planned to be used": 2 x 1,600 x 0.4 = 1,280 watt-hours over a 40-minute shadow = about 1,900 W, more than any build uses, so the alarm would never ring; 400 W makes every build switch the antenna or the heater off, like the real team that "reduced the draw on them, in part by adjusting heater temperatures before the spacecraft enters shadow"): http://web.archive.org/web/20090827094624/http://mars.jpl.nasa.gov/mro/mission/sc_electrical.html and https://www.jpl.nasa.gov/news/news.php?feature=7059; start_after_seconds and time_to_fix_seconds: game-design choice
+  [landing > source]
+      Game-design choice (look and timing only).
+  [ship > planet look > sources > earth]
+      NASA Blue Marble, Land Surface, Ocean Color and Sea Ice (NASA Visible Earth, image 57730: http://visibleearth.nasa.gov/view.php?id=57730), shrunk to 1024 x 512, copy from https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg. Credit: NASA Earth Observatory. Downloaded 2026-11-14 (approved by Holden).
+  [ship > planet look > sources > mars]
+      Mars Viking MDIM 2.1 colorized global mosaic (USGS Astrogeology / NASA, public domain: https://astrogeology.usgs.gov/search/map/mars_viking_colorized_global_mosaic_232m), from https://commons.wikimedia.org/wiki/File:Mars_Viking_MDIM21_ClrMosaic_1km.jpg (3840-wide copy), shrunk to 1024 x 512. Downloaded 2026-11-14 (approved by Holden).
+  [ship > planet look > sources > moon]
+      NASA Scientific Visualization Studio, CGI Moon Kit (https://svs.gsfc.nasa.gov/4720): lroc_color_poles_2k.tif, the Lunar Reconnaissance Orbiter (LROC WAC) color map, saved as JPG, shrunk to 1024 x 512. Credit: NASA's Scientific Visualization Studio. Downloaded 2026-11-14 (approved by Holden).
+  [ship > planet look > sources > venus]
+      Magellan radar composite of Venus (NASA/JPL, public domain), 'Cylindrical Map of Venus' via https://commons.wikimedia.org/wiki/File:Cylindrical_Map_of_Venus.jpg (original: solarviews.com, venmap), 3840-wide copy shrunk to 1024 x 512. It shows the ground as seen by radar through the clouds; venus_cloud_veil puts see-through cloud bands over it. Downloaded 2026-11-14 (approved by Holden).
+  [ship > planet look > source]
+      Look: game-design choice (UPGRADE_PLAN_V3 D1). The made-in-code surfaces are not real maps.
+  [ship > source]
+      Game-design choice (look and layout only).
+  [reroute power > heater > source]
+      off_lifetime_months_per_second: game-design choice. (The heater's 300 W moved to parts, thermal_control, on 2026-11-12.)
+  [mission clock > source]
+      months_per_second: game-design choice (0.4 makes the 60-second walk equal MRO's real 24-month primary science phase: "a low-altitude orbit around Mars for two years"; "Primary science phase: November 2006 to December 2008"): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; days_per_month: calendar math (365.25 days / 12 = 30.4; 24 x 30.4 = 730 days, the same 730 days used for the camera data, so the basic camera collects 4.8 x 730 = about 3,500 Gb, like CTX's real "approximately 3.5 Tb"); turned_off_parts_stop: game rule (a part that is turned off still has its mass and cost)
+  [keybinds > source]
+      Game-design choice (UPGRADE_PLAN_V2 step 8 key table).
+  [hud > source]
+      Game-design choice (layout only).
+  [portraits > source]
+      Game-design choice (look only).
+  [start menu > source]
+      Game-design choice (look only).
+  [rocket models > source]
+      Game-design choice (look only). Colors follow the real rockets loosely: Falcon 9 white with a black interstage; Atlas V orange first stage; the 541 has a bigger 5-meter-class fairing and four side boosters.
+  [spacecraft model > source]
+      Game-design choice (look only).
+  [choice room > source]
+      Game-design choice (layout and look only).
+  [bots > source]
+      Game-design choice.
+  [leaderboard > source]
+      Game-design choice.
+
+----------------------------------------------------------------------------------------------------
+  data/levels.json
+----------------------------------------------------------------------------------------------------
+  [source]
+      Written game-design choice by the coach, passed 2026-11-10 (AGENT_SOURCE.md section 2, levels change guidance only). It is NOT a NASA number and NOT a PLACEHOLDER.
+  [levels > easy > source]
+      Written game-design choice (Scientist). Most guidance.
+  [levels > medium > source]
+      Written game-design choice (Janitor). Some guidance.
+  [levels > hard > source]
+      Written game-design choice (Student). Least guidance.
+
+----------------------------------------------------------------------------------------------------
+  data/minigames.json
+----------------------------------------------------------------------------------------------------
+  [source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (the team tunes them after playtesting)
+  [tutorial > source]
+      Game-design choice (look only).
+  [assembly > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), words and times changed at UPGRADE_PLAN_V2 step 18 (2026-11-14), waiting for the team's pass
+  [hammer > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), changed at UPGRADE_PLAN_V2 step 19 (2026-11-14), waiting for the team's pass
+  [fuel > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [voice > source]
+      Game-design choice (TASKS.md step 14, 2026-11-13).
+  [workshop > source]
+      Game-design choice (look and layout only).
+
+----------------------------------------------------------------------------------------------------
+  data/nasa_resources.json
+----------------------------------------------------------------------------------------------------
+  [resources > design develop > link]
+      https://ntrs.nasa.gov/citations/20250002492 (NASA webinar deck, March 26 2025, Access to Space for All Systems Engineering series) (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > cml > link]
+      https://ntrs.nasa.gov/citations/20150007816 (Wessen, Borden, Ziemer, Kwok, 'Space Mission Concept Development Using Concept Maturity Levels', AIAA SPACE 2013); also https://science.nasa.gov/wp-content/uploads/2023/11/03-ziemer-mission-development-101-cmls.pdf (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > mdl > link]
+      https://etd.gsfc.nasa.gov/capabilities/integrated-design-center/mission-design-lab (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > telescope game > link]
+      https://science.nasa.gov/mission/webb/game-build-it-yourself/ (Build It Yourself: Satellite!, NASA Goddard) (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > cubesat 101 > link]
+      https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > mission viz > link]
+      https://nasa.github.io/mission-viz (Web-based Space Mission Visualization) (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > gmat > link]
+      https://software.nasa.gov/software/GSC-19640-1 (GMAT R2026 in the NASA Software Catalog); overview: https://etd.gsfc.nasa.gov/?p=18597 (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [resources > vr challenge > link]
+      https://www.spaceappschallenge.org/2023/challenges/visualize-a-space-mission-using-virtual-reality/ (found by web search 2026-11-15)
+  [resources > csa games > link]
+      https://www.asc-csa.gc.ca/eng/youth-educators/digital-games-and-activities.asp (found by web search 2026-11-14: check it matches the challenge Resources tab)
+  [csa tip > link]
+      https://www.asc-csa.gc.ca/eng/satellites/osiris-rex/activities/game.asp (from the CSA Digital Games and Activities page, found 2026-11-15)
+  [segments > source]
+      Segment names (launch, space, ground, user): Design and Develop Science Missions, https://ntrs.nasa.gov/citations/20250002492 (found by web search, check against the Resources tab). The scene grouping is a game-design choice.
+  [cml > source]
+      CML 1-4 names from JPL's Concept Maturity Levels paper: https://ntrs.nasa.gov/citations/20150007816; nicknames are ours (game-design choice).
+  [dictionary bonus > source]
+      Game-design choice (2026-11-14), waiting for the team's pass.
+  [glossary > #1 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #2 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #3 > source]
+      resource: cubesat_101 (see its link in resources)
+  [glossary > #4 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #5 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #6 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #7 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #8 > source]
+      resource: gmat (see its link in resources)
+  [glossary > #9 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #10 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #11 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #12 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #13 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #14 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #15 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #16 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #17 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #18 > source]
+      resource: telescope_game (see its link in resources)
+  [glossary > #19 > source]
+      resource: cml (see its link in resources)
+  [glossary > #20 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #21 > source]
+      resource: mdl (see its link in resources)
+  [glossary > #22 > source]
+      resource: cubesat_101 (see its link in resources)
+  [glossary > #23 > source]
+      resource: cubesat_101 (see its link in resources)
+  [glossary > #24 > source]
+      resource: cubesat_101 (see its link in resources)
+  [glossary > #25 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #26 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #27 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #28 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #29 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #30 > source]
+      resource: design_develop (see its link in resources)
+  [glossary > #31 > link]
+      science.nasa.gov/missions/what-are-jpls-lucky-peanuts
+  [glossary > #31 > source]
+      https://science.nasa.gov/missions/what-are-jpls-lucky-peanuts/ (Ranger 7, July 28 1964)
+  [glossary > #32 > link]
+      nasa.gov/general/moonmascot
+  [glossary > #32 > source]
+      https://www.nasa.gov/general/moonmascot/ (Artemis II mascot Rise); also https://www.nasa.gov/image-article/cosmonaut-oleg-novitskiy-holds-up-zero-g-indicator/
+  [glossary > #33 > link]
+      MAVEN press kit (mars.nasa.gov)
+  [glossary > #33 > source]
+      MAVEN press kit, Quick Facts p. 4: https://mars.nasa.gov/files/resources/MAVEN_PressKit_Final.pdf
+  [glossary > #34 > link]
+      nssdc.gsfc.nasa.gov (MRO)
+  [glossary > #34 > source]
+      https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  [glossary > #35 > link]
+      nasa.gov (InSight retires)
+  [glossary > #35 > source]
+      https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/
+  [glossary > #36 > link]
+      JPL MRO launch press kit
+  [glossary > #36 > source]
+      https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+  [glossary > #37 > link]
+      McEwen et al. 2007 (HiRISE team)
+  [glossary > #37 > source]
+      https://boris.unibe.ch/25369/1/2005JE002605.pdf
+  [glossary > #38 > link]
+      JPL MRO launch press kit
+  [glossary > #38 > source]
+      https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+  [glossary > #39 > link]
+      nssdc.gsfc.nasa.gov (Apollo 15 seismometer)
+  [glossary > #39 > source]
+      https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01; 3 days: Apollo 8, https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/
+  [glossary > #40 > link]
+      jpl.nasa.gov (Phoenix confirms frozen water)
+  [glossary > #40 > source]
+      https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/; 7 months: MRO 210 days, https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  [glossary > #41 > link]
+      science.nasa.gov/venus/venus-facts
+  [glossary > #41 > source]
+      https://science.nasa.gov/venus/venus-facts/
+  [glossary > #42 > link]
+      nasa.gov (PACE launch contract)
+  [glossary > #42 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/
+  [glossary > #43 > link]
+      nasa.gov (Lucy launch contract)
+  [glossary > #43 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/
+  [glossary > #44 > link]
+      nasa.gov (Mars 2020 launch contract)
+  [glossary > #44 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/
+  [glossary > #45 > link]
+      mars.nasa.gov (launch windows)
+  [glossary > #45 > source]
+      https://mars.nasa.gov/msl/timeline/launch/launch-windows/
+  [real missions > #1 > source]
+      https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/
+  [real missions > #2 > source]
+      https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  [real missions > #3 > source]
+      https://science.nasa.gov/mission/pioneer-venus-1/
+  [real missions > #4 > source]
+      https://science.nasa.gov/resource/apollo-11-seismic-experiment/
+  [real missions > #5 > source]
+      https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/
+  [real missions > #6 > source]
+      https://nssdc.gsfc.nasa.gov/planetary/magellan.html
+  [real missions > #7 > source]
+      https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F
+  [real rockets > #1 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/
+  [real rockets > #2 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/
+  [real rockets > #3 > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/
+  [astronaut facts > #1 > short source]
+      science.nasa.gov
+  [astronaut facts > #1 > source]
+      https://science.nasa.gov/resource/apollo-11-seismic-experiment/ and https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_11_30th.html
+  [astronaut facts > #2 > short source]
+      Apollo Lunar Surface Journal
+  [astronaut facts > #2 > source]
+      https://history.nasa.gov/alsj/a15/a15.summary.html and https://www.hq.nasa.gov/office/pao/History/alsj/a15/a15.alsepdep.html
+  [astronaut facts > #3 > short source]
+      nasa.gov
+  [astronaut facts > #3 > source]
+      https://www.nasa.gov/missions/station/looking-back-at-the-yearinspace/
+  [astronaut facts > #4 > short source]
+      nasa.gov
+  [astronaut facts > #4 > source]
+      https://www.nasa.gov/news-release/nasa-astronauts-record-setting-mission-helps-scientists-for-future-missions/
+  [astronaut facts > #5 > short source]
+      nasa.gov
+  [astronaut facts > #5 > source]
+      https://www.nasa.gov/news-release/nasa-welcomes-record-setting-artemis-ii-moonfarers-back-to-earth/
+  [astronaut facts > #6 > short source]
+      nasa.gov
+  [astronaut facts > #6 > source]
+      https://www.nasa.gov/history/magellan-mission-to-venus-began-25-years-ago-aboard-atlantis-on-sts-30-mission/
+  [intro plaques > source]
+      See astronaut_facts (Aldrin, Scott, Artemis II).
+
+----------------------------------------------------------------------------------------------------
+  data/story.json
+----------------------------------------------------------------------------------------------------
+  [did you know > parts > structure > source]
+      https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  [did you know > parts > solar panel > source]
+      https://www.jpl.nasa.gov/news/news.php?feature=7059
+  [did you know > parts > battery > source]
+      https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+  [did you know > parts > attitude control > source]
+      https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/
+  [did you know > parts > thermal control > source]
+      https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/
+  [did you know > parts > antenna > source]
+      https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf and https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+  [did you know > parts > computer > source]
+      McEwen et al. 2007 (HiRISE team paper): https://boris.unibe.ch/25369/1/2005JE002605.pdf
+  [did you know > rockets > source]
+      https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/ and https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/ (Team decision 2026-11-13: keep the real rocket numbers and teach why the Falcon 9 is cheap.)
+  [did you know > instruments > mars > source]
+      https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/ and https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf
+  [did you know > instruments > moon > source]
+      https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01
+  [did you know > instruments > venus > source]
+      https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F
+  [minigames > assembly > real step source]
+      NASA CubeSat 101 (integration and testing): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf
+  [minigames > hammer > real step source]
+      NASA CubeSat 101 (environmental testing, including vibration): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf
+  [minigames > fuel > real step source]
+      NASA CubeSat 101 (launch preparation): https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf; propellant loading is one of the last steps before launch
+  [destinations > mission card source]
+      Distances: NASA fact sheets. Moon mean distance 384,400 km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html; Mars 54.6 to 401.3 million km from Earth: https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html; Venus 38.2 to 261.0 million km: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html (Science & Data Lead: please confirm these three lines). Trip times: destinations.json trip_days (Apollo 8 about 3 days, MRO 210 days, Pioneer Venus 198 days). NASA lines: destinations.json twins sources (Apollo seismometers until 1977, Phoenix ice 2008, MRO SHARAD buried ice, Magellan radar map) and NASA Venus facts (surface hot enough to melt lead).
+  [nasa > gmat tip > source]
+      https://software.nasa.gov/software/GSC-19640-1 (NASA Software Catalog: GMAT is open source software for space mission design). Found by web search 2026-11-14: check it matches the challenge Resources tab.
+  [nasa > end of mission > moon > source]
+      Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+  [nasa > end of mission > mars > source]
+      Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+  [nasa > end of mission > venus > source]
+      Game-design choice (NASA_RESOURCES_PLAN.md N3 DEFAULT).
+  [landing > captions > moon > source]
+      NASA: "The lack of atmosphere on the moon prevents the use of parachutes or aerobrakes to slow the descent": https://www.nasa.gov/stem-content/lunar-base-supply-egg-drop/
+  [landing > captions > mars > source]
+      NASA JPL Phoenix landing press kit (parachute at about 12.6 km, then pulsed descent thrusters to touchdown): https://www.jpl.nasa.gov/news/press_kits/phoenix-landing.pdf
+  [landing > captions > venus > source]
+      NASA MAVEN orbit insertion: an engine burn "to slow the spacecraft so that it can be captured into Martian orbit": https://www.nasa.gov/image-article/mavens-mars-orbit-insertion/
+  [launch3d > source]
+      liftoff (Newton's third law): https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html; Max Q: https://www.nasa.gov/blogs/commercialcrew/2026/10/01/rocket-reaches-max-q-5/ and the SLS throttle-down: https://www.nasa.gov/wp-content/uploads/2026/01/sls-5558-artemis-ii-sls-reference-guide-final-review-508-012026.pdf; staging: https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/balloon_staging.html; fairing (protects the satellite from aerodynamic pressure and heating, then jettisoned): https://science.nasa.gov/blogs/pace/2024/02/01/pace-spacecraft-encapsulated-in-payload-fairing/; orbit (continuous free fall): https://science.nasa.gov/learn/basics-of-space-flight/chapter3-4/; detumble (reaction wheels point the spacecraft): https://science.nasa.gov/learn/basics-of-space-flight/chapter11-2/
+  [briefing > source]
+      moon (Apollo seismometers until 1977, moonquakes show the inside): https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01 and https://www.jpl.nasa.gov/missions/farside-seismic-suite/; lunar night 14 Earth days: https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf; mars (ice for drinking water, air and rocket fuel): https://www.nasa.gov/solar-system/planets/mars/nasa-is-locating-ice-on-mars-with-this-new-map/; MRO launched 2005: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A; Phoenix found water ice: https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/; venus (runaway greenhouse, hottest planet): https://science.nasa.gov/venus/venus-facts/; VEGA balloons 1985: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F; Magellan radar map: https://nssdc.gsfc.nasa.gov/planetary/magellan.html
+  [extras > source]
+      Real facts checked against NASA pages on 2026-11-15: see the sources in data/extras.json and in moments > sources below.
+  [extras > moments > sources > solar flare]
+      Mars Odyssey MARIE failed during the 28 October 2003 solar storm: https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=2001-013A-03
+  [extras > moments > sources > far from earth]
+      "a radio signal takes about 22 1/2 hours to reach Voyager 1": https://www.jpl.nasa.gov/news/nasas-voyager-1-resumes-sending-engineering-updates-to-earth/
+  [extras > moments > sources > dust on panels]
+      InSight retired in December 2022 after dust on its solar panels drained its power: https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/
+  [extras > moments > sources > arrival burn]
+      Mars Climate Orbiter: data in pound-seconds instead of Newton-seconds (Mishap Investigation Board): https://llis.nasa.gov/llis_lib/pdf/1009464main1_0641-mr.pdf
+  [extras > moments > sources > heat near sun]
+      The heat shield reaches nearly 2,500 F (about 1,377 C): https://www.nasa.gov/solar-system/traveling-to-the-sun-why-wont-parker-solar-probe-melt/
+  [extras > moments > sources > lunar night]
+      "a lunar night lasts 14 Earth days": https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf
+  [extras > moments > sources > water leak]
+      EVA 23, 16 July 2013: water filled an astronaut's helmet: https://www.nasa.gov/general/10-years-ago-eva-23-how-a-high-visibility-close-call-cut-short-a-spacewalk/
+  [extras > moments > sources > air filter]
+      Apollo 13 CO2 adapter from canisters, plastic bags, cardboard and tape: https://www.nasa.gov/history/afj/ap13fj/15day4-mailbox.html
+  [extras > moments > sources > breaker trip]
+      Apollo 12 lightning and "SCE to Aux": https://www.nasa.gov/history/50-years-ago-return-to-the-moon/
+
+----------------------------------------------------------------------------------------------------
+  data/supplies.json
+----------------------------------------------------------------------------------------------------
+  [per person per day > food > source]
+      Lopez, Schultz et al., Logistics Needs for Potential Deep Space Mission Scenarios Post Asteroid Redirect Crewed Mission, NASA Johnson Space Center, Table Food/Crew Provisions: 'Food Kg/crew/day 1.831 BVAD Table & ISS experience' (includes packaging). https://ntrs.nasa.gov/api/citations/20150003005/downloads/20150003005.pdf
+  [per person per day > water > source]
+      NASA-STD-3001 Technical Brief OCHMO-TB-027 Water: 'Potable Water for Hydration Minimum 2.5 L (84.5 fl oz) per crewmember per day'. https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-027-water.pdf
+  [per person per day > air > source]
+      Lopez, Schultz et al. (same paper), Table Gases: 'O 2 Metabolic kg per crew/day 0.82 HIDH / BVAD'. https://ntrs.nasa.gov/api/citations/20150003005/downloads/20150003005.pdf
+  [crew size > source]
+      PLACEHOLDER
+  [start amount > food > source]
+      PLACEHOLDER
+  [start amount > water > source]
+      PLACEHOLDER
+  [start amount > air > source]
+      PLACEHOLDER
+  [capacity > food > source]
+      PLACEHOLDER
+  [capacity > water > source]
+      PLACEHOLDER
+  [capacity > air > source]
+      PLACEHOLDER (the air meter can go above its start amount, because the oxygen generator makes oxygen)
+  [status > warning percent > source]
+      PLACEHOLDER
+  [status > danger percent > source]
+      PLACEHOLDER
+  [walk alone > air result > source]
+      PLACEHOLDER (if you play the Arrival walk on its own, with no Flight, the ship starts as if rationing was on and the oxygen generator ran with this result)
+  [empty damage > amount > source]
+      PLACEHOLDER (percent of damage when a crew supply hits zero)
+  [tasks > ration > food use factor > source]
+      PLACEHOLDER (with rationing on, the crew eats 0.6 of the normal food each day)
+  [tasks > oxygen generator > restore > Perfect > source]
+      PLACEHOLDER
+  [tasks > oxygen generator > restore > Good > source]
+      PLACEHOLDER
+  [tasks > oxygen generator > restore > Miss > source]
+      PLACEHOLDER
+  [tasks > oxygen generator > press speed > source]
+      PLACEHOLDER
+  [tasks > oxygen generator > press tightness > source]
+      PLACEHOLDER
+  [tasks > oxygen generator > result show seconds > source]
+      PLACEHOLDER (how long the ring stays on screen after the press)
+
+----------------------------------------------------------------------------------------------------
+  data/timing.json
+----------------------------------------------------------------------------------------------------
+  [launch vehicles > small > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch vehicles > medium > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch vehicles > large > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [timed press > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass. good_window doubled from 0.16 to 0.32 at Upgrade Step 5 (2026-11-14): playtesters found GOOD too narrow (UPGRADE_PLAN_V2 DEFAULT: GOOD twice as wide, PERFECT the same).
+  [launch > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (game-design timing, a student can change it)
+  [launch3d > telemetry > source]
+      Display only (Upgrade step 16, 2026-11-14). NASA Glenn Rocket Principles: low Earth orbit needs more than 28,000 km/h, and escape from Earth about 40,250 km/h: https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html (the 200 km height is a game-design choice inside low Earth orbit).
+  [launch3d > source]
+      Game-design choice (timing and look), Upgrade step 16 (2026-11-14). The timing windows themselves are in timed_press above.
+  [structure check > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch moments > liftoff > miss cost > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch moments > max pressure > miss cost > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch moments > stage separation > miss cost > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch moments > fairing release > miss cost > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+  [launch moments > engine cutoff > miss cost > source]
+      PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass
+
+====================================================================================================
+  PART 4: EVERY WEB LINK USED IN THE DATA FILES (A to Z, 115 links)
+====================================================================================================
+  http://visibleearth.nasa.gov/view.php?id=57730
+  http://web.archive.org/web/20090827094624/http://mars.jpl.nasa.gov/mro/mission/sc_electrical.html
+  https://astrogeology.usgs.gov/search/map/mars_viking_colorized_global_mosaic_232m
+  https://boris.unibe.ch/25369/1/2005JE002605.pdf
+  https://commons.wikimedia.org/wiki/File:Cylindrical_Map_of_Venus.jpg
+  https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg
+  https://commons.wikimedia.org/wiki/File:Mars_Viking_MDIM21_ClrMosaic_1km.jpg
+  https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf
+  https://descanso.jpl.nasa.gov/monograph/series13/DeepCommo_Chapter8--141029.pdf
+  https://discovery.larc.nasa.gov/PDF_FILES/28Mars_Relay_Description.pdf
+  https://etd.gsfc.nasa.gov/?p=18597
+  https://etd.gsfc.nasa.gov/capabilities/integrated-design-center/mission-design-lab
+  https://history.nasa.gov/alsj/a15/a15.summary.html
+  https://ilrs.gsfc.nasa.gov/science/scienceContributions/lunar.html
+  https://llis.nasa.gov/llis_lib/pdf/1009464main1_0641-mr.pdf
+  https://mars.nasa.gov/files/resources/MAVEN_PressKit_Final.pdf
+  https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/
+  https://mars.nasa.gov/msl/timeline/launch/launch-windows/
+  https://nasa.github.io/mission-viz
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1969-059C-04
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-01
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1971-063C-06
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1972-096C-01
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1978-051A-06
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=1989-033B-01
+  https://nssdc.gsfc.nasa.gov/nmc/experiment/display.action?id=2001-013A-03
+  https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1984-125F
+  https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2005-029A
+  https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2013-047A
+  https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html
+  https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html
+  https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
+  https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_11_30th.html
+  https://nssdc.gsfc.nasa.gov/planetary/magellan.html
+  https://ntrs.nasa.gov/api/citations/20030065626/downloads/20030065626.pdf
+  https://ntrs.nasa.gov/api/citations/20070029236/downloads/20070029236.pdf
+  https://ntrs.nasa.gov/api/citations/20130013405/downloads/20130013405.pdf
+  https://ntrs.nasa.gov/api/citations/20150003005/downloads/20150003005.pdf
+  https://ntrs.nasa.gov/citations/20120013627
+  https://ntrs.nasa.gov/citations/20150007816
+  https://ntrs.nasa.gov/citations/20250002492
+  https://pds-geosciences.wustl.edu/ody/ody-m-rss-1-raw-v1/odrs_0299/catalog/inst.cat
+  https://pds-imaging.jpl.nasa.gov/data/mro/mars_reconnaissance_orbiter/ctx/mrox_0954/document/ctxsis.pdf
+  https://planetaryprotection.jpl.nasa.gov/research
+  https://public.ksc.nasa.gov/LspEducation/Launches/LSP%20Fleet/SpaceXLaunchVehicles
+  https://science.nasa.gov/blog/speaking-percys-language-how-to-talk-so-perseverance-will-listen/
+  https://science.nasa.gov/blogs/pace/2024/02/01/pace-spacecraft-encapsulated-in-payload-fairing/
+  https://science.nasa.gov/blogs/perseverance-mars-rover/2021/02/18/perseverance-will-land-on-mars-today/
+  https://science.nasa.gov/learn/basics-of-space-flight/chapter11-2/
+  https://science.nasa.gov/learn/basics-of-space-flight/chapter14-1/
+  https://science.nasa.gov/learn/basics-of-space-flight/chapter3-4/
+  https://science.nasa.gov/mission/davinci/davinci-science/
+  https://science.nasa.gov/mission/hubble/observatory/design/
+  https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/
+  https://science.nasa.gov/mission/pioneer-venus-1/
+  https://science.nasa.gov/mission/webb/game-build-it-yourself/
+  https://science.nasa.gov/missions/what-are-jpls-lucky-peanuts/
+  https://science.nasa.gov/moon/moonlight/
+  https://science.nasa.gov/moon/weather-on-the-moon/
+  https://science.nasa.gov/photojournal/scalloped-terrain-led-to-finding-of-buried-ice-on-mars/
+  https://science.nasa.gov/resource/apollo-11-seismic-experiment/
+  https://science.nasa.gov/resource/atlas-v-401-rocket/
+  https://science.nasa.gov/solar-system/moon/10-cool-things-nasas-lunar-reconnaissance-orbiter-is-teaching-us-about-the-moon/
+  https://science.nasa.gov/venus/venus-facts/
+  https://science.nasa.gov/wp-content/uploads/2023/11/03-ziemer-mission-development-101-cmls.pdf
+  https://science.nasa.gov/wp-content/uploads/2024/01/lrolitho7temperaturevariation27may2014.pdf
+  https://software.nasa.gov/software/GSC-19640-1
+  https://solarsystem.nasa.gov/docs/MSL%20Plan%20Prot%20Fact%20Sheet%20ApprovedRev1%208-3-12.pdf
+  https://svs.gsfc.nasa.gov/4720
+  https://www.asc-csa.gc.ca/eng/satellites/osiris-rex/activities/game.asp
+  https://www.asc-csa.gc.ca/eng/youth-educators/digital-games-and-activities.asp
+  https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/balloon_staging.html
+  https://www.grc.nasa.gov/www/k-12/rocket/TRCRocket/rocket_principles.html
+  https://www.hq.nasa.gov/office/pao/History/alsj/a15/a15.alsepdep.html
+  https://www.jpl.nasa.gov/images/pia12112-polygons-crater-layers-and-defrosting-dunes/
+  https://www.jpl.nasa.gov/missions/farside-seismic-suite/
+  https://www.jpl.nasa.gov/news/bright-chunks-at-phoenix-landers-mars-site-must-have-been-ice/
+  https://www.jpl.nasa.gov/news/nasa-phoenix-mars-lander-confirms-frozen-water/
+  https://www.jpl.nasa.gov/news/nasa-selects-2-missions-to-study-lost-habitable-world-of-venus/
+  https://www.jpl.nasa.gov/news/nasas-voyager-1-resumes-sending-engineering-updates-to-earth/
+  https://www.jpl.nasa.gov/news/news.php?feature=7059
+  https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/
+  https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf
+  https://www.jpl.nasa.gov/news/press_kits/odysseyarrival.pdf
+  https://www.jpl.nasa.gov/news/press_kits/phoenix-landing.pdf
+  https://www.nasa.gov/blogs/commercialcrew/2026/10/01/rocket-reaches-max-q-5/
+  https://www.nasa.gov/directorates/smd/how-long-does-it-take-to-get-to-the-moon-mars-jupiter-we-asked-a-nasa-expert-episode-51/
+  https://www.nasa.gov/general/10-years-ago-eva-23-how-a-high-visibility-close-call-cut-short-a-spacewalk/
+  https://www.nasa.gov/general/moonmascot/
+  https://www.nasa.gov/history/50-years-ago-return-to-the-moon/
+  https://www.nasa.gov/history/afj/ap13fj/15day4-mailbox.html
+  https://www.nasa.gov/history/alsj/a12/A12Audio_Moon_Houston.html
+  https://www.nasa.gov/history/magellan-mission-to-venus-began-25-years-ago-aboard-atlantis-on-sts-30-mission/
+  https://www.nasa.gov/humans-in-space/spaceships-and-rockets/commercial-crew-rockets/
+  https://www.nasa.gov/image-article/cosmonaut-oleg-novitskiy-holds-up-zero-g-indicator/
+  https://www.nasa.gov/image-article/mavens-mars-orbit-insertion/
+  https://www.nasa.gov/missions/insight/nasa-retires-insight-mars-lander-mission-after-years-of-science/
+  https://www.nasa.gov/missions/station/looking-back-at-the-yearinspace/
+  https://www.nasa.gov/news-release/nasa-astronauts-record-setting-mission-helps-scientists-for-future-missions/
+  https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/
+  https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/
+  https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/
+  https://www.nasa.gov/news-release/nasa-suspends-2016-launch-of-insight-mission-to-mars/:
+  https://www.nasa.gov/news-release/nasa-welcomes-record-setting-artemis-ii-moonfarers-back-to-earth/
+  https://www.nasa.gov/solar-system/planets/mars/nasa-is-locating-ice-on-mars-with-this-new-map/
+  https://www.nasa.gov/solar-system/traveling-to-the-sun-why-wont-parker-solar-probe-melt/
+  https://www.nasa.gov/stem-content/lunar-base-supply-egg-drop/
+  https://www.nasa.gov/wp-content/uploads/2015/03/mavenfactsheet_final20130610.pdf
+  https://www.nasa.gov/wp-content/uploads/2017/03/nasa_csli_cubesat_101_508.pdf
+  https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-027-water.pdf
+  https://www.nasa.gov/wp-content/uploads/2026/01/artemis-ii-mission-availability.pdf
+  https://www.nasa.gov/wp-content/uploads/2026/01/sls-5558-artemis-ii-sls-reference-guide-final-review-508-012026.pdf
+  https://www.spaceappschallenge.org/2023/challenges/visualize-a-space-mission-using-virtual-reality/
+  https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/model-rockets-and-real-rockets/
+  https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/moon/

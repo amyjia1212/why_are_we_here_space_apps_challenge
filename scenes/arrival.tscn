@@ -1,0 +1,108 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/arrival.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/drill_meter.tscn" id="3_meter"]
+[ext_resource type="PackedScene" path="res://scenes/inner_voice_bar.tscn" id="4_bar"]
+
+[node name="Arrival" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+unique_name_in_owner = true
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 20, 0)
+shadow_enabled = true
+
+[node name="World" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+unique_name_in_owner = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Screen" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TaskPanel" type="PanelContainer" parent="HUD/Screen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 520.0
+offset_bottom = 60.0
+mouse_filter = 2
+theme_type_variation = &"NavyPanel"
+
+[node name="TaskList" type="VBoxContainer" parent="HUD/Screen/TaskPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Controls" type="Label" parent="HUD/Screen"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -580.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_type_variation = &"SmallText"
+text = "Controls"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Middle" type="VBoxContainer" parent="HUD/Screen"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -320.0
+offset_right = 300.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="Prompt" type="Label" parent="HUD/Screen/Middle"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingText"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="DrillMeter" parent="HUD/Screen/Middle" instance=ExtResource("3_meter")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="SendBar" type="ProgressBar" parent="HUD/Screen/Middle"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(520, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+max_value = 1.0
+show_percentage = false
+
+[node name="InnerVoiceBar" parent="HUD/Screen" instance=ExtResource("4_bar")]
+unique_name_in_owner = true
+layout_mode = 1

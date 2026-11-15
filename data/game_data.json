@@ -1,0 +1,887 @@
+{
+  "_readme": "ALL game numbers live in this file. Scripts never contain numbers. Every NASA or mission number has a \"source\": a link to where the real NASA number came from, or a written game-design choice. Layout, look and timing settings (walk, arm, dashboard, ship, power_panel) are game-design choices and have no source. If you add a made-up number for testing, mark its source with the word PLACEHOLDER (in capitals) and replace it with real NASA data, or a written game-design choice that the coach passes, before the final submission.",
+  "stages": {
+    "_readme": "The order of the game screens. go_next() in StageManager.gd walks down this list, one screen at a time. Each name is a scene file in the scenes folder (cutscene_intro means scenes/cutscene_intro.tscn). To change the order, change this list. Nothing else needs to change. The first screen in the list must also be the main scene in Project Settings.",
+    "source": "Game-design choice by the coach. It is NOT a NASA number.",
+    "scene_folder": "res://scenes/",
+    "order": ["start_menu", "cutscene_intro", "name", "character_room", "player_count", "your_file", "mission_room", "mission_briefing", "mission_school", "design_room", "review", "minigame_assembly", "minigame_hammer", "minigame_fuel", "launch", "flight", "landing", "arrival", "cutscene_return", "debrief"],
+    "redesign_to": "design_room",
+    "new_mission_to": "mission_room",
+    "_jumps_readme": "redesign_to = where \"Redesign and fly again\" and the Review's Back button go; new_mission_to = where \"New mission\" goes (UPGRADE_PLAN_V2 section 4)."
+  },
+  "setup": {
+    "_readme": "Settings for the setup questions (name, who are you, choose a mission, rocket). After you answer, the inner voice reacts and a Next button appears; the player clicks it to go on. name_max_length = the most letters the name box accepts. default_character = who you play as if you press Play on a later screen without answering the questions. mission_card_width = how wide each card is on the Choose a mission screen, in pixels. locked_card_opacity = how see-through a locked card is (1 = solid, 0 = invisible). build_card_width = how wide each card is on the Build screen, in pixels. picked_card_opacity = how see-through the cards you did NOT pick (or pack) are on the Build screen.",
+    "name_max_length": 20,
+    "default_character": "janitor",
+    "mission_card_width": 380,
+    "locked_card_opacity": 0.5,
+    "build_card_width": 230,
+    "picked_card_opacity": 0.7,
+    "source": "Game-design choice. It is NOT a NASA number."
+  },
+  "resources": {
+    "budget": {
+      "name": "Budget",
+      "unit": "million $"
+    },
+    "mass": {
+      "name": "Mass",
+      "unit": "kg"
+    },
+    "power": {
+      "name": "Power",
+      "unit": "W spare"
+    },
+    "communications": {
+      "name": "Communications",
+      "unit": "Mb/s"
+    },
+    "data": {
+      "name": "Data",
+      "unit": "Gb/day",
+      "live_unit": "Gb collected"
+    },
+    "mission_lifetime": {
+      "name": "Mission lifetime",
+      "unit": "months",
+      "live_unit": "months left"
+    }
+  },
+  "_rules_readme": "rule \"max\" = the total must stay AT or BELOW value. rule \"min\" = the total must reach AT LEAST value. warning = where the dashboard turns yellow (for max: above warning; for min: below warning). bar_max = the number that fills the dashboard bar all the way.",
+  "missions": {
+    "mars_ice": {
+      "limits": {
+        "budget": {
+          "rule": "max",
+          "value": 671,
+          "warning": 640,
+          "bar_max": 750,
+          "source": "MAVEN's total cost (our mission gets MAVEN's money, less than MRO's $720M). value (\"Cost: $671 million over its full life cycle.\", MAVEN press kit, Quick Facts, page 4): https://mars.nasa.gov/files/resources/MAVEN_PressKit_Final.pdf; warning and bar_max: game-design choice"
+        },
+        "mass": {
+          "rule": "max",
+          "value_from": "launch_vehicle",
+          "warning_fraction": 0.92,
+          "bar_max_fraction": 1.1,
+          "source": "Team decision, PLAN.md section 6d (2026-11-11): the mass must fit what the picked rocket can lift (its capacity in \"launch_vehicles\"), so there is no fixed number here. warning_fraction = the row turns yellow above this share of the capacity (0.92 = 92%); bar_max_fraction = the bar is full at this share (1.1 = 110%). Both fractions: game-design choice. (Before 2026-11-11 the limit was MRO's dry mass, 1,031 kg.)"
+        },
+        "power": {
+          "rule": "min",
+          "value": 0,
+          "warning": 250,
+          "bar_max": 1500,
+          "source": "value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice (warning 250 makes every small solar panel build yellow)"
+        },
+        "communications": {
+          "rule": "min",
+          "value": 0.6,
+          "warning": 1,
+          "bar_max": 8,
+          "source": "What MRO could still send when Mars is farthest from Earth. value (\"expected to send data to a 34-meter antenna on Earth at a rate of about 600 kilobits per second\" = 0.6 Mb/s): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; warning and bar_max: game-design choice"
+        },
+        "data": {
+          "rule": "min",
+          "value": 4,
+          "warning": 4.5,
+          "bar_max": 20,
+          "source": "value: game-design choice (just under the basic camera's 4.8 Gb/day, so the basic camera only passes if it is switched off for a short time at most, about 10 seconds; MRO's planned \"26 terabits or more\" is all six instruments, not one camera); warning and bar_max: game-design choice"
+        },
+        "mission_lifetime": {
+          "rule": "min",
+          "value": 24,
+          "warning": 27,
+          "bar_max": 45,
+          "source": "MRO's primary science phase. value (\"a low-altitude orbit around Mars for two years\"; \"Primary science phase: November 2006 to December 2008\"): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; warning and bar_max: game-design choice"
+        }
+      }
+    },
+    "moon_quakes": {
+      "limits": {
+        "budget": { "rule": "max", "value": 620, "warning": 600, "bar_max": 700, "source": "Game-design choice (Step 11b, 2026-11-13; the team checks it). The real small lunar orbiter LADEE cost about $263 million for its whole life (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2013-047A), too little for the game's parts (the body alone is about $280 million), so the Moon keeps $620 million." },
+        "mass": { "rule": "max", "value_from": "launch_vehicle", "warning_fraction": 0.92, "bar_max_fraction": 1.1, "source": "Team decision, PLAN.md section 6d: the mass must fit what the picked rocket can lift. Fractions: game-design choice." },
+        "power": { "rule": "min", "value": 0, "warning": 250, "bar_max": 1500, "source": "value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice" },
+        "communications": { "rule": "min", "value": 0.1, "warning": 0.2, "bar_max": 8, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (the Moon is close, so a small antenna is enough)" },
+        "data": { "rule": "min", "value": 0.3, "warning": 0.5, "bar_max": 10, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" },
+        "mission_lifetime": { "rule": "min", "value": 12, "warning": 15, "bar_max": 45, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" }
+      }
+    },
+    "venus_storms": {
+      "limits": {
+        "budget": { "rule": "max", "value": 700, "warning": 670, "bar_max": 780, "source": "Game-design choice inside the real range (Step 11b, 2026-11-13). NASA's Venus missions DAVINCI and VERITAS were each capped at about $500 million, \"excluding launch vehicle funding or the cost of post-launch operations\" (https://www.jpl.nasa.gov/news/nasa-selects-2-missions-to-study-lost-habitable-world-of-venus/). $500 million plus one of the game's real rockets ($80.4 to $243 million) is $580 to $743 million; $700 million sits inside that range. (650 was tested and left Atlas V 401 builds no way to win.)" },
+        "mass": { "rule": "max", "value_from": "launch_vehicle", "warning_fraction": 0.92, "bar_max_fraction": 1.1, "source": "Team decision, PLAN.md section 6d: the mass must fit what the picked rocket can lift. Fractions: game-design choice." },
+        "power": { "rule": "min", "value": 0, "warning": 250, "bar_max": 1500, "source": "value: game-design choice (the parts cannot use more power than the solar panels make); warning and bar_max: game-design choice" },
+        "communications": { "rule": "min", "value": 0.3, "warning": 0.6, "bar_max": 8, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" },
+        "data": { "rule": "min", "value": 2, "warning": 3, "bar_max": 20, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" },
+        "mission_lifetime": { "rule": "min", "value": 12, "warning": 15, "bar_max": 45, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" }
+      }
+    }
+  },
+  "report": {
+    "_readme": "The mission report score out of 1000 (PLAN.md section 11). weights = the most points for each part: goals = checklist goals done, data = science data sent home compared with the mission's data target (destinations.json > report), resources = rows inside their limits at Review (out of 6), build_quality = the Assembly team score, teamwork = the average of all three minigame team scores. max_lines = how many \"went well\" and \"fix next time\" lines the report shows. good_teamwork = the teamwork average (0-100) that counts as a \"went well\" line. return_seconds = how long the return-to-Earth line shows before the report.",
+    "weights": { "goals": 400, "data": 200, "resources": 200, "build_quality": 100, "teamwork": 100 },
+    "_scoring_readme": "Since Upgrade Step 1 (2026-11-14): a goal that is only partly done earns the share of its tasks done (2 of 3 seismometers = 2/3 of that goal). A resource row earns full points when green, warning_row_share of them when yellow (close to the limit), none when red.",
+    "warning_row_share": 0.5,
+    "warning_row_share_source": "PLACEHOLDER: game-design choice (Upgrade Step 1, 2026-11-14), waiting for the team's pass",
+    "max_lines": 3,
+    "good_teamwork": 80,
+    "return_seconds": 5,
+    "goal_split": "even",
+    "_goal_split_readme": "UPGRADE_PLAN_V3 A3: the 400 goals points are split evenly across the checklist items (8 items = 50 points each).",
+    "return_rules": {
+      "_readme": "UPGRADE_PLAN_V3 A3 DEFAULT: the return cutscene is still a placeholder, so Depart and Home are decided by a simple rule. depart_min_fuel = the fuel left (Fueling score minus launch fuel damage, 0-100) needed for a smooth lift-off; home_min_structure = the structure strength (Hammering score minus structure damage, 0-100) needed for a smooth landing. Below the line, that item fails with a one-line reason.",
+      "depart_min_fuel": 50,
+      "home_min_structure": 60,
+      "source": "PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. home_min_structure matches the launch's structure check (timing.json structure_check min_strength 60)."
+    },
+    "source": "weights: PLAN.md section 11 DEFAULT (game-design choice). max_lines, good_teamwork, return_seconds: game-design choice."
+  },
+  "_missions_more_readme": "moon_quakes and venus_storms are the limits for the Moon and Venus missions (destinations.json limits_from). Same rules as mars_ice.",
+  "characters": {
+    "_readme": "The three characters. The character is the ONLY place that says which level the player plays (easy, medium or hard), so the character and the level can never disagree. What each level changes (budget, timing, supplies, hints) is in data/levels.json.",
+    "scientist": {
+      "level": "easy",
+      "scene": "res://scenes/characters/assistant_scientist.tscn"
+    },
+    "janitor": {
+      "level": "medium",
+      "scene": "res://scenes/characters/janitor.tscn"
+    },
+    "student": {
+      "level": "hard",
+      "scene": "res://scenes/characters/student.tscn"
+    },
+    "source": "Game-design choice by the coach (AGENT_SOURCE.md section 2, 2026-11-10): Scientist = easy, Janitor = medium, Student = hard. It is NOT a NASA number."
+  },
+  "suit": {
+    "_readme": "The space suit the player's character wears in the arrival walk (TASKS.md step 13; PLAN.md section 12: the same toy-like characters in suits on the planets). The character's scene is in \"characters\" (scene). color = the suit, trim_color = the stripe around the middle, pack_color = the backpack, visor_color and visor_alpha = the see-through helmet bubble (0 = invisible, 1 = solid). helmet_size = the bubble compared with the head. walk_sway = how far the person rocks side to side while walking (radians). Looks only.",
+    "color": "#f2f2f2",
+    "trim_color": "#ff9933",
+    "pack_color": "#5a6070",
+    "visor_color": "#9fd3ff",
+    "visor_alpha": 0.3,
+    "helmet_size": 1.45,
+    "walk_sway": 0.08,
+    "source": "Game-design choice (look only)."
+  },
+  "sounds": {
+    "_readme": "Sound effects made in code by scripts/autoload/Sfx.gd (no sound files). Each sound: wave = sine (soft beep), square (buzzy beep) or noise (hiss, clank, rumble); notes = a list of [pitch in Hz, seconds] played one after another (a third number slides the pitch to it); volume_db = loudness (0 = full, -6 = about half, -20 = quiet). Where they play: click = every button; good = a good result (Perfect press, task done, green flight line); bad = a bad result (Miss, wrong key, red flight line); hit = a nail hit or a part snapped on; launch = liftoff; done = mission report stamp for a success; drill = a worker starts a job in the minigame workshop; radio = the workshop radio beep (a pitch of 0 = silence). The radio beep copies the idea of the Apollo \"Quindar tones\" (2,525 Hz and 2,475 Hz) that marked the start and end of a radio message; the volumes and lengths are game-design choices. TASKS.md step 14.",
+    "click": { "wave": "square", "notes": [[900, 0.03, 700]], "volume_db": -18 },
+    "good": { "wave": "sine", "notes": [[660, 0.08], [880, 0.14]], "volume_db": -8 },
+    "bad": { "wave": "square", "notes": [[220, 0.12], [160, 0.2]], "volume_db": -16 },
+    "hit": { "wave": "noise", "notes": [[0, 0.06]], "volume_db": -12 },
+    "launch": { "wave": "noise", "notes": [[0, 1.6]], "volume_db": -10 },
+    "done": { "wave": "sine", "notes": [[523, 0.1], [659, 0.1], [784, 0.1], [1047, 0.3]], "volume_db": -8 },
+    "drill": { "wave": "square", "notes": [[90, 0.18, 130], [130, 0.18, 90], [90, 0.18, 130]], "volume_db": -24 },
+    "radio": { "wave": "sine", "notes": [[2525, 0.25], [0, 0.6], [2475, 0.25]], "volume_db": -26 },
+    "_more_readme": "Added at Upgrade steps 9 and 26 (2026-11-14): hover = the mouse moves onto a button; beep = the fallback for a sound name with no recipe; the others are named for where they play.",
+    "hover": { "wave": "sine", "notes": [[1400, 0.02]], "volume_db": -28 },
+    "beep": { "wave": "sine", "notes": [[880, 0.08]], "volume_db": -14 },
+    "confirm": { "wave": "sine", "notes": [[523, 0.07], [784, 0.07], [1047, 0.16]], "volume_db": -10 },
+    "cancel": { "wave": "sine", "notes": [[600, 0.07], [400, 0.12]], "volume_db": -14 },
+    "preview": { "wave": "sine", "notes": [[700, 0.05, 900]], "volume_db": -16 },
+    "snap": { "wave": "square", "notes": [[180, 0.04], [0, 0.03], [260, 0.06]], "volume_db": -16 },
+    "stamp": { "wave": "noise", "notes": [[0, 0.09]], "volume_db": -6 },
+    "footstep": { "wave": "noise", "notes": [[0, 0.035]], "volume_db": -30 },
+    "jump": { "wave": "sine", "notes": [[300, 0.12, 520]], "volume_db": -22 },
+    "door": { "wave": "noise", "notes": [[0, 0.35]], "volume_db": -24 },
+    "pickup": { "wave": "sine", "notes": [[880, 0.05], [1320, 0.09]], "volume_db": -14 },
+    "station": { "wave": "square", "notes": [[440, 0.05], [660, 0.05]], "volume_db": -20 },
+    "task_done": { "wave": "sine", "notes": [[660, 0.07], [880, 0.07], [1175, 0.14]], "volume_db": -10 },
+    "alarm": { "wave": "square", "notes": [[880, 0.18], [660, 0.18], [880, 0.18], [660, 0.18]], "volume_db": -16 },
+    "rumble": { "wave": "noise", "notes": [[0, 2.5]], "volume_db": -8 },
+    "countdown": { "wave": "sine", "notes": [[1000, 0.09]], "volume_db": -12 },
+    "countdown_go": { "wave": "sine", "notes": [[1500, 0.3]], "volume_db": -10 },
+    "perfect": { "wave": "sine", "notes": [[784, 0.06], [1047, 0.06], [1568, 0.16]], "volume_db": -8 },
+    "miss": { "wave": "square", "notes": [[200, 0.18, 120]], "volume_db": -16 },
+    "type": { "wave": "square", "notes": [[1800, 0.012]], "volume_db": -26 },
+    "clank": { "wave": "square", "notes": [[320, 0.03], [210, 0.09]], "volume_db": -12 },
+    "dent": { "wave": "noise", "notes": [[0, 0.12]], "volume_db": -14 },
+    "spark": { "wave": "noise", "notes": [[0, 0.03], [0, 0.02]], "volume_db": -18 },
+    "valve": { "wave": "square", "notes": [[140, 0.05, 160]], "volume_db": -26 },
+    "whoosh": { "wave": "noise", "notes": [[0, 0.6]], "volume_db": -18 },
+    "separation": { "wave": "noise", "notes": [[0, 0.25]], "volume_db": -8 },
+    "warning": { "wave": "square", "notes": [[520, 0.1], [0, 0.06], [520, 0.1]], "volume_db": -14 },
+    "source": "Game-design choice (sound look and feel only)."
+  },
+  "arrival_props": {
+    "_readme": "Colors for the props in the arrival walk (scripts/arrival.gd, make_prop; TASKS.md step 13). screen_glow = how brightly screens and lights glow. Looks only.",
+    "console": "#3a4566",
+    "screen": "#5ed17a",
+    "screen_glow": 1.5,
+    "metal": "#9aa0a8",
+    "dish": "#eeeeee",
+    "gold": "#c9a227",
+    "orange": "#ff9933",
+    "ice": "#cfeeff",
+    "_kinds_readme": "kinds = how each prop is built: a list of simple shapes. shape = box, cylinder or sphere. size: box [x, y, z]; cylinder [top radius, bottom radius, height]; sphere [radius]. at = the shape's middle, in meters from the prop's foot. color = one of the color names above. glow = how brightly it glows (optional). turn = [x, y, z] tilt in degrees (optional). lander_parts = sizes for the lander's band, legs, feet and dish, in meters (the lander's body size is in destinations.json).",
+    "kinds": {
+      "console": [
+        { "shape": "box", "size": [1.0, 1.1, 0.7], "at": [0, 0.55, 0], "color": "console" },
+        { "shape": "box", "size": [0.8, 0.45, 0.05], "at": [0, 0.95, 0.36], "color": "screen", "glow": 1.5, "turn": [-23, 0, 0] }
+      ],
+      "dish": [
+        { "shape": "cylinder", "size": [0.06, 0.08, 1.6], "at": [0, 0.8, 0], "color": "metal" },
+        { "shape": "cylinder", "size": [0.7, 0.12, 0.3], "at": [0, 1.7, 0], "color": "dish", "turn": [34, 0, 0] }
+      ],
+      "seismometer": [
+        { "shape": "cylinder", "size": [0.25, 0.3, 0.4], "at": [0, 0.2, 0], "color": "gold" },
+        { "shape": "sphere", "size": [0.08], "at": [0, 0.45, 0], "color": "screen", "glow": 1.5 }
+      ],
+      "drill_rig": [
+        { "shape": "box", "size": [0.12, 2.2, 0.12], "at": [-0.5, 1.1, 0], "color": "metal" },
+        { "shape": "box", "size": [0.12, 2.2, 0.12], "at": [0.5, 1.1, 0], "color": "metal" },
+        { "shape": "box", "size": [1.2, 0.2, 0.3], "at": [0, 2.2, 0], "color": "orange" },
+        { "shape": "cylinder", "size": [0.08, 0.02, 1.8], "at": [0, 1.1, 0], "color": "metal" },
+        { "shape": "cylinder", "size": [0.12, 0.12, 0.5], "at": [0.9, 0.12, 0.3], "color": "ice", "glow": 0.4, "turn": [0, 0, 90] }
+      ]
+    },
+    "lander_parts": {
+      "band_height": 0.35,
+      "band_above_legs": 0.4,
+      "leg_radius": 0.08,
+      "foot_radius": 0.33,
+      "foot_height": 0.1,
+      "dish_radius": 0.6,
+      "dish_depth": 0.3,
+      "dish_above_top": 0.5,
+      "dish_tilt_degrees": 29
+    },
+    "source": "Game-design choice (look only)."
+  },
+  "launch_vehicles": {
+    "_readme": "The three rockets the player can pick. cost = what the rocket costs, in million $. The rocket's cost is added to the Build budget total. The MEDIUM rocket's cost is already taken OUT of the spacecraft base (spacecraft_base budget is 490 minus the medium cost), so with the medium rocket the total is the same as before. The small rocket makes the total lower and the large rocket makes it higher. capacity = how many kg the rocket can send to the destination: the spacecraft PLUS the fuel it needs to get into its orbit (the orbit fuel is in data/destinations.json, \"orbits\"). The capacity is the Mass limit (PLAN.md section 6d). How many launch moments each rocket has, and how tight they are, is in data/timing.json. default = the rocket used if you press Play on a later screen without picking one. If you change the medium cost, also change the base budget by the same amount, the other way. NOTE for the real numbers: replace the capacities and the orbit fuel together, or the balance breaks.",
+    "default": "medium",
+    "vehicles": {
+      "small": {
+        "cost": 80.4,
+        "capacity": 4020,
+        "source": "SpaceX Falcon 9 (Step 11b, 2026-11-13). cost (\"The total cost for NASA to launch PACE is approximately $80.4 million\"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-earth-science-mission/; capacity (\"Mars: 4,020 kg\"): https://public.ksc.nasa.gov/LspEducation/Launches/LSP%20Fleet/SpaceXLaunchVehicles. Note: the real Falcon 9 is the cheapest AND lifts a lot (reusable rockets made launches cheaper). Its game trade-off is the launch timing (data/timing.json), a game-design choice. The card id stays \"small\" so old saves still work."
+      },
+      "medium": {
+        "cost": 148.3,
+        "capacity": 2315,
+        "source": "ULA Atlas V 401, the rocket that really launched MRO (Step 11b, 2026-11-13). cost (\"The total cost for NASA to launch Lucy is approximately $148.3 million\"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-lucy-mission/; capacity (2,315 kg at Mars-departure energy C3 = 12): https://ntrs.nasa.gov/api/citations/20130013405/downloads/20130013405.pdf (Science & Data Lead: please confirm this line in the PDF)"
+      },
+      "large": {
+        "cost": 243,
+        "capacity": 4050,
+        "source": "ULA Atlas V 541 (Step 11b, 2026-11-13). cost (\"The total cost for NASA to launch Mars 2020 is approximately $243 million\"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/; capacity (Mars Science Laboratory, 4,050 kg launched toward Mars): https://descanso.jpl.nasa.gov/monograph/series13/DeepCommo_Chapter8--141029.pdf"
+      }
+    }
+  },
+  "spacecraft_base": {
+    "_readme": "The spacecraft body (fuel tanks, wiring, small parts) that every build has. Its mass is dry mass: no fuel. Its numbers are added to the parts the player picks. Since 2026-11-12 the frame (structure), battery, pointing (attitude control) and computer are part cards the player picks, so the SIMPLE card of each of those 4 was taken OUT of the body: budget 400 - 65 = 335 (since Step 11b, 2026-11-13: 276.7, because the medium rocket now costs the real $148.3 million: 490 - 148.3 - 65), mass 848.7 - 163 = 685.7, power -40 + 35 = -5. So a build with every simple card adds up exactly as before. If you change a simple card's numbers, change the body by the same amount the other way. The heat (thermal control) was never inside the body: its simple card is the MRO heaters, which used to be in \"reroute_power\".",
+    "effects": {
+      "budget": 276.7,
+      "mass": 685.7,
+      "power": -5,
+      "communications": 0,
+      "data": 0,
+      "mission_lifetime": 30
+    },
+    "source": "Step 11b (2026-11-13): budget 335 became 276.7 because the medium rocket is now the real Atlas V 401 ($148.3 million instead of the old placeholder $90 million): 490 - 148.3 - 65 = 276.7, so the medium-rocket total is unchanged. Team decision (AGENT_SOURCE.md, 2026-11-12): the simple structure, battery, attitude control and computer cards (all PLACEHOLDER: budget 30 + 10 + 15 + 10 = 65, mass 120 + 20 + 15 + 8 = 163, power -20 - 15 = -35) were taken out of the numbers below. Before that: MRO spacecraft without the swappable parts. budget was 400 = 490 minus the medium rocket's cost of 90 (the rocket's cost is taken OUT of the base, see \"launch_vehicles\"; the rocket's 90 is PLACEHOLDER). So the total with the medium rocket is still exactly 490, the same as before the rocket question. The 490 comes from: (\"Cost: About $720 million total, consisting approximately of $450 million spacecraft development and science instruments; $90 million launch; $180 million mission operations\"; minus the game costs of MRO's parts, large solar 70 + high resolution camera 110 + large antenna 50 = 230: 720 - 230 = 490) and mass (\"139 kilograms ... science payload, 892 kilograms ... other dry weight\" = 1,031 kg dry; minus MRO's solar arrays 96.6, HiRISE 65 and 3 m antenna 20.7: 1,031 - 96.6 - 65 - 20.7 = 848.7; the 3 kg CTX camera stays in the base): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; power: no public source; communications and data: game-design choice (the body sends and collects nothing by itself); mission_lifetime: game-design choice",
+    "look": {
+      "size": [
+        2,
+        2,
+        2
+      ],
+      "height_above_floor": 1.0,
+      "color": "#c9a227",
+      "texture": "foil"
+    }
+  },
+  "_look_readme": "\"look\" = how a part is drawn in the 3D walk. Sizes are in meters and are only for the picture, not NASA data. shape: wings = two flat panels on the sides, size [width, thickness, depth]; cylinder = hangs under the body, size [radius, length]; dish = sits on top, size [radius, depth]. model: leave \"\" to use the simple shape, or put a path like \"res://models/large_antenna.glb\" to use a real 3D model.",
+  "_parts_readme": "The part categories on the Build screen, in tab order. Each has 3 cards (versions): the FIRST one is the simple card, picked by default. The names and descriptions on the screen are in data/story.json (\"parts\"). A part with a \"look\" is drawn in the 3D walk; parts without one are not drawn yet. Science instruments are NOT here: each mission has its own, in data/destinations.json (\"instruments\").",
+  "parts": {
+    "structure": {
+      "versions": {
+        "small": {
+          "effects": { "budget": 30, "mass": 120, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base."
+        },
+        "medium": {
+          "effects": { "budget": 45, "mass": 160, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 3 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        },
+        "large": {
+          "effects": { "budget": 60, "mass": 200, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 6 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      }
+    },
+    "solar_panel": {
+      "look": {
+        "shape": "wings",
+        "mount": "sides",
+        "color": "#22337a",
+        "texture": "solar"
+      },
+      "versions": {
+        "small": {
+          "effects": {
+            "budget": 20,
+            "mass": 32.3,
+            "power": 750,
+            "communications": 0,
+            "data": 0,
+            "mission_lifetime": 0
+          },
+          "source": "Mars Odyssey solar array. mass: https://ntrs.nasa.gov/api/citations/20030065626/downloads/20030065626.pdf; power: https://www.jpl.nasa.gov/news/press_kits/odysseyarrival.pdf; budget: no public source; mission_lifetime: game-design choice",
+          "look": {
+            "size": [
+              1.5,
+              0.06,
+              1.2
+            ],
+            "model": ""
+          }
+        },
+        "medium": {
+          "effects": {
+            "budget": 40,
+            "mass": 60,
+            "power": 1135,
+            "communications": 0,
+            "data": 0,
+            "mission_lifetime": 6
+          },
+          "source": "MAVEN solar arrays. power: https://www.nasa.gov/wp-content/uploads/2015/03/mavenfactsheet_final20130610.pdf; mass: no public source; budget: no public source; mission_lifetime: game-design choice",
+          "look": {
+            "size": [
+              2.5,
+              0.06,
+              1.6
+            ],
+            "model": ""
+          }
+        },
+        "large": {
+          "effects": {
+            "budget": 70,
+            "mass": 96.6,
+            "power": 2000,
+            "communications": 0,
+            "data": 0,
+            "mission_lifetime": 12
+          },
+          "source": "MRO solar arrays, both wings. mass (2 x 48.3 kg): https://ntrs.nasa.gov/api/citations/20070029236/downloads/20070029236.pdf; power: https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; budget: no public source; mission_lifetime: game-design choice",
+          "look": {
+            "size": [
+              3.5,
+              0.06,
+              2.0
+            ],
+            "model": ""
+          }
+        }
+      }
+    },
+    "battery": {
+      "versions": {
+        "small": {
+          "effects": { "budget": 10, "mass": 20, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base."
+        },
+        "medium": {
+          "effects": { "budget": 18, "mass": 35, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 3 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        },
+        "large": {
+          "effects": { "budget": 28, "mass": 55, "power": 0, "communications": 0, "data": 0, "mission_lifetime": 6 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      }
+    },
+    "attitude_control": {
+      "versions": {
+        "simple": {
+          "effects": { "budget": 15, "mass": 15, "power": -20, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base."
+        },
+        "better": {
+          "effects": { "budget": 30, "mass": 25, "power": -40, "communications": 0.2, "data": 0.5, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). Game-design idea: better pointing aims the antenna and instruments more exactly, so a little more data and signal."
+        },
+        "best": {
+          "effects": { "budget": 50, "mass": 35, "power": -60, "communications": 0.4, "data": 1, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      }
+    },
+    "thermal_control": {
+      "versions": {
+        "heaters": {
+          "effects": { "budget": 0, "mass": 0, "power": -300, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "All MRO heaters. power (the page says \"As much as 300 watts of power are used to run heaters\"; 300 W is that figure, not a sum): https://mars.nasa.gov/mro/mission/spacecraft/parts/thermal/; budget and mass: game-design choice (0: the heaters are counted in spacecraft_base). Until 2026-11-12 this was the heater in \"reroute_power\"."
+        },
+        "louvers": {
+          "effects": { "budget": 15, "mass": 10, "power": -200, "communications": 0, "data": 0, "mission_lifetime": 2 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        },
+        "radiators": {
+          "effects": { "budget": 30, "mass": 20, "power": -120, "communications": 0, "data": 0, "mission_lifetime": 4 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      }
+    },
+    "antenna": {
+      "look": {
+        "shape": "dish",
+        "mount": "top",
+        "color": "#eeeeee"
+      },
+      "versions": {
+        "small": {
+          "effects": {
+            "budget": 20,
+            "mass": 3.15,
+            "power": -172,
+            "communications": 0.124,
+            "data": 0,
+            "mission_lifetime": 0
+          },
+          "source": "Mars Odyssey 1.3 m high-gain antenna. mass (\"Mass (kg) 3.150\"; the catalog says \"Masses of MGA and HGA are combined\", so this is the high-gain antenna plus the small medium-gain antenna on it): https://pds-geosciences.wustl.edu/ody/ody-m-rss-1-raw-v1/odrs_0299/catalog/inst.cat; communications (\"maximum supported data rate of 124.425 kbps\" = 0.124 Mb/s): https://discovery.larc.nasa.gov/PDF_FILES/28Mars_Relay_Description.pdf; power: game-design choice, same 172 W amplifier as MRO (power used, electricity in; Odyssey really sends with \"a 15 W Solid State Power Amplifier\", from the Mars Relay Description link above; 172 W is the MRO figure): https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf; budget: no public source",
+          "look": {
+            "size": [
+              0.45,
+              0.25
+            ],
+            "model": ""
+          }
+        },
+        "medium": {
+          "effects": { "budget": 35, "mass": 10, "power": -172, "communications": 1.5, "data": 0, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (budget, mass, communications). power: same 172 W amplifier as the other two antennas (game-design choice, see the small antenna).",
+          "look": { "size": [0.7, 0.35], "model": "" }
+        },
+        "large": {
+          "effects": {
+            "budget": 50,
+            "mass": 20.7,
+            "power": -172,
+            "communications": 6,
+            "data": 0,
+            "mission_lifetime": 0
+          },
+          "source": "MRO 3 m high-gain antenna. mass (Table 2-1: \"HGA prime reflector 19.1\" + \"Antenna feed assembly 1.6\" = 20.7 kg) and power (Table 2-1, X-band TWTA \"Spacecraft power input, W\" 172; power used, electricity in; its radio power out is 100 W): https://descanso.jpl.nasa.gov/DPSummary/MRO_092106.pdf; communications (same document: \"rates as high as 6 Mbps\"; NASA's Mars Relay Description gives a maximum of 5.2 Mbps: https://discovery.larc.nasa.gov/PDF_FILES/28Mars_Relay_Description.pdf); budget: no public source",
+          "look": {
+            "size": [
+              1.0,
+              0.45
+            ],
+            "model": ""
+          }
+        }
+      }
+    },
+    "computer": {
+      "versions": {
+        "simple": {
+          "effects": { "budget": 10, "mass": 8, "power": -15, "communications": 0, "data": 0, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base."
+        },
+        "better": {
+          "effects": { "budget": 25, "mass": 10, "power": -25, "communications": 0, "data": 1, "mission_lifetime": 0 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). Game-design idea: a faster computer squeezes (compresses) more science into the same data."
+        },
+        "best": {
+          "effects": { "budget": 45, "mass": 12, "power": -35, "communications": 0, "data": 2, "mission_lifetime": 2 },
+          "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)"
+        }
+      }
+    }
+  },
+  "events": {
+    "power_low": {
+      "_readme": "The live alarm in the 3D walk: a shadow pass. The spacecraft flies into Mars' shadow, where no sunlight reaches the solar panels. It starts after start_after_seconds. The solar part (solar_part) then makes solar_drop_percent less power (100 = none at all), and the batteries give battery_power watts instead. If spare power goes below the limit, the alarm rings and the player has time_to_fix_seconds to turn systems off at the power panel. The alarm is fixed the moment power fits again (spare power back inside the limit). If it stops fitting while the shadow pass is still on, the alarm rings again. The shadow pass ends storm_seconds after it starts: the solar panels get their full power back, and the player can switch systems back on. IMPORTANT: time_to_fix_seconds must be SHORTER than storm_seconds, or a player who does nothing would be saved when the shadow pass ends.",
+      "start_after_seconds": 20,
+      "time_to_fix_seconds": 15,
+      "storm_seconds": 20,
+      "solar_part": "solar_panel",
+      "solar_drop_percent": 100,
+      "battery_power": 400,
+      "source": "MRO passing through Mars' shadow. solar_drop_percent (\"a pair of nickel-hydrogen batteries to fill in when the spacecraft is in the shadow of a planet\": in shadow the solar panels make no power): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; storm_seconds: game-design choice (20 s of the 60 s walk is about one third, like the real shadow: \"currently for about 40 minutes of every two-hour orbit\", 40 of 112 minutes; this one shadow stands for every real shadow, sped up): https://www.jpl.nasa.gov/news/news.php?feature=7059; battery_power: game-design choice (MRO's real batteries are bigger: \"two nickel-hydrogen rechargeable batteries, each with an energy storage capacity of 50 ampere-hours -- at 32 volts that's 1,600 watts for one hour\" and \"only about 40 percent of the battery capacity is ever planned to be used\": 2 x 1,600 x 0.4 = 1,280 watt-hours over a 40-minute shadow = about 1,900 W, more than any build uses, so the alarm would never ring; 400 W makes every build switch the antenna or the heater off, like the real team that \"reduced the draw on them, in part by adjusting heater temperatures before the spacecraft enters shadow\"): http://web.archive.org/web/20090827094624/http://mars.jpl.nasa.gov/mro/mission/sc_electrical.html and https://www.jpl.nasa.gov/news/news.php?feature=7059; start_after_seconds and time_to_fix_seconds: game-design choice"
+    }
+  },
+  "walk": {
+    "_readme": "3D walk settings. reach_distance = how close (in meters) you must stand to a part to press E on it. voice_hold_seconds = after the inner voice says something, warnings wait this long so they don't talk over it. end_read_seconds = when the mission is over, time to read the last line before the debrief. failed_read_seconds = the same, when the power alarm ran out of time. The mission is over when the mission clock reaches the mission length (the mission's mission_lifetime limit, for example 24 months).",
+    "reach_distance": 1.5,
+    "voice_hold_seconds": 3,
+    "end_read_seconds": 4,
+    "failed_read_seconds": 3
+  },
+  "landing": {
+    "_readme": "The landing animation between the flight and the arrival (scripts/landing.gd). duration_seconds = how long the descent (or the braking burn at Venus) takes; hold_seconds = how long TOUCHDOWN / IN ORBIT stays before the arrival starts. start_height = where the lander starts, in meters above the ground; dust_below_height = the dust starts blowing below this height. altitude_scale = the altitude readout shows height x this (the scene is small; looks only). flame_color = the engine flame. Venus: orbit_planet_radius = how big Venus is in the scene, orbit_fly_distance = how far the ship flies in, orbit_craft_scale = the spacecraft model size. Space, Enter or a click skips.",
+    "duration_seconds": 7,
+    "hold_seconds": 2,
+    "start_height": 28,
+    "dust_below_height": 6,
+    "altitude_scale": 40,
+    "camera_fov": 60,
+    "flame_color": "#ffb347",
+    "dust_amount": 60,
+    "orbit_planet_radius": 40,
+    "orbit_fly_distance": 18,
+    "orbit_craft_scale": 0.8,
+    "source": "Game-design choice (look and timing only)."
+  },
+  "ship": {
+    "_readme": "The ship interior for the flight (UPGRADE_PLAN_V2 step 21; built by scripts/flight.gd). All sizes are in meters. Seen from above, x goes left/right and z goes front/back (the Bridge is at the front, small z). Each room is a box from x[0] to x[1] and z[0] to z[1]. door = the wall with the doorway into the hallway (north, south, east or west). stations = the glowing cyan floor pads where tasks happen: pos = [x, z] of the pad, face = which way you look when you use it (the prop stands one step that way), prop = what stands there (console, panel, tank, rack, crate, dish). The words for each station are in story.json \"flight_ship\". decor = furniture with no task (seat, bench, rack, crate). windows = holes in an outside wall that show space: room, wall, center (along that wall), width. wall_screen = the big screen on the Bridge with the flight log and the trip map: center [x, y, z], size [w, h], face = which way it looks. planet = the destination outside the Bridge window: it grows on screen from start_angle_degrees to end_angle_degrees during the trip; colors per destination. bot_routes = paths the toy-like staff walk (step 27). Colors are web color codes: warm white walls, navy floor, cyan and orange accents.",
+    "planet_look": {
+      "_readme": "UPGRADE_PLAN_V3 D1: the planets in the ship's windows (scripts/planet_look.gd). maps = a real NASA map for each planet: when the file exists it is wrapped around the sphere (each is 1024 x 512, shrunk 2026-11-14 to keep the web build small); until then a made-in-code surface is used. The files are not downloaded yet: the team approves the download first (sources below). rim_colors = the thin glowing edge. rim_size = the edge sphere's size (1.04 = 4% bigger). spin_degrees_per_second = the slow spin.",
+      "maps": { "earth": "res://assets/planets/earth.jpg", "mars": "res://assets/planets/mars.jpg", "moon": "res://assets/planets/moon.jpg", "venus": "res://assets/planets/venus.jpg" },
+      "rim_colors": { "earth": "#5fa8ff", "mars": "#ffbf8a", "moon": "#c8ccd4", "venus": "#ffe2a0" },
+      "rim_size": 1.04,
+      "spin_degrees_per_second": 2.0,
+      "sources": {
+        "earth": "NASA Blue Marble, Land Surface, Ocean Color and Sea Ice (NASA Visible Earth, image 57730: http://visibleearth.nasa.gov/view.php?id=57730), shrunk to 1024 x 512, copy from https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg. Credit: NASA Earth Observatory. Downloaded 2026-11-14 (approved by Holden).",
+        "mars": "Mars Viking MDIM 2.1 colorized global mosaic (USGS Astrogeology / NASA, public domain: https://astrogeology.usgs.gov/search/map/mars_viking_colorized_global_mosaic_232m), from https://commons.wikimedia.org/wiki/File:Mars_Viking_MDIM21_ClrMosaic_1km.jpg (3840-wide copy), shrunk to 1024 x 512. Downloaded 2026-11-14 (approved by Holden).",
+        "moon": "NASA Scientific Visualization Studio, CGI Moon Kit (https://svs.gsfc.nasa.gov/4720): lroc_color_poles_2k.tif, the Lunar Reconnaissance Orbiter (LROC WAC) color map, saved as JPG, shrunk to 1024 x 512. Credit: NASA's Scientific Visualization Studio. Downloaded 2026-11-14 (approved by Holden).",
+        "venus": "Magellan radar composite of Venus (NASA/JPL, public domain), 'Cylindrical Map of Venus' via https://commons.wikimedia.org/wiki/File:Cylindrical_Map_of_Venus.jpg (original: solarviews.com, venmap), 3840-wide copy shrunk to 1024 x 512. It shows the ground as seen by radar through the clouds; venus_cloud_veil puts see-through cloud bands over it. Downloaded 2026-11-14 (approved by Holden)."
+      },
+      "venus_cloud_veil": 0.55,
+      "_venus_cloud_veil_readme": "How much the made-in-code cloud bands cover Venus's real radar map (0 = no clouds, 1 = no map showing). Game-design choice: real Venus is fully cloud-covered to the eye.",
+      "source": "Look: game-design choice (UPGRADE_PLAN_V3 D1). The made-in-code surfaces are not real maps."
+    },
+    "station_questions": {
+      "_readme": "UPGRADE_PLAN_V3 A2: the Q card at each ship station (glossary ids in nasa_resources.json). The zero-g plush on the Bridge has its own card (zero_g_indicator).",
+      "bridge_burn": "trajectory", "bridge_flare": "cruise", "power_breaker": "battery", "power_solar": "solar_array",
+      "science_calibrate": "instrument", "science_samples": "payload", "comms_dish": "downlink", "comms_send": "signal_delay",
+      "life_water": "cruise", "life_air": "cruise", "life_food": "cruise"
+    },
+    "wall_height": 3.0,
+    "wall_thickness": 0.2,
+    "door_width": 2.0,
+    "door_height": 2.3,
+    "hallway": { "x": [-1.5, 1.5], "z": [-6, 10] },
+    "rooms": {
+      "bridge": { "x": [-5, 5], "z": [-14, -6], "door": "south" },
+      "power_room": { "x": [1.5, 9.5], "z": [-5, 3], "door": "west" },
+      "science_bay": { "x": [-9.5, -1.5], "z": [-5, 3], "door": "east" },
+      "comms_room": { "x": [-5, 5], "z": [10, 18], "door": "north" },
+      "life_support": { "x": [1.5, 9.5], "z": [4, 9], "door": "west" }
+    },
+    "stations": {
+      "bridge_burn": { "room": "bridge", "pos": [-1.5, -12.0], "face": "north", "prop": "console" },
+      "bridge_flare": { "room": "bridge", "pos": [3.6, -8.5], "face": "east", "prop": "panel" },
+      "power_breaker": { "room": "power_room", "pos": [8.2, -3.5], "face": "east", "prop": "panel" },
+      "power_solar": { "room": "power_room", "pos": [8.2, 1.6], "face": "east", "prop": "console" },
+      "science_calibrate": { "room": "science_bay", "pos": [-8.2, -3.5], "face": "west", "prop": "console" },
+      "science_samples": { "room": "science_bay", "pos": [-8.2, 1.6], "face": "west", "prop": "crate" },
+      "comms_dish": { "room": "comms_room", "pos": [-2.8, 16.0], "face": "south", "prop": "dish" },
+      "comms_send": { "room": "comms_room", "pos": [2.8, 16.0], "face": "south", "prop": "console" },
+      "life_water": { "room": "life_support", "pos": [3.8, 7.6], "face": "south", "prop": "tank" },
+      "life_air": { "room": "life_support", "pos": [6.1, 7.6], "face": "south", "prop": "rack" },
+      "life_food": { "room": "life_support", "pos": [8.4, 7.6], "face": "south", "prop": "crate" }
+    },
+    "decor": [
+      { "type": "seat", "pos": [-1.5, -10.6], "face": "north" },
+      { "type": "seat", "pos": [1.5, -10.6], "face": "north" },
+      { "type": "console", "pos": [1.5, -13.1], "face": "north" },
+      { "type": "rack", "pos": [4.5, -4.4], "face": "north" },
+      { "type": "rack", "pos": [6.0, -4.4], "face": "north" },
+      { "type": "rack", "pos": [4.5, 2.4], "face": "south" },
+      { "type": "bench", "pos": [-5.5, -4.3], "face": "north" },
+      { "type": "bench", "pos": [-5.5, 2.3], "face": "south" },
+      { "type": "crate", "pos": [4.0, 11.0], "face": "north" },
+      { "type": "seat", "pos": [0.0, 14.5], "face": "south" }
+    ],
+    "windows": [
+      { "room": "bridge", "wall": "north", "center": 0, "width": 7.0 },
+      { "room": "power_room", "wall": "east", "center": -1.0, "width": 2.0 },
+      { "room": "science_bay", "wall": "west", "center": -1.0, "width": 2.0 },
+      { "room": "comms_room", "wall": "south", "center": 0, "width": 3.0 }
+    ],
+    "window_bottom": 1.0,
+    "window_top": 2.4,
+    "wall_screen": { "center": [-4.85, 1.7, -10.0], "size": [4.6, 2.6], "face": "east" },
+    "planet": {
+      "_readme": "The destination outside the Bridge window. Its size on screen grows steadily from start_angle_degrees (a dot) to end_angle_degrees (it fills the window) during the trip. radius = its size in meters (the game moves it closer to make it look bigger). height = how high it sits in the window.",
+      "start_angle_degrees": 3,
+      "end_angle_degrees": 32,
+      "radius": 4,
+      "height": 1.6,
+      "colors": { "moon": "#c8c8c8", "mars": "#c1440e", "venus": "#e3c16f" }
+    },
+    "star_count": 260,
+    "player_start": [0, 0, -9.0],
+    "player_facing_degrees": 180,
+    "hallway_lights": 3,
+    "light_color": "#fff2dc",
+    "light_energy": 1.3,
+    "light_range": 10,
+    "floor_color": "#1f2a44",
+    "wall_color": "#eef0f2",
+    "ceiling_color": "#d9dde4",
+    "trim_color": "#ff9933",
+    "accent_color": "#3fd0ff",
+    "prop_color": "#9aa3b2",
+    "screen_color": "#0d1a33",
+    "sign_color": "#ffb347",
+    "sign_letter_size": 0.35,
+    "pad_size": 1.4,
+    "pad_glow": 1.6,
+    "task_glow_color": "#ffd24d",
+    "emergency_glow_color": "#ff4d4d",
+    "label_height": 2.1,
+    "label_letter_size": 0.2,
+    "bot_routes": [
+      [[0, 0, -4], [0, 0, 8]],
+      [[-6.5, 0, -1.5], [-4, 0, 1.0]],
+      [[-1.5, 0, 12.5], [1.5, 0, 12.5]]
+    ],
+    "source": "Game-design choice (look and layout only)."
+  },
+  "power_panel": {
+    "_readme": "The power panel in the Power room (the Reroute Power mini-game). position = where its bottom middle stands on the floor, in meters (same x/z map as \"ship\"; here it stands against the Power room's north wall, which is at z = -5). facing_degrees = which way its front faces (0 = toward +z, into the room; -90 = toward -x). size = [width, height, depth] in meters. height_above_floor = the gap under the cabinet. Colors are web color codes.",
+    "position": [5.5, 0, -4.77],
+    "facing_degrees": 0,
+    "size": [1.2, 1.6, 0.25],
+    "height_above_floor": 0.5,
+    "color": "#2a3550",
+    "screen_color": "#5ed17a",
+    "stripe_color": "#ff9933"
+  },
+  "reroute_power": {
+    "_readme": "The Reroute Power mini-game (the switch panel; moves to the archive in TASKS.md step 7). systems = the switches, top to bottom. instruments = every science instrument the player packed, together. antenna = the antenna part the player picked. heater = the thermal control card the player picked (heater_part). off_lifetime_months_per_second = while the heater is OFF, the cold wears out the batteries: the mission loses this many extra months of lifetime every real second (0.2 = 1 month every 5 seconds).",
+    "systems": ["instruments", "antenna", "heater"],
+    "heater": {
+      "heater_part": "thermal_control",
+      "off_lifetime_months_per_second": 0.2,
+      "source": "off_lifetime_months_per_second: game-design choice. (The heater's 300 W moved to parts, thermal_control, on 2026-11-12.)"
+    }
+  },
+  "dashboard": {
+    "_readme": "Dashboard colors (web color codes). safe = inside the limit, warning = close to the limit, danger = past the limit. flash_seconds = how fast a row flashes during an alarm.",
+    "colors": {
+      "safe": "#5ed17a",
+      "warning": "#ffd24d",
+      "danger": "#ff5c5c"
+    },
+    "flash_seconds": 0.35
+  },
+  "mission_clock": {
+    "_readme": "The live mission in the 3D walk. months_per_second = how fast mission time runs (0.4 = one real minute is 24 mission months). days_per_month turns months into days for the data total (30.4 = 365.25 days / 12). turned_off_parts_stop = what a part stops giving or using when it is turned off (it still has its mass and cost).",
+    "months_per_second": 0.4,
+    "days_per_month": 30.4,
+    "turned_off_parts_stop": [
+      "power",
+      "data",
+      "communications"
+    ],
+    "source": "months_per_second: game-design choice (0.4 makes the 60-second walk equal MRO's real 24-month primary science phase: \"a low-altitude orbit around Mars for two years\"; \"Primary science phase: November 2006 to December 2008\"): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; days_per_month: calendar math (365.25 days / 12 = 30.4; 24 x 30.4 = 730 days, the same 730 days used for the camera data, so the basic camera collects 4.8 x 730 = about 3,500 Gb, like CTX's real \"approximately 3.5 Tb\"); turned_off_parts_stop: game rule (a part that is turned off still has its mass and cost)"
+  },
+  "arm": {
+    "_readme": "The wrist light on the player's arm. It shows the worst dashboard color. blink_seconds = how fast it blinks when something is red. raise_seconds = how long Tab takes to raise or lower the arm. panel_gap_pixels = space between the wrist light and the dashboard above it.",
+    "blink_seconds": 0.3,
+    "raise_seconds": 0.25,
+    "panel_gap_pixels": 30
+  },
+  "textures": {
+    "_readme": "Textures made in code (scripts/autoload/Textures.gd). They are GRAY: 1.0 = keep the material's color, 0.5 = half as bright. pixels = image size (must divide evenly by squares_across, and by 2 x thread_pixels). meters = how many meters one copy covers. noise_frequency = size of the random bumps (bigger = smaller bumps). seed = which random bumps (same every run). Looks only, not mission numbers.",
+    "seed": 7,
+    "floor": { "pattern": "grid", "pixels": 256, "squares_across": 4, "base": 0.9, "line": 0.55, "line_pixels": 4, "speckle": 0.12, "noise_frequency": 0.08, "rivet_pixels": 0, "rivet_inset": 0, "rivet": 0, "meters": 3.0, "roughness": 0.85 },
+    "wall": { "pattern": "grid", "pixels": 256, "squares_across": 2, "base": 0.95, "line": 0.6, "line_pixels": 4, "speckle": 0.06, "noise_frequency": 0.05, "rivet_pixels": 4, "rivet_inset": 12, "rivet": 0.7, "meters": 4.0, "roughness": 0.7 },
+    "foil": { "pattern": "crinkle", "pixels": 256, "base": 0.85, "strength": 0.35, "noise_frequency": 0.05, "meters": 1.0, "metallic": 0.35, "roughness": 0.4 },
+    "solar": { "pattern": "grid", "pixels": 256, "squares_across": 4, "base": 1.0, "line": 0.35, "line_pixels": 6, "speckle": 0.08, "noise_frequency": 0.1, "rivet_pixels": 0, "rivet_inset": 0, "rivet": 0, "meters": 0.8, "metallic": 0.3, "roughness": 0.3 },
+    "fabric": { "pattern": "weave", "pixels": 64, "thread_pixels": 4, "base": 0.85, "weave": 0.1, "speckle": 0.1, "noise_frequency": 0.2, "meters": 0.06 }
+  },
+  "keybinds": {
+    "_readme": "Every key in the game (UPGRADE_PLAN_V2 step 8). Since UPGRADE_PLAN_V3 A2 (2026-11-14): Q = ask a question (ask_question), Backspace = go back one choice (go_back), R = the ship's quick fix (quick_fix; it used to share Q). scripts/autoload/Controls.gd puts these into Godot's Input Map when the game starts, so no script names a key directly. Key names are Godot's names (W, Up, Space, Shift, Enter, Kp Enter, Tab, Escape, 1). The words on the Controls screen are in story.json \"controls\".",
+    "actions": {
+      "move_forward": ["W", "Up"],
+      "move_back": ["S", "Down"],
+      "move_left": ["A", "Left"],
+      "move_right": ["D", "Right"],
+      "jump": ["Space"],
+      "run": ["Shift"],
+      "interact": ["E"],
+      "preview_1": ["1", "Kp 1"],
+      "preview_2": ["2", "Kp 2"],
+      "preview_3": ["3", "Kp 3"],
+      "preview_4": ["4", "Kp 4"],
+      "preview_5": ["5", "Kp 5"],
+      "preview_6": ["6", "Kp 6"],
+      "confirm": ["Enter", "Kp Enter"],
+      "ask_question": ["Q"],
+      "go_back": ["Backspace"],
+      "quick_fix": ["R"],
+      "tablet": ["Tab"],
+      "toggle_dashboard": ["Tab"],
+      "show_controls": ["H"],
+      "mute": ["M"],
+      "fullscreen": ["F"],
+      "pause": ["Escape"], "office_hours": ["O"], "dictionary": ["G"], "notebook": ["N"],
+      "skip_lesson": ["S"], "replay_lesson": ["L"]
+    },
+    "run_multiplier": 1.7,
+    "source": "Game-design choice (UPGRADE_PLAN_V2 step 8 key table)."
+  },
+  "hud": {
+    "_readme": "The layer on top of every screen (scripts/autoload/Hud.gd): the controls hint, the Controls panel (H), the pause menu (Esc), the mission tablet (Tab), the waypoints and the portrait corner. portrait_scenes = screens that show the player's portrait in the top-left corner. no_pause_scenes = screens where Esc does not open the pause menu. tablet_map_meters = how many meters the tablet's mini map shows from side to side. waypoint_edge_margin = how far from the screen edge the arrows sit, in pixels.",
+    "scene_questions": {
+      "_readme": "UPGRADE_PLAN_V3 A2: the Q card on screens that do not choose their own (a screen with get_question_id() decides by itself). Values are glossary ids in nasa_resources.json.",
+      "mission_briefing": "conops", "mission_school": "budget", "review": "verification", "minigame_assembly": "integration",
+      "minigame_hammer": "vibration_test", "minigame_fuel": "fueling", "landing": "trajectory", "debrief": "user_segment"
+    },
+    "flight_log_lines": 4,
+    "question_tag_bottom": 160,
+    "question_card_width": 380,
+    "notebook_button_scenes": ["mission_room", "design_room", "review"],
+    "_question_card_width_readme": "UI_POLISH_PLAN_V4 Step 3a: the Q card is one small see-through card, low on the left, at most about a quarter of the screen wide. Look only.",
+    "_question_tag_readme": "UPGRADE_PLAN_V3 A2: the Q ? sign sits in the bottom-right corner, this many pixels up from the bottom (above the voice bar).",
+    "_flight_log_lines_readme": "UPGRADE_PLAN_V3 E: the flight log shows only the newest lines; older ones scroll away.",
+    "portrait_scenes": ["design_room", "mission_room", "flight"],
+    "no_pause_scenes": ["start_menu"],
+    "portrait_size": 96,
+    "tablet_map_meters": 44,
+    "tablet_map_pixels": 360,
+    "waypoint_edge_margin": 48,
+    "waypoint_height": 2.4, "waypoint_top_margin": 300, "waypoint_bottom_margin": 190, "_waypoint_margins_readme": "Off-screen arrows stay between these distances from the top and the bottom of the screen, so they never sit under the hint bar, the alerts or the voice bar.",
+    "source": "Game-design choice (layout only)."
+  },
+  "portraits": {
+    "_readme": "Pictures of each character (UPGRADE_PLAN_V2 step 10), taken from the 3D models when the game starts and saved to user://portraits. camera_height = the share of the character's height the camera looks at; distance in meters; fov = how wide the camera sees, in degrees.",
+    "size": 256,
+    "camera_height": 0.8,
+    "distance": 2.6,
+    "fov": 30,
+    "background": "#1c3466",
+    "list": {
+      "scientist": "res://scenes/characters/assistant_scientist.tscn",
+      "janitor": "res://scenes/characters/janitor.tscn",
+      "student": "res://scenes/characters/student.tscn",
+      "general": "res://scenes/characters/general.tscn"
+    },
+    "source": "Game-design choice (look only)."
+  },
+  "start_menu": {
+    "_readme": "The start menu's 3D backdrop (UPGRADE_PLAN_V2 step 7): the rocket on the pad at dawn. camera_orbit_seconds = how long the camera takes to go once around; camera_radius / camera_height in meters. Colors are hex codes.",
+    "rocket": "small",
+    "sky_top": "#2b3a6b",
+    "sky_horizon": "#f2a65a",
+    "ground_color": "#5b5f66",
+    "sea_color": "#2c5a7a",
+    "sun_color": "#ffc27a",
+    "tower_color": "#e9ecef",
+    "camera_orbit_seconds": 90,
+    "camera_radius": 26,
+    "camera_height": 7,
+    "look_height": 12,
+    "dust_amount": 60,
+    "source": "Game-design choice (look only)."
+  },
+  "rocket_models": {
+    "_readme": "How each rocket looks (UPGRADE_PLAN_V2 step 15), in meters at toy scale (not the real sizes). radius = the first stage; first_height / second_height = the two stages; interstage = the dark ring between them; fairing = the nose cone that splits open; engines = how many engine bells show; boosters = side boosters; legs = folded landing legs. model = a real 3D model scene to use instead (empty = build from these shapes). Colors are hex codes. The shapes are look only, NOT NASA numbers.",
+    "small": {
+      "model": "", "radius": 0.9, "first_height": 12.0, "interstage_height": 1.2, "second_height": 3.6, "second_radius": 0.9,
+      "fairing_radius": 1.15, "fairing_height": 4.2, "engines": 9, "bell_radius": 0.22, "bell_height": 0.7,
+      "boosters": 0, "legs": 4, "flame_length": 7.0,
+      "body_color": "#f3f4f6", "second_color": "#f3f4f6", "fairing_color": "#f3f4f6", "interstage_color": "#23262c",
+      "stripe_color": "#1f3c8f", "stripe_height": 0.35, "logo_color": "#ff9933", "bell_color": "#3b3f47",
+      "booster_color": "#ffffff", "flame_color": "#ffb347"
+    },
+    "medium": {
+      "model": "", "radius": 1.05, "first_height": 10.5, "interstage_height": 0.8, "second_height": 3.4, "second_radius": 0.85,
+      "fairing_radius": 1.25, "fairing_height": 4.4, "engines": 2, "bell_radius": 0.38, "bell_height": 0.9,
+      "boosters": 0, "legs": 0, "flame_length": 7.5,
+      "body_color": "#d9893b", "second_color": "#e9ecef", "fairing_color": "#ffffff", "interstage_color": "#e9ecef",
+      "stripe_color": "#c0392b", "stripe_height": 0.3, "logo_color": "#1f3c8f", "bell_color": "#2f3238",
+      "booster_color": "#ffffff", "flame_color": "#ffb347"
+    },
+    "large": {
+      "model": "", "radius": 1.05, "first_height": 10.5, "interstage_height": 0.8, "second_height": 3.4, "second_radius": 0.85,
+      "fairing_radius": 1.6, "fairing_height": 6.4, "engines": 2, "bell_radius": 0.38, "bell_height": 0.9,
+      "boosters": 4, "booster_radius": 0.38, "booster_height": 6.5, "legs": 0, "flame_length": 9.0,
+      "body_color": "#d9893b", "second_color": "#e9ecef", "fairing_color": "#ffffff", "interstage_color": "#e9ecef",
+      "stripe_color": "#c0392b", "stripe_height": 0.3, "logo_color": "#1f3c8f", "bell_color": "#2f3238",
+      "booster_color": "#f5f5f5", "flame_color": "#ffb347"
+    },
+    "source": "Game-design choice (look only). Colors follow the real rockets loosely: Falcon 9 white with a black interstage; Atlas V orange first stage; the 541 has a bigger 5-meter-class fairing and four side boosters."
+  },
+  "spacecraft_model": {
+    "_readme": "The spacecraft with an inside (UPGRADE_PLAN_V2 step 15): the shell turns see-through for the Inside view, showing the battery, computer, tanks, wheels, antenna and each instrument. Sizes in meters (toy scale); colors are hex codes. shell_alpha = how see-through the shell is in the Inside view. glow_color = the color of the part you are choosing.",
+    "body_size": [1.6, 1.6, 1.6],
+    "shell_color": "#c9a227",
+    "shell_alpha": 0.18,
+    "glow_color": "#3ff0ff",
+    "battery": { "size": [0.5, 0.35, 0.4], "pos": [-0.4, -0.45, 0.3], "color": "#3fae5b" },
+    "computer": { "size": [0.45, 0.2, 0.35], "pos": [0.35, 0.45, -0.3], "color": "#2f6fd6" },
+    "structure": { "color": "#9aa3ad" },
+    "tanks": { "radius": 0.28, "spots": [[-0.4, 0.15, -0.35], [0.4, -0.2, 0.35]], "color": "#c7ccd3" },
+    "attitude_control": { "radius": 0.14, "spots": [[0.45, -0.45, -0.3], [0.1, -0.45, -0.45], [0.45, -0.15, -0.45]], "color": "#8e44ad" },
+    "thermal_control": { "color": "#e74c3c" },
+    "instrument_colors": ["#ff9933", "#f1c40f", "#1abc9c", "#e84393"],
+    "source": "Game-design choice (look only)."
+  },
+  "choice_room": {
+    "_readme": "The 3D Choice Room (UPGRADE_PLAN_V2 steps 13-14): every selection is made by walking up to one of the pedestals and pressing E (or 1/2/3), then confirming at the console in the middle. Sizes in meters, colors are hex codes. room_size = width and depth; wall_screen_size = the big screen on the far wall; pedestal_spacing = the gap between pedestals; reach = how close you must stand to a pedestal or the console; inside_categories = the choices that switch the wall view to Inside (see-through spacecraft); planet_colors = the globes in the Mission Room; rocket_scale = how small the rockets are on the pedestals and the display; hired_seconds = how long the \"You're hired\" moment lasts; read_seconds = how long a line stays before the next room loads.",
+    "first_person": true,
+    "room_size": [26, 15],
+    "wall_height": 8.0,
+    "wall_screen_size": [10.4, 5.85],
+    "wall_screen_height": 4.5,
+    "wall_ui_scale": 1.5,
+    "_wall_ui_scale_readme": "UI_POLISH_PLAN_V4: the wall screen uses the game theme times this (fonts, padding, gaps), because it is seen from across the room. Look only.",
+    "screen_pixels": [1280, 720],
+    "_layout_readme": "ROOM_LAYOUT_PLAN_V5 (layout only, Jeremy tunes these): pedestals in a gentle curve (pedestal_curve = how much closer the outer ones stand), raised so the models sit near head height; nameplate_size / nameplate_letter = the plate on each pedestal's front (meters); side_screens = the two screens on the left and right, turned angle_degrees toward the start spot (x = distance from the middle, z = how far forward, height = middle of the screen, ui_scale = theme times this); display_position = the high shelf with your spacecraft on the back wall, shelf_scale = how big it is there.",
+    "_layout_2_readme": "Holden, 2026-11-15 (second layout): a wide room (room_size 26 x 13). Back wall in thirds: the two screens on the left and right thirds (side_screens: x = middle of each screen, height = its middle, size in meters), the observation area in the middle third (observation: hologram radius, railing radius/height, beam height and see-through, spotlight). The chosen thing floats there big (display_position, display_scale). The options stand in front on LOW pedestals with small models (option_model_scale per room, 'other' = the rest), all below eye height so nothing ever covers the screens; the picked one rises selected_lift meters and grows selected_scale times.",
+    "pedestal_z": 1.5,
+    "pedestal_curve": 0.0,
+    "character_pedestal_height": 0.3,
+    "option_model_scale": { "character": 0.6, "mission": 0.6, "rocket": 0.42, "instruments": 0.75, "other": 1.0 },
+    "selected_lift": 0.15,
+    "selected_scale": 1.15,
+    "observation": { "radius": 1.3, "rail_radius": 2.2, "rail_height": 0.9, "beam_height": 2.6, "beam_alpha": 0.1, "spot_energy": 3.0 },
+    "pedestal_spacing": 2.0,
+    "pedestal_radius": 0.4,
+    "pedestal_height": 0.6,
+    "nameplate_size": [1.8, 0.34],
+    "nameplate_letter": 0.0032,
+    "pedestal_max_span": 6.0,
+    "_pedestal_max_span_readme": "V5: the widest the row of pedestals may be (meters), so 4 or 5 options never stand behind the side screens; the spacing and the nameplates shrink to fit (the letters do not).",
+    "side_screens": { "size": [8.0, 4.5], "x": 8.67, "height": 4.3, "ui_scale": 2.7, "pixels": [1280, 720] },
+    "_side_screens_readme": "Since 2026-11-15 (Holden) the two screens hang flat on the BACK wall, left third and right third. The bottom edge (height - size/2) stays above eye height (1.6 m), so the low option models never cover them.",
+    "reach": 1.6,
+    "console_position": [5.0, 0, 3.4],
+    "display_position": [0, 3.7, -2.6],
+    "display_scale": 1.3,
+    "spawn": [0, 0, 6.6],
+    "rocket_scale": 0.085,
+    "display_rocket_scale": 0.13,
+    "spacecraft_display_scale": 0.62,
+    "turn_speed": 0.35,
+    "general_position": [8.5, 0, -5.5],
+    "hired_seconds": 5.0,
+    "read_seconds": 3.0,
+    "floor_color": "#1d2a4d",
+    "wall_color": "#eceae4",
+    "accent_color": "#3fd9ff",
+    "stripe_color": "#ff9933",
+    "pedestal_color": "#c9ced6",
+    "console_color": "#2a3550",
+    "inside_categories": ["battery", "computer", "thermal_control", "attitude_control", "instruments"],
+    "planet_colors": { "moon": "#b9b9b9", "mars": "#c1532f", "venus": "#e8c46a" },
+    "planet_radius": 0.55,
+    "bot_routes": [[[-11.0, 0, 4.5], [-7.0, 0, 3.5]], [[11.0, 0, 4.5], [8.0, 0, 3.0]]],
+    "_bot_routes_readme": "Paths the toy-like staff walk in every Choice Room (UPGRADE_PLAN_V2 step 27): a list of paths, each a list of [x, y, z] points. They wave at each point and run during alerts.",
+    "orbit_radius": { "low": 0.75, "high": 1.05, "polar": 0.75 },
+    "source": "Game-design choice (layout and look only)."
+  },
+  "bots": {
+    "_readme": "Toy-like staff and bot crewmates (UPGRADE_PLAN_V2 step 27). walk_speed in meters per second; wait_seconds = how long they stop (and wave) at each point; alert_speed_multiplier = how much faster they run during an alert; score_spread = bot scores land this many points above or below the player's (for show only, DEFAULT: they never change the mission result).",
+    "staff_scenes": ["res://scenes/characters/staff1.tscn", "res://scenes/characters/staff2.tscn", "res://scenes/characters/staff3.tscn"],
+    "walk_speed": 1.0,
+    "wait_seconds": 2.5,
+    "alert_speed_multiplier": 2.6,
+    "score_spread": 150,
+    "source": "Game-design choice."
+  },
+  "leaderboard": {
+    "_readme": "The local leaderboard (UPGRADE_PLAN_V2 step 12): the best runs on this computer, saved in user://leaderboard.json. size = how many runs it keeps.",
+    "size": 10,
+    "show_after_seconds": 6,
+    "source": "Game-design choice."
+  }
+}

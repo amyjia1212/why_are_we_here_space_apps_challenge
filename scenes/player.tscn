@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_visor"]
+size = Vector3(0.5, 0.22, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="Material_visor"]
+albedo_color = Color(0.1, 0.12, 0.18, 1)
+metallic = 0.6
+roughness = 0.2
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="Visor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.5, -0.36)
+mesh = SubResource("BoxMesh_visor")
+surface_material_override/0 = SubResource("Material_visor")
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.6, 0)
+
+[node name="SpringArm" type="SpringArm3D" parent="Head"]
+unique_name_in_owner = true
+spring_length = 4.5
+margin = 0.2
+
+[node name="Camera" type="Camera3D" parent="Head/SpringArm"]
+current = true
+fov = 70.0

@@ -1,0 +1,134 @@
+{
+  "launch_events": {
+    "_readme": "One surprise per launch (UPGRADE_PLAN_V2 step 16), picked at random. How bad it is depends on the build minigames. engine_out: a ring to REBALANCE; a miss means the computer takes over and the rocket loses fuel (miss_cost). The loss is multiplied by worst_multiplier for a build quality (Assembly) of 0 and best_multiplier for 100. debris_alert: WAIT (always costs a little fuel, wait_cost) or RELEASE NOW (safe if the structure strength (Hammering) is at least safe_strength, otherwise the instruments take release_cost damage, less for a stronger structure). Do nothing for seconds and the computer waits for you (timeout_cost).",
+    "engine_out": {
+      "miss_cost": { "kind": "fuel", "amount": 10 },
+      "worst_multiplier": 1.6,
+      "best_multiplier": 0.6,
+      "source": "PLACEHOLDER: game-design choice (Upgrade step 16, 2026-11-14), waiting for the team's pass"
+    },
+    "debris_alert": {
+      "seconds": 5,
+      "wait_cost": { "kind": "fuel", "amount": 4 },
+      "release_cost": { "kind": "instruments", "amount": 20 },
+      "safe_strength": 70,
+      "timeout_cost": { "kind": "fuel", "amount": 8 },
+      "source": "PLACEHOLDER: game-design choice (Upgrade step 16, 2026-11-14), waiting for the team's pass"
+    }
+  },
+  "_readme": "Events that happen during a stage. Each event has a stage, a station (a place on the ship) and facts written as { \"value\": ..., \"source\": ... }. A source is a link, a written game-design choice, or the word PLACEHOLDER (made up for now; a student replaces it before the final submission). The Mars shadow pass is NOT here: it is a Mars-orbit event and lives in game_data.json (events, power_low). The words on the screen are in data/inner_voice.json (flight) and data/story.json (flight).",
+  "flight": {
+    "_readme": "The Flight screen (PLAN.md section 9): an automatic trip with a map and a flight log. flight_seconds = how long the trip takes at 1x speed (real seconds). fast_speed = how many times faster the speed button makes it. type_chars_per_second = how fast log lines type out. phase_cruise_from / phase_arrival_from = how far along the trip (0 to 1) the phase changes from Launch to Cruise to Arrival. The radio delay (signal_delay_minutes) is in data/destinations.json, per mission. cruise_data_share = during the trip, the instruments only test: this share of their daily data is sent home. routine_at = where a calm \"all systems normal\" line prints (0 to 1). build_quality: a SMALL problem fixes itself if the build quality (Assembly score) is at least save_at_least; below low_below, a problem also costs low_reserve_cost from the cash reserve. mission_events = which events each mission gets, in order.",
+    "flight_seconds": { "value": 40, "source": "Game-design choice (PLAN.md section 9: repeat players use the 4x button)." },
+    "ship": {
+      "_readme": "The walkable ship during the flight (UPGRADE_PLAN_V2 step 21). trip_seconds = how long the trip lasts while you walk the ship (about three minutes). A flight event whose design check fails becomes an EMERGENCY at a station (emergencies > event id): an alert, a timer and a reason in the flight log. Fix it in time (walk there, press E) and the loss is avoided; let the timer run out and the loss happens as before. seconds = the timer; design_part + factors = the player's pick for that part stretches or shrinks the timer (a small battery makes the power problem worse). A good design passes the check and gets no emergency. crew = emergencies that are not about the design (a water leak...); they top the trip up to min_emergencies (never more than max_emergencies), at the crew_slots (how far along the trip, 0 to 1). A missed crew emergency costs miss_cost million $ from the cash reserve. routine_every_seconds = how often a calm task opens at a free station; routine_data_gb = the data bonus for doing one (it counts toward data sent home). reach_meters = how close you must stand to a station to press E.",
+      "trip_seconds": 180,
+      "reach_meters": 2.0,
+      "min_emergencies": 3,
+      "max_emergencies": 5,
+      "crew_slots": [0.16, 0.5, 0.82],
+      "routine_every_seconds": 22,
+      "routine_data_gb": 2.0,
+      "emergencies": {
+        "solar_flare": { "station": "bridge_flare", "seconds": 30 },
+        "far_from_earth": { "station": "comms_dish", "seconds": 35, "design_part": "antenna", "factors": { "small": 0.8, "medium": 1.0, "large": 1.2 } },
+        "dust_on_panels": { "station": "power_solar", "seconds": 32, "design_part": "battery", "factors": { "small": 0.7, "medium": 1.0, "large": 1.3 } },
+        "arrival_burn": { "station": "bridge_burn", "seconds": 30 },
+        "heat_near_sun": { "station": "power_breaker", "seconds": 32, "design_part": "battery", "factors": { "small": 0.8, "medium": 1.0, "large": 1.2 } },
+        "lunar_night": { "station": "power_breaker", "seconds": 30, "design_part": "battery", "factors": { "small": 0.7, "medium": 1.0, "large": 1.3 } }
+      },
+      "crew": {
+        "water_leak": { "station": "life_water", "seconds": 32, "miss_cost": 10 },
+        "air_filter": { "station": "life_air", "seconds": 36, "miss_cost": 8 },
+        "breaker_trip": { "station": "power_breaker", "seconds": 34, "design_part": "battery", "factors": { "small": 0.8, "medium": 1.0, "large": 1.2 }, "miss_cost": 6 }
+      },
+      "source": "PLACEHOLDER: game-design choice proposed at UPGRADE_PLAN_V2 step 21 (2026-11-14), not searched yet, waiting for the team's pass (timers, costs and bonuses are for game feel, not NASA numbers)"
+    },
+    "fast_speed": { "value": 4, "source": "Game-design choice (PLAN.md section 9: 1x / 4x)." },
+    "type_chars_per_second": { "value": 70, "source": "Game-design choice." },
+    "phase_cruise_from": { "value": 0.06, "source": "Game-design choice." },
+    "phase_arrival_from": { "value": 0.92, "source": "Game-design choice." },
+    "cruise_data_share": { "value": 0.1, "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass" },
+    "routine_at": { "value": [0.12, 0.5, 0.82], "source": "Game-design choice." },
+    "build_quality": {
+      "save_at_least": 75,
+      "low_below": 40,
+      "low_reserve_cost": 10,
+      "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (, PLAN.md section 7: high build quality fixes small problems, low build quality costs reserve money)"
+    },
+    "mission_events": {
+      "mars": ["solar_flare", "far_from_earth", "dust_on_panels", "arrival_burn"],
+      "moon": ["solar_flare", "arrival_burn", "lunar_night"],
+      "venus": ["solar_flare", "heat_near_sun", "far_from_earth", "arrival_burn"]
+    },
+    "events": {
+      "_readme": "One entry per flight event. at = how far along the trip it happens (0 to 1). check = what decides the outcome (the game knows: computer, communications, power_margin, fuel). small = true if high build quality can fix it. The other numbers are what the check needs, or what a bad outcome costs. The log lines are in data/story.json (\"flight_screen\", \"events\"), the report cards in data/inner_voice.json (\"resource_failures\", \"flight_...\").",
+      "solar_flare": {
+        "at": 0.28,
+        "check": "computer",
+        "small": true,
+        "data_lost_days": 1,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: a better or best computer is protected against radiation; a simple one resets and loses data_lost_days of data)"
+      },
+      "far_from_earth": {
+        "at": 0.55,
+        "check": "communications",
+        "small": false,
+        "bad_data_rate_factor": 0.5,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: if communications is below the mission's limit, the data rate is cut by this factor)"
+      },
+      "dust_on_panels": {
+        "at": 0.72,
+        "check": "power_margin",
+        "small": true,
+        "min_spare_power": 150,
+        "no_instrument_data_rate_factor": 0.75,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: with less spare power than min_spare_power, the most power-hungry instrument that is not the key instrument is switched off; with none to switch off, the data rate is cut by no_instrument_data_rate_factor)"
+      },
+      "arrival_burn": {
+        "at": 0.94,
+        "check": "fuel",
+        "small": false,
+        "min_fuel": 60,
+        "lifetime_months_lost": 6,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: fuel left = Fueling score minus fuel lost at launch; below min_fuel the arrival is rough and the mission loses lifetime_months_lost)"
+      },
+      "heat_near_sun": {
+        "at": 0.42,
+        "check": "heat",
+        "small": false,
+        "no_instrument_data_rate_factor": 0.75,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: Venus is closer to the Sun, so it is hotter; with heaters only (no way to get rid of heat), the most power-hungry instrument that is not a key instrument overheats and is switched off; with none to switch off, the data rate is cut by no_instrument_data_rate_factor)"
+      },
+      "lunar_night": {
+        "at": 0.97,
+        "check": "lunar_night",
+        "small": false,
+        "lifetime_months_lost": 6,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (: the long lunar night has no sunlight, so it passes only with a battery bigger than the small one AND heat control better than heaters only; otherwise a seismometer freezes and the mission loses lifetime_months_lost. A lunar night is about two Earth weeks: https://science.nasa.gov/moon/moonlight/)"
+      }
+    }
+  },
+  "events": {
+    "water_leak": {
+      "stage": "flight",
+      "supply": "water",
+      "station": {
+        "value": "water",
+        "source": "Game-design choice: the Water station in the Life Support room (A10)."
+      },
+      "start_after_seconds": {
+        "value": 8,
+        "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (seconds after the Flight leg starts)"
+      },
+      "drain_liters_per_second": {
+        "value": 50,
+        "source": "PLACEHOLDER (extra water lost every real second until the leak is fixed; a leak fixed within about 30 s of the warning leaves the water out of the red)"
+      },
+      "fix": {
+        "value": "press_e_at_station",
+        "source": "Game-design choice: press E at the Water station."
+      }
+    }
+  }
+}
