@@ -89,8 +89,12 @@ func _process(delta: float) -> void:
 			if nail["age"] >= settings["nail_life_seconds"]:
 				nail["state"] = "loose"   # slid back out: a miss
 				show_count()
+	slide = minf(slide + delta / float(settings.get("slide_seconds", 0.35)), 1.0)
 	if shown < int(settings["nails_per_turn"]):
-		spawn_clock += delta
+		# A new panel comes only when every nail on this one is in or loose.
+		var starts_panel: bool = shown % per_panel() == 0
+		if not (starts_panel and nails.any(func(n): return n["state"] == "out")):
+			spawn_clock += delta
 		if spawn_clock >= settings["spawn_every_seconds"]:
 			spawn_clock -= settings["spawn_every_seconds"]
 			spawn_nail()
@@ -98,16 +102,67 @@ func _process(delta: float) -> void:
 		end_turn()
 
 
-# A nail at a random free spot on the panel.
+# --- Panels (UPGRADE_PLAN_V6 A7): one ship panel at a time, nails along its seam ---
+
+var slide: float = 1.0   # 0 = the new panel is just sliding in, 1 = in place
+
+
+func per_panel() -> int:
+	return maxi(int(settings.get("nails_per_panel", 3)), 1)
+
+
+func panel_count() -> int:
+	return int(ceil(float(settings["nails_per_turn"]) / per_panel()))
+
+
+# Which panel is on the board now (the panel of the newest nail).
+func current_panel() -> int:
+	return maxi(shown - 1, 0) / per_panel()
+
+
+# How far right the panel still is while it slides in (pixels).
+func slide_shift() -> Vector2:
+	return Vector2((1.0 - ease(slide, 0.4)) * panel_rect().size.x, 0.0)
+
+
+# A panel's outline in screen pixels, where it rests (add slide_shift() to draw it).
+func panel_points(index: int) -> PackedVector2Array:
+	var shapes: Array = settings["panels"]
+	var shape: Array = shapes[index % shapes.size()]["points"]
+	var rect: Rect2 = panel_rect()
+	var points := PackedVector2Array()
+	for p in shape:
+		points.append(rect.position + Vector2(float(p[0]) * rect.size.x, float(p[1]) * rect.size.y))
+	return points
+
+
+# A point a share (0 to 1) of the way around an outline.
+func point_on_outline(points: PackedVector2Array, share: float) -> Vector2:
+	var total: float = 0.0
+	for i in points.size():
+		total += points[i].distance_to(points[(i + 1) % points.size()])
+	var goal: float = share * total
+	for i in points.size():
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % points.size()]
+		var length: float = a.distance_to(b)
+		if goal <= length:
+			return a.lerp(b, goal / maxf(length, 0.001))
+		goal -= length
+	return points[0]
+
+
+# The next nail: in order along the current panel's seam. The first nail of a
+# panel brings the new panel in (the old one slides away).
 func spawn_nail() -> void:
-	var rect: Rect2 = panel_rect().grow(-float(settings["hit_radius_pixels"]))
-	var pos := Vector2.ZERO
-	for attempt in 12:
-		pos = Vector2(rng.randf_range(rect.position.x, rect.end.x), rng.randf_range(rect.position.y, rect.end.y))
-		if not nails.any(func(n): return n["state"] == "out" and n["pos"].distance_to(pos) < settings["hit_radius_pixels"] * 2.2):
-			break
-	nails.append({"pos": pos, "age": 0.0, "state": "out"})
+	var slot: int = shown % per_panel()
+	if slot == 0:
+		nails.clear()   # the finished panel leaves with its nails
+		dents.clear()
+		slide = 0.0 if shown > 0 else 1.0   # the very first panel is already in place
 	shown += 1
+	var pos: Vector2 = point_on_outline(panel_points(current_panel()), (slot + 0.5) / float(per_panel()))
+	nails.append({"pos": pos, "age": 0.0, "state": "out"})
 	AudioManager.play_sfx("preview")
 	show_count()
 
@@ -121,14 +176,14 @@ func _on_board_input(event: InputEvent) -> void:
 	var best: Dictionary = {}
 	var best_distance: float = settings["hit_radius_pixels"]
 	for nail in nails:
-		var d: float = nail["pos"].distance_to(event.position)
+		var d: float = (nail["pos"] + slide_shift()).distance_to(event.position)
 		if nail["state"] == "out" and d <= best_distance:
 			best = nail
 			best_distance = d
 	if not best.is_empty():
 		best["state"] = "in"
 		hits += 1
-		sparks.append({"pos": best["pos"], "age": 0.0})
+		sparks.append({"pos": best["pos"] + slide_shift(), "age": 0.0})
 		AudioManager.play_sfx("clank")
 		AudioManager.play_sfx("spark")
 	elif panel_rect().has_point(event.position):
@@ -152,26 +207,50 @@ func end_turn() -> void:
 
 # ---------- drawing ----------
 
+# A small rocket in the top-right corner: one piece fills in per finished panel.
+func draw_rocket_progress(c: Callable) -> void:
+	var count: int = panel_count()
+	var finished: int = current_panel() if nails.any(func(n): return n["state"] == "out") or shown < int(settings["nails_per_turn"]) else panel_count()
+	var area: Vector2 = board.size
+	var w: float = 44.0
+	var piece: float = 22.0
+	var top := Vector2(area.x - w - 24.0, 24.0)
+	# The nose on top, then the body pieces from the bottom up.
+	var nose := PackedVector2Array([top + Vector2(w / 2.0, 0), top + Vector2(w, piece), top + Vector2(0, piece)])
+	board.draw_colored_polygon(nose, c.call("target_color") if finished >= count else c.call("dent_color"))
+	for i in count - 1:
+		var y: float = top.y + piece + (count - 2 - i) * piece
+		var box := Rect2(top.x, y, w, piece - 3.0)
+		board.draw_rect(box, c.call("target_color") if i < finished else c.call("dent_color"))
+		board.draw_rect(box, c.call("panel_edge_color"), false, 2.0)
+
 func _draw_board() -> void:
 	if not playing and nails.is_empty():
 		return
 	var rect: Rect2 = panel_rect()
 	var c := func(key: String) -> Color: return board.get_theme_color(key, &"Minigame")
-	# The panel: metal with an orange stripe and a row of rivets on each edge.
-	board.draw_rect(rect, c.call("panel_color"))
-	board.draw_rect(rect, c.call("panel_edge_color"), false, 6.0)
-	board.draw_rect(Rect2(rect.position.x, rect.position.y + rect.size.y * 0.45, rect.size.x, 18.0), c.call("target_color"))
-	var rivets: int = 16
-	for i in rivets + 1:
-		var x: float = rect.position.x + rect.size.x * i / rivets
-		board.draw_circle(Vector2(x, rect.position.y + 14.0), 5.0, c.call("rivet_color"))
-		board.draw_circle(Vector2(x, rect.end.y - 14.0), 5.0, c.call("rivet_color"))
+	# The current ship panel (UPGRADE_PLAN_V6 A7): its own shape, a metal face, a
+	# thick edge and its name; it slides in from the right.
+	var shift: Vector2 = slide_shift()
+	var outline := PackedVector2Array()
+	for p in panel_points(current_panel()):
+		outline.append(p + shift)
+	board.draw_colored_polygon(outline, c.call("panel_color"))
+	var closed := outline.duplicate()
+	closed.append(outline[0])
+	board.draw_polyline(closed, c.call("panel_edge_color"), 6.0)
+	var shapes: Array = settings["panels"]
+	var font: Font = board.get_theme_default_font()
+	var font_size: int = board.get_theme_font_size("font_size", &"HeadingText")
+	var panel_name: String = str(shapes[current_panel() % shapes.size()]["name"])
+	board.draw_string(font, rect.position + Vector2(0, font_size) + shift, panel_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, c.call("target_color"))
+	draw_rocket_progress(c)
 	for dent in dents:
 		board.draw_circle(dent, 9.0, c.call("dent_color"))
 		board.draw_arc(dent, 11.0, PI, TAU, 10, c.call("panel_edge_color"), 2.0)
 	var head: float = settings["nail_size_pixels"] / 2.0
 	for nail in nails:
-		var p: Vector2 = nail["pos"]
+		var p: Vector2 = nail["pos"] + shift
 		match nail["state"]:
 			"in":
 				board.draw_circle(p, head * 0.7, c.call("nail_sunk_color"))

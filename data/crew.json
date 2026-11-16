@@ -1,0 +1,103 @@
+{
+  "_readme": "UPGRADE_PLAN_V6 C1 (2026-11-15): real astronauts as the ship's crew. FACTS ONLY, never invented dialogue: press E next to a crew member and a narrator tells these sourced facts (the person never 'speaks'). Every fact has a NASA source link, checked on 2026-11-15. An entry with \"show\": false is hidden (the PLACEHOLDER slot). look = how their toy figure looks (skin, hair_style, hair_color, suit_color, older, beard, camera). missions = the crew on each mission (the same three people for the whole mission). The game also says one honest line: our crew is a game-design choice.",
+  "missions": {
+    "moon": ["koch", "glover", "glenn"],
+    "mars": ["whitson", "pettit", "mann"],
+    "venus": ["ride", "mann", "pettit"]
+  },
+  "game_choice_line": "On this mission, {name} is part of your crew. That part is our game's idea: the facts above are real.",
+  "people": {
+    "ride": {
+      "show": true,
+      "name": "Sally Ride",
+      "one_line": "First American woman in space",
+      "facts": [
+        "On June 18, 1983, Sally Ride became the first American woman in space, on space shuttle mission STS-7.",
+        "She was picked in NASA's 1978 astronaut class, the first class to include women.",
+        "She flew again in 1984 on STS-41G, and later became a professor at the University of California, San Diego."
+      ],
+      "source": "https://www.nasa.gov/history/40-years-ago-sts-7-and-the-flight-of-sally-ride/ and https://science.nasa.gov/people/sally-ride/",
+      "look": { "skin": "#f1c9a5", "hair_style": "curly_short", "hair_color": "#4a2f1d", "suit_color": "#2f5aa8", "older": false, "female": true }
+    },
+    "koch": {
+      "show": true,
+      "name": "Christina Koch",
+      "one_line": "Record for the longest single spaceflight by a woman",
+      "facts": [
+        "Christina Koch spent 328 days in space on the International Space Station: the longest single spaceflight by a woman.",
+        "On that mission she made six spacewalks, including the first all-woman spacewalks.",
+        "On April 1, 2026, she launched on Artemis II, the crewed flight around the Moon."
+      ],
+      "source": "https://www.nasa.gov/news-release/record-setting-nasa-astronaut-crewmates-return-from-space-station/ and NASA biography https://www.nasa.gov/wp-content/uploads/2026/04/koch-c-1.pdf",
+      "look": { "skin": "#f3cfb0", "hair_style": "ponytail", "hair_color": "#9a7a52", "suit_color": "#e8742a", "older": false, "female": true }
+    },
+    "glover": {
+      "show": true,
+      "name": "Victor Glover",
+      "one_line": "Pilot of Artemis II and SpaceX Crew-1",
+      "facts": [
+        "Victor Glover is a NASA astronaut and U.S. Navy test pilot, picked by NASA in 2013.",
+        "He was the pilot of SpaceX Crew-1 and lived on the space station for 168 days, making four spacewalks.",
+        "He was the pilot of Artemis II, which launched on April 1, 2026 and flew around the Moon."
+      ],
+      "source": "https://www.nasa.gov/humans-in-space/astronauts/victor-j-glover/ and https://www.nasa.gov/wp-content/uploads/2026/01/artemis-ii-press-kit.pdf",
+      "look": { "skin": "#6a4430", "hair_style": "buzz", "hair_color": "#151515", "suit_color": "#e8742a", "older": false, "beard": true }
+    },
+    "whitson": {
+      "show": true,
+      "name": "Peggy Whitson",
+      "one_line": "Most total days in space of any American",
+      "facts": [
+        "Peggy Whitson holds the U.S. record for the most total time in space: more days than any other American astronaut.",
+        "In 2008 she became the first woman to command the International Space Station, and later the first woman to command it twice.",
+        "She is a biochemist, and she flew to the station again in 2025 on Axiom Mission 4."
+      ],
+      "source": "https://www.nasa.gov/international-space-station/space-station-astronaut-record-holders/ and https://www.nasa.gov/former-astronaut-peggy-whitson/",
+      "look": { "skin": "#f2ccb0", "hair_style": "short", "hair_color": "#d9cfb8", "suit_color": "#2f5aa8", "older": true, "female": true }
+    },
+    "mann": {
+      "show": true,
+      "name": "Nicole Mann",
+      "one_line": "First Native American woman in space",
+      "facts": [
+        "Nicole Mann became the first Native American woman in space when she launched on October 5, 2022.",
+        "She was the commander of NASA's SpaceX Crew-5, and spent 157 days in orbit.",
+        "She is a U.S. Marine Corps test pilot, and she is registered with the Wailacki of the Round Valley Indian Tribes."
+      ],
+      "source": "https://www.nasa.gov/people/nicole-a-mann/ and https://roundupreads.jsc.nasa.gov/roundup/2044",
+      "look": { "skin": "#c08a64", "hair_style": "bun", "hair_color": "#24180f", "suit_color": "#2f5aa8", "older": false, "female": true }
+    },
+    "pettit": {
+      "show": true,
+      "name": "Don Pettit",
+      "one_line": "Space station scientist and space photographer",
+      "facts": [
+        "Don Pettit is a NASA scientist-astronaut who has flown four spaceflights and spent 590 days in space.",
+        "He is famous for his photos from the space station: on his last stay he took more than 670,000 pictures.",
+        "He invents science in his spare time: he made the first 'space cup' to drink from in zero-g."
+      ],
+      "source": "https://www.nasa.gov/humans-in-space/astronauts/donald-r-pettit/ and https://www.nasa.gov/missions/station/iss-research/science-meets-art-nasa-astronaut-don-pettit-turns-the-camera-on-science/",
+      "look": { "skin": "#efc5a4", "hair_style": "bald_fringe", "hair_color": "#e4e4e4", "suit_color": "#2f5aa8", "older": true, "camera": true, "mustache": true }
+    },
+    "glenn": {
+      "show": true,
+      "name": "John Glenn",
+      "one_line": "First American to orbit Earth",
+      "facts": [
+        "On February 20, 1962, John Glenn became the first American to orbit Earth, going around three times in Friendship 7.",
+        "He was one of NASA's first seven astronauts, the Mercury 7.",
+        "In 1998, at age 77, he flew to space again on space shuttle Discovery (STS-95)."
+      ],
+      "source": "https://www.nasa.gov/former-astronaut-john-h-glenn/ and https://www.nasa.gov/history/25-years-ago-sts-95-john-glenn-returns-to-space/",
+      "look": { "skin": "#f0c4a2", "hair_style": "bald_fringe", "hair_color": "#f2f2f2", "suit_color": "#b9c2cc", "older": true }
+    },
+    "placeholder_intro": {
+      "show": false,
+      "name": "PLACEHOLDER",
+      "one_line": "PLACEHOLDER: the team's 'intro guy' (name to confirm by the Science & Data Lead)",
+      "facts": [],
+      "source": "PLACEHOLDER",
+      "look": { "skin": "#e0b090", "hair_style": "short", "hair_color": "#333333", "suit_color": "#2f5aa8", "older": false }
+    }
+  }
+}

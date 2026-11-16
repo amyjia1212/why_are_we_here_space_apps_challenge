@@ -37,68 +37,6 @@ theme_override_constants/margin_bottom = 152
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Header" type="PanelContainer" parent="Margin/Column"]
-layout_mode = 2
-theme_type_variation = &"NavyPanel"
-
-[node name="HeaderRow" type="HBoxContainer" parent="Margin/Column/Header"]
-layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="HeaderText" type="VBoxContainer" parent="Margin/Column/Header/HeaderRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="ReportLabel" type="Label" parent="Margin/Column/Header/HeaderRow/HeaderText"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"AccentText"
-text = "MISSION REPORT"
-
-[node name="MissionName" type="Label" parent="Margin/Column/Header/HeaderRow/HeaderText"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"HeadingText"
-text = "Mission name"
-
-[node name="Details" type="Label" parent="Margin/Column/Header/HeaderRow/HeaderText"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"SmallText"
-text = "Mission designer: ..."
-autowrap_mode = 3
-
-[node name="Stamp" type="PanelContainer" parent="Margin/Column/Header/HeaderRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="StampText" type="Label" parent="Margin/Column/Header/HeaderRow/Stamp"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"HeadingText"
-text = "MISSION ..."
-horizontal_alignment = 1
-
-[node name="Buttons" type="VBoxContainer" parent="Margin/Column/Header/HeaderRow"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 8
-
-[node name="RedesignButton" type="Button" parent="Margin/Column/Header/HeaderRow/Buttons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 48)
-layout_mode = 2
-text = "Redesign"
-
-[node name="NewMissionButton" type="Button" parent="Margin/Column/Header/HeaderRow/Buttons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 48)
-layout_mode = 2
-theme_type_variation = &"SmallButton"
-text = "New mission"
-
 [node name="Scroll" type="ScrollContainer" parent="Margin/Column"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -108,6 +46,68 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
+
+[node name="Header" type="PanelContainer" parent="Margin/Column/Scroll/Body"]
+layout_mode = 2
+theme_type_variation = &"NavyPanel"
+
+[node name="HeaderRow" type="HBoxContainer" parent="Margin/Column/Scroll/Body/Header"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="HeaderText" type="VBoxContainer" parent="Margin/Column/Scroll/Body/Header/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ReportLabel" type="Label" parent="Margin/Column/Scroll/Body/Header/HeaderRow/HeaderText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"AccentText"
+text = "MISSION REPORT"
+
+[node name="MissionName" type="Label" parent="Margin/Column/Scroll/Body/Header/HeaderRow/HeaderText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingText"
+text = "Mission name"
+
+[node name="Details" type="Label" parent="Margin/Column/Scroll/Body/Header/HeaderRow/HeaderText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallText"
+text = "Mission designer: ..."
+autowrap_mode = 3
+
+[node name="Stamp" type="PanelContainer" parent="Margin/Column/Scroll/Body/Header/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="StampText" type="Label" parent="Margin/Column/Scroll/Body/Header/HeaderRow/Stamp"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingText"
+text = "MISSION ..."
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="Margin/Column/Scroll/Body/Header/HeaderRow"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="RedesignButton" type="Button" parent="Margin/Column/Scroll/Body/Header/HeaderRow/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 48)
+layout_mode = 2
+text = "Redesign"
+
+[node name="NewMissionButton" type="Button" parent="Margin/Column/Scroll/Body/Header/HeaderRow/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 48)
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+text = "New mission"
 
 [node name="TopRow" type="HBoxContainer" parent="Margin/Column/Scroll/Body"]
 layout_mode = 2

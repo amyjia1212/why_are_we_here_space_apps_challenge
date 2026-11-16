@@ -49,6 +49,15 @@ func _ready() -> void:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	buttons.add_child(spacer)
 	buttons.add_child(office)
+	# The Notebook button sits in this row (2026-11-15: the floating Hud one covered the title).
+	var notebook := Button.new()
+	notebook.text = Data.story["notebook"]["button"]
+	notebook.theme_type_variation = &"SmallButton"
+	notebook.custom_minimum_size = Vector2(0, 46)
+	notebook.focus_mode = Control.FOCUS_NONE
+	notebook.pressed.connect(Hud.open_page.bind("notebook"))
+	buttons.add_child(notebook)
+	buttons.move_child(notebook, office.get_index())
 	buttons.move_child(launch_button, buttons.get_child_count() - 1)
 
 	make_columns()

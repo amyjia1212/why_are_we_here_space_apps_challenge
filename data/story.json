@@ -39,6 +39,102 @@
       "4": { "name": "4 players", "description": "Take turns at each build job. Your scores are averaged.", "button": "Four of us" }
     }
   },
+  "achievements": {
+    "_readme": "UPGRADE_PLAN_V6 C3: words for achievements (the list is data/achievements.json). count: {got} of {total}. board_title = the big board behind you in the Character Room.",
+    "title": "Achievements",
+    "count": "{got} of {total}",
+    "toast_title": "ACHIEVEMENT UNLOCKED",
+    "board_title": "ACHIEVEMENTS: turn around and find them all!",
+    "got_mark": "[x]",
+    "open_mark": "[ ]"
+  },
+  "life_report": {
+    "_readme": "UPGRADE_PLAN_V6 C2: the 'Life on the ship' box on the report.",
+    "title": "Life on the ship",
+    "meals": "Meals eaten: {n}",
+    "drinks": "Water refills: {n}",
+    "filters": "Air filters swapped: {n}",
+    "crew": "Crew you talked to: {names}",
+    "nobody": "nobody yet",
+    "learned": "Stations you learned about: {n}",
+    "failed": "Times a life bar ran out: {n}",
+    "tip": "Next time: talk to every crew member and learn every station!"
+  },
+  "crew_talk": {
+    "_readme": "UPGRADE_PLAN_V6 C1: talking to a real astronaut on the ship. The facts are in data/crew.json (sourced). next_hint follows every line; back_line is said when the talk ends.",
+    "next_hint": "(E: next)",
+    "source_label": "Source:",
+    "back_line": "Back to work. The trip goes on."
+  },
+  "ship_life": {
+    "_readme": "UPGRADE_PLAN_V6 C2: the life bars on the ship and the learn cards. bars: name = on the bar, job = the verb at the station, low_goal = the voice bar's reminder, done_voice = after the job, fail_* = the card when the bar hits zero. learn = the first-time card per station (station id -> title, lines, source). Every fact has a NASA source.",
+    "prompt": "E: {job}  ({bar} {value}%)",
+    "learn_button": "Got it",
+    "fail_kicker": "TRIP OVER",
+    "fail_how": "The trip starts again. Your spacecraft design stays the same. Keep an eye on the three bars at the bottom left!",
+    "fail_button": "Start the trip again",
+    "bars": {
+      "hunger": { "name": "Hunger", "job": "Eat", "low_goal": "I'm so hungry. Eat at the Food station in Life Support.", "done_voice": "Mmm. Space food. Hunger bar full again.", "fail_title": "The crew ran out of energy", "fail_text": "Nobody ate, so the crew became too weak to fly the ship." },
+      "hydration": { "name": "Hydration", "job": "Drink", "low_goal": "I'm thirsty. Get water at the Water station in Life Support.", "done_voice": "Water! Much better.", "fail_title": "The crew ran out of water", "fail_text": "Nobody drank, and people cannot go long without water." },
+      "air": { "name": "Air", "job": "Swap the filter", "low_goal": "The air is getting stale. Swap the filter at the Air station in Life Support.", "done_voice": "Fresh filter. I can breathe easy.", "fail_title": "The air ran out", "fail_text": "The air filter was never swapped, so the air became unsafe to breathe." }
+    },
+    "learn": {
+      "life_food": {
+        "kicker": "LIFE SUPPORT · FOOD",
+        "title": "Freeze-dried space food",
+        "lines": [
+          "Most meals in space are freeze-dried: the water is taken out, so they are light to launch.",
+          "Astronauts add water from the ship's supply before they eat. NASA has used freeze-dried food since the Gemini missions."
+        ],
+        "source": "NASA: Food on the International Space Station, https://www.nasa.gov/history/space-station-20th-food-on-iss/"
+      },
+      "life_water": {
+        "kicker": "LIFE SUPPORT · WATER",
+        "title": "Water is recycled",
+        "lines": [
+          "Water is heavy, so space stations reuse it. Sweat, breath and even urine are cleaned back into drinking water.",
+          "The International Space Station recovers about 98% of its water."
+        ],
+        "source": "NASA: NASA Achieves Water Recovery Milestone on International Space Station, https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/"
+      },
+      "life_air": {
+        "kicker": "LIFE SUPPORT · AIR",
+        "title": "Making air from water",
+        "lines": [
+          "The space station makes oxygen by splitting water into oxygen and hydrogen with electricity from its solar panels.",
+          "Filters clean the air, and they must be swapped so the crew can keep breathing safely."
+        ],
+        "source": "NASA Marshall: Environmental Control and Life Support System, https://www.nasa.gov/wp-content/uploads/2025/08/g-657270-59-hp-environmental-control-and-life-support-system-eclss.pdf"
+      },
+      "science_calibrate": {
+        "kicker": "SCIENCE BAY · INSTRUMENTS",
+        "title": "Keep the instruments clean",
+        "lines": [
+          "Spacecraft are built in clean rooms, and their instruments are kept free of dust and germs.",
+          "That way the science is right, and Earth microbes do not travel to other worlds."
+        ],
+        "source": "NASA planetary protection: https://planetaryprotection.jpl.nasa.gov/research"
+      }
+    }
+  },
+  "ship_tasks": {
+    "_readme": "UPGRADE_PLAN_V6 C5: the small jobs at the Life Support stations. steps = the hint line for each step; labels = the words drawn on the board.",
+    "swap": { "title": "Swap the air filter", "steps": ["Drag the dirty filter into the bin.", "Now drag the clean filter into the slot.", "Done!"], "labels": ["Filter slot", "Bin", "Clean filter"], "done": "Fresh filter in. The air is clean." },
+    "fill": { "title": "Refill your water", "steps": ["Hold the mouse on the valve. Let go in the GREEN zone."], "labels": ["Hold the valve"], "too_far": "Too much! It overflowed. Try again.", "too_early": "Not enough. Try again.", "done": "Bottle full. Drink up!" },
+    "eat": { "title": "Make a space meal", "steps": ["Click the pouch to add water.", "Click it again to eat.", "Done!"], "labels": ["Food pouch"], "done": "Yum. Freeze-dried, then rehydrated." }
+  },
+  "build_done": {
+    "_readme": "UPGRADE_PLAN_V6 B2: the Build complete celebration. verdict = the big line after the scores, by how good the build was (great / good / weak). score_line: {name} = the build result, {score} = 0-100.",
+    "title": "Build complete!",
+    "subtitle": "All that work went into this. Here it is, rolling out to the pad.",
+    "score_line": "{name}: {score} / 100",
+    "verdict": {
+      "great": "WOW! The whole team is cheering. That is a rocket to be proud of!",
+      "good": "Nice work, team! It is built, and it is ready.",
+      "weak": "It is not pretty, but it is ours. Let's fly it!"
+    },
+    "button": "Ready to launch"
+  },
   "minigames": {
     "_readme": "Words for the three build minigames and the turn screens around them. {player} = the player's name, {score} = a score out of 100, {n} = the player number.",
     "player_default": "Player {n}",
@@ -56,6 +152,7 @@
     "help_button": "?",
     "back_button": "Back to the game",
     "press_space": "Press Space to start",
+    "q_reminder": "Press Q to learn why real spacecraft need this job.",
     "assembly": {
       "title": "Build job 1: Assembly",
       "how_to": "Type the name of the part being bolted on. Each finished word snaps that part onto the rocket. A wrong key freezes you for {freeze} seconds.",
@@ -439,8 +536,8 @@
         "cruise_safely": "Survive the trip to Mars",
         "enter_orbit": "Enter Mars orbit",
         "land_safely": "Land on Mars",
-        "sample_ice": "Drill and sample the ice",
-        "send_data": "Send the ice data home",
+        "sample_ice": "Drill 3 ice samples at 3 sites",
+        "send_data": "Send all 3 ice samples' data home",
         "lift_off": "Lift off from Mars",
         "land_home": "Land safely on Earth"
       }
@@ -765,6 +862,7 @@
     "skip": "Enter: skip to arrival",
     "goal_trip": "Fly to {planet}. Keep the ship running: do the yellow tasks, fix the red alerts.",
     "goal_fix": "Fix it: {task}",
+    "goal_next": "Next job: {task}. Follow the yellow marker.",
     "task_log": "Crew: {task}. Done. Extra science data sent home.",
     "voice_start": "This is our ship. Walk the rooms with WASD and press E at the glowing pads. The flight log is on the Bridge wall.",
     "voice_alert": "Alarm! The marker shows where to go. I have {seconds} seconds.",
@@ -800,6 +898,29 @@
   "arrival_screen": {
     "_readme": "Words for the arrival walk. tasks = the task list, one group per mission (left side must match the task ids in destinations.json > arrival > tasks). marks = what goes before a task or goal: open, done, failed. prompts = the line in the middle of the screen when you stand on a task spot: do = you can do it now, done = already done, missing = an instrument is not packed, waiting = do another task first. sending and leave are shared ({planet} = the place name). The checklist goal names are in \"destinations\" > goals.",
     "tasks_title": "Tasks",
+    "site_suffix": " (site {n})",
+    "samples_line": "Ice samples: {n} of {total}",
+    "survey": {
+      "_readme": "UPGRADE_PLAN_V6 C4: the ground radar reading said the first time you step on a dig site. PLACEHOLDER depths (game-design choice).",
+      "mars": {
+        "dig_1": "Ground radar: ice only a little way down here, close to the lander. A quick drill and a short run back.",
+        "dig_2": "Ground radar: the ice is deeper here. The drill takes longer, and it is a longer run to the analyzer.",
+        "dig_3": "Ground radar: deep ice, far from the analyzer. Drill carefully, then RUN!"
+      }
+    },
+    "_explain_readme": "UPGRADE_PLAN_V6 A6: a paused card the first time a task is ready, before you start it (task id -> title, lines, source). Enter or E closes it.",
+    "explain_start": "Press Enter to start",
+    "explain": {
+      "drill": {
+        "title": "How the ice drill works",
+        "lines": [
+          "1. Hold E. The needle fills the bar.",
+          "2. Let go when the needle is in the GREEN zone. Too early or too late, and you try again.",
+          "3. Then RUN to the analyzer! Mars air is so thin that the ice turns straight into gas. The longer you take, the less ice is left to study."
+        ],
+        "source": "Real Mars ice did this: in 2008, bits of ice dug up by NASA's Phoenix lander vanished in about four days. jpl.nasa.gov/news/bright-chunks-at-phoenix-landers-mars-site-must-have-been-ice"
+      }
+    },
     "checklist_title": "Mission checklist",
     "marks": { "open": "[ ]", "done": "[x]", "failed": "[!]" },
     "tasks": {
@@ -918,6 +1039,14 @@
       "flight": "E use · Q question · Tab tablet",
       "landing": "Space, Enter or click to skip",
       "arrival": "E use · Q question · Tab tablet"
+    },
+    "_key_strip_readme": "UPGRADE_PLAN_V6 A3: on these walking screens the top hint is drawn as key caps: [key, what it does]. Five keys at most so it fits between the portrait and the Q ? sign. A screen listed here shows the key caps instead of its hint line. H still shows every key.",
+    "key_strip": {
+      "character_room": [["WASD", "move"], ["Mouse", "look"], ["Space", "jump"], ["E", "look at"], ["Enter", "confirm"]],
+      "mission_room": [["WASD", "move"], ["Mouse", "look"], ["E", "look at"], ["Enter", "confirm"], ["Q", "question"]],
+      "design_room": [["WASD", "move"], ["Mouse", "look"], ["E", "look at"], ["Enter", "confirm"], ["Q", "question"]],
+      "flight": [["WASD", "move"], ["Mouse", "look"], ["E", "use"], ["Q", "question"], ["Tab", "tablet"]],
+      "arrival": [["WASD", "move"], ["Space", "jump"], ["E", "use"], ["Q", "question"], ["Tab", "tablet"]]
     }
   },
   "pause": {
@@ -1014,6 +1143,8 @@
   "choice_room": {
     "_readme": "Words for the 3D Choice Room (UPGRADE_PLAN_V2 steps 13-14). titles = the big title on the wall for each choice; room_names = the sign over the screen.",
     "room_names": { "character": "Who Are You?", "mission": "Mission Room", "design": "Mission Design Lab" },
+    "previous_button": "< Previous step (Backspace)",
+    "retry": { "_readme": "UPGRADE_PLAN_V6 B3/B4: the amber arrow over what the Scientist should pick on a retry, and the tag over last run's pick.", "arrow_color": "#ffb020", "last_tag": "LAST TIME" },
     "wall": {
       "_readme": "The wall screen's small words (UI_POLISH_PLAN_V4 Step 2). short_resources = the six names on the slim strip (short so they fit).",
       "back": "Backspace · Back",
@@ -1291,10 +1422,16 @@
       "discipline": "Mission Design",
       "names": { "best": "Best date", "ok": "OK date", "poor": "Poor date" },
       "descriptions": {
-        "best": "Earth and the target line up just right: the shortest trip and the least fuel. But the window is short, so the launch moments are tighter.",
-        "ok": "A fair date. A normal trip, normal fuel, a normal launch window.",
-        "poor": "The planets are badly placed: a longer trip (more food, water and air used) and extra fuel to carry. The window is wide, so the launch is easier."
+        "best": "The farthest date away. Waiting costs money, but Earth and the target line up just right: the shortest trip, the least fuel, and almost never a scrub. The window is short, so the launch moments are tighter.",
+        "ok": "A date a bit later. A little waiting money, a normal trip, and the weather may scrub the launch once or twice.",
+        "poor": "The soonest date: no waiting money. But the planets are badly placed: a longer trip, extra fuel, and the launch is often scrubbed again and again."
       },
+      "wait_line": "Wait: +{value} M$",
+      "wait_none": "Wait: none",
+      "scrub_line": "Scrub risk: {word}",
+      "scrub_words": { "best": "low", "ok": "medium", "poor": "high" },
+      "scrub_again_poor": "Scrubbed AGAIN. That is what a poor date costs.",
+      "scrub_again": "Scrubbed again. The weather will not let us go yet.",
       "trip_line": "Trip: {days} days",
       "fuel_line": "Fuel: {sign}{value} kg",
       "window_line": "Window: {word}",
@@ -1346,7 +1483,7 @@
       "ask_text": "Strong winds high above the pad will shake the rocket. Launch now and the launch moments get tighter, or wait one day for {cost} million $. Real launches are often delayed for winds like these.",
       "go_now": "Launch now",
       "wait": "Wait a day ({cost} M$)",
-      "waited_log": "We waited one day for better weather: {cost} million $."
+      "waited_log": "Weather scrubs kept us on the pad. Waiting cost {cost} million $."
     },
     "two_way_fix": {
       "prompt": "Hold E: proper fix ({seconds} s)   ·   R: quick fix (costs later)",

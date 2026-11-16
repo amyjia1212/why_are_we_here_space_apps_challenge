@@ -40,6 +40,77 @@ func _ready() -> void:
 	# ROOM_LAYOUT_PLAN_V5 Step 4: hidden while it has nothing to say; it fades in
 	# when a line starts (say()).
 	visible = false
+	# 2026-11-15 team note: the bar must not block anything.
+	# 1. Clicks go through it (only the Next button catches clicks).
+	for node in [self, $Margin, $Margin/Row, $Margin/Row/Column, speaker_label, line_label, portrait]:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# 2. It is narrower and centered, so the bottom corners stay free.
+	var hud: Dictionary = Data.game_data["hud"]
+	var width: float = float(hud.get("voice_bar_max_width", 0))
+	if width > 0.0:
+		anchor_left = 0.5
+		anchor_right = 0.5
+		offset_left = -width / 2.0
+		offset_right = width / 2.0
+	# 3. It fades away after the line has been read (see _process).
+	hold_seconds = float(hud.get("voice_bar_hold_seconds", 0))
+	seconds_per_letter = float(hud.get("voice_bar_seconds_per_letter", 0))
+
+
+var hold_seconds: float = 0.0          # 0 = never fade away on its own
+var seconds_per_letter: float = 0.0
+var show_left: float = 0.0             # seconds until the bar fades away
+var fading: bool = false
+
+
+var showing_goal: bool = false        # the bar shows "what to do now" (UPGRADE_PLAN_V6 A5)
+
+
+func _process(delta: float) -> void:
+	if showing_goal:
+		# Keep the task line up to date; it changes when an alarm starts or a job is done.
+		var goal: String = current_goal()
+		if goal == "":
+			showing_goal = false
+			visible = false
+		elif goal != line_label.text:
+			line_label.text = goal
+		return
+	if not visible or hold_seconds <= 0.0 or next_button.visible or get_meta("hold", false):
+		return   # a Next button waits for the player: the bar stays
+	show_left -= delta
+	if show_left <= 0.0 and not fading and current_goal() != "":
+		# On the ship and the planet the bar does not just vanish: after the line
+		# was read it shows the task at hand, quietly (no beep-talk).
+		showing_goal = true
+		speaker_label.text = Data.voice["speaker_name"]
+		speaker_key = ""
+		update_portrait()
+		line_label.text = current_goal()
+		line_label.visible_ratio = 1.0
+		return
+	if show_left <= 0.0 and not fading:
+		fading = true
+		fade_tween = create_tween()
+		fade_tween.tween_property(self, "modulate:a", 0.0, 0.4)
+		fade_tween.tween_callback(func():
+			visible = false
+			modulate.a = 1.0
+			fading = false)
+
+
+var fade_tween: Tween
+
+
+# The screen's "what to do now" line ("" on screens without one).
+func current_goal() -> String:
+	var scene := get_tree().current_scene
+	if scene == null or not scene.has_method("get_goal_text"):
+		return ""
+	var scene_id: String = scene.scene_file_path.get_file().get_basename()
+	if not Data.game_data["hud"].get("voice_goal_scenes", []).has(scene_id):
+		return ""
+	return str(scene.get_goal_text())
 
 
 # Someone else talks in the bar (for example the General on the report).
@@ -62,6 +133,14 @@ func say(text: String) -> void:
 	if text == "":
 		visible = false
 		return
+	showing_goal = false
+	# Time to type the line, then time to read it, then it fades away.
+	show_left = text.length() / LETTERS_PER_SECOND + hold_seconds + text.length() * seconds_per_letter
+	if fading:
+		fading = false
+		if fade_tween:
+			fade_tween.kill()
+		modulate.a = 1.0
 	if not visible:
 		visible = true
 		preload("res://scripts/ui_kit.gd").fade_in(self, Vector2.ZERO)

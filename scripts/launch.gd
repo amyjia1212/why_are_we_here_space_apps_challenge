@@ -104,7 +104,9 @@ func _ready() -> void:
 	tightness = timing["window_tightness"] * float(GameState.get_launch_window()["tightness_factor"])
 	GameState.start_launch()
 	GameState.weather_wait_cost = 0.0
-	weather_amber = randf() < float(Data.extras["weather"]["amber_chance"])
+	# UPGRADE_PLAN_V6 B1: the scrub chance comes from the picked launch date.
+	scrubs = 0
+	weather_amber = roll_scrub()
 	mission_time = -float(numbers["pad_mission_time"])
 	build_world()
 	build_ui()
@@ -664,6 +666,17 @@ func _on_go_pressed() -> void:
 # ---------- the extras (2026-11-14, data/extras.json) ----------
 
 var weather_amber: bool = false
+var scrubs: int = 0   # how many times the weather scrubbed this launch
+
+
+# Amber weather (a scrub) for the picked date, until that date's max_scrubs is used up.
+func roll_scrub() -> bool:
+	var window: Dictionary = GameState.get_launch_window()
+	if scrubs >= int(window.get("max_scrubs", 1)):
+		return false
+	return randf() < float(window.get("scrub_chance", Data.extras["weather"]["amber_chance"]))
+
+
 var peanut_jar: Control
 var peanut_label: Label
 var peanuts_left: int = 0
@@ -695,17 +708,28 @@ func _on_weather_choice(choice: String) -> void:
 	weather_amber = false
 	go_button.disabled = false
 	if choice == "wait":
+		scrubs += 1
+		if scrubs >= 2:
+			Achievements.unlock("scrubbed_twice")
 		GameState.weather_wait_cost += float(weather["wait_cost"])
-		inner_voice.say(Data.voice["extras"]["weather_wait"])
+		# After the wait the weather can scrub the launch AGAIN (B1): poor dates often do.
+		weather_amber = roll_scrub()
+		var window_words: Dictionary = Data.story["extras"]["launch_window"]
+		if weather_amber:
+			inner_voice.say(window_words["scrub_again_poor"] if GameState.get_launch_window_id() == "poor" else window_words["scrub_again"])
+			AudioManager.play_sfx("warning")
+		else:
+			inner_voice.say(Data.voice["extras"]["weather_wait"])
 		for child in poll_box.get_children():
 			child.queue_free()
 		await get_tree().process_frame
 		fill_poll()
-		# Say the new weather in the poll: calm after the wait.
-		var last_row: Node = poll_box.get_child(poll_box.get_child_count() - 2)
-		if last_row is HBoxContainer:
-			(last_row.get_child(1) as Label).text = words["poll_items"]["weather"] + ": " + Data.story["extras"]["weather"]["green_after_wait"]
-		AudioManager.play_sfx("confirm")
+		if not weather_amber:
+			# Say the new weather in the poll: calm after the wait.
+			var last_row: Node = poll_box.get_child(poll_box.get_child_count() - 2)
+			if last_row is HBoxContainer:
+				(last_row.get_child(1) as Label).text = words["poll_items"]["weather"] + ": " + Data.story["extras"]["weather"]["green_after_wait"]
+			AudioManager.play_sfx("confirm")
 	else:
 		tightness *= float(weather["go_tightness_factor"])
 		inner_voice.say(Data.voice["extras"]["weather_go"])
@@ -771,6 +795,7 @@ func eat_peanut() -> void:
 		return
 	peanuts_left -= 1
 	GameState.peanuts_eaten += 1
+	Achievements.unlock("peanuts")
 	AudioManager.play_sfx("pickup")
 	# The message shows right next to the jar for a moment (not over the buttons).
 	peanut_label.text = Data.story["extras"]["peanuts"]["ate"]
@@ -920,7 +945,8 @@ func tween_telemetry(to_altitude: float, to_speed: float, seconds: float) -> voi
 
 func show_caption(caption_id: String) -> void:
 	var caption: Dictionary = words["captions"][caption_id]
-	var planet: String = Data.story["destinations"][GameState.get_destination_key()].get("in_sentence", "")
+	var place_words: Dictionary = Data.story["destinations"][GameState.get_destination_key()]
+	var planet: String = place_words.get("in_sentence", place_words["name"])   # "Mars" has no in_sentence: use the name
 	caption_title.text = caption["title"]
 	caption_text.text = caption["text"].format({"planet": planet})
 	caption_panel.visible = true
@@ -1202,7 +1228,8 @@ func show_summary() -> void:
 	filler.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	right_column.add_child(filler)
 	var next := Button.new()
-	next.text = words["summary_next"].format({"planet": Data.story["destinations"][GameState.get_destination_key()].get("in_sentence", "")})
+	var place: Dictionary = Data.story["destinations"][GameState.get_destination_key()]
+	next.text = words["summary_next"].format({"planet": place.get("in_sentence", place["name"])})
 	next.custom_minimum_size.y = 56
 	next.pressed.connect(_on_next_pressed.bind(next))
 	right_column.add_child(next)

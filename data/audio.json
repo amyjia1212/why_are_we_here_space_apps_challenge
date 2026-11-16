@@ -35,7 +35,7 @@
       "_readme": "Which music state each screen starts. A screen that is not listed keeps the music that is already playing. \"planet\" = the mission's own state (moon, mars or venus).",
       "start_menu": "menu", "cutscene_intro": "menu", "name": "calm", "character_room": "calm", "player_count": "calm",
       "your_file": "calm", "mission_room": "calm", "mission_briefing": "calm", "mission_school": "calm", "design_room": "calm", "review": "calm",
-      "minigame_clean": "build", "minigame_assembly": "build", "minigame_hammer": "build", "minigame_fuel": "build",
+      "minigame_clean": "build", "minigame_assembly": "build", "minigame_hammer": "build", "minigame_fuel": "build", "build_done": "win",
       "launch": "launch", "flight": "space", "arrival": "planet", "cutscene_return": "space"
     }
   },

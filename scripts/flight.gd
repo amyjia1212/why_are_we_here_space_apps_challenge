@@ -88,7 +88,8 @@ func _ready() -> void:
 	build_planet_and_stars()
 	spawn_player()
 	build_ui()
-	Bots.spawn_walkers(self, ship["bot_routes"])
+	# The real astronauts of this mission walk the ship (UPGRADE_PLAN_V6 C1): the same three all mission.
+	Bots.spawn_walkers(self, ship["bot_routes"], Data.crew["missions"].get(GameState.get_destination_key(), []))
 	Bots.set_alert(false)
 
 	flight_log.emergency_started.connect(_on_emergency_started)
@@ -259,6 +260,7 @@ func build_ui() -> void:
 
 	inner_voice = BAR_SCENE.instantiate()
 	layer.add_child(inner_voice)
+	build_need_bars(layer)
 
 
 # ---------- the trip ----------
@@ -282,8 +284,8 @@ func plan_crew_emergencies() -> void:
 
 
 func _process(delta: float) -> void:
-	if cleaning != null:
-		return   # the Clean Room is open: the whole trip waits
+	if cleaning != null or talk_crew != "" or ship_task != null:
+		return   # the Clean Room, a crew talk or a station job is open: the whole trip waits
 	var progress: float = flight_log.progress
 	update_planet(progress)
 	day_label.text = words["day"].format({"day": flight_log.get_day(), "days": flight_log.get_trip_days()})
@@ -292,6 +294,7 @@ func _process(delta: float) -> void:
 			start_crew_emergency(crew_plan.pop_front()["id"])
 		if clean_state == "waiting" and progress >= float(Data.extras["clean_room"]["flight_at"]):
 			open_clean_task()
+		drain_needs(delta)
 		routine_clock += delta
 		if routine_clock >= float(rules["routine_every_seconds"]):
 			routine_clock = 0.0
@@ -305,7 +308,12 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if cleaning != null:
+	if cleaning != null or ship_task != null:
+		return
+	if talk_crew != "":
+		if event.is_action_pressed("interact") or event.is_action_pressed("confirm"):
+			next_talk_line()
+			get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("interact"):
 		if near_station != "":
@@ -405,7 +413,13 @@ func miss_emergency(task: Dictionary) -> void:
 # E at a station: fix its emergency first, otherwise do its calm task.
 func use_station(station_id: String) -> void:
 	var key: String = task_key_at(station_id)
+	# Life Support (UPGRADE_PLAN_V6 C2): eat, drink or swap the air filter any time,
+	# unless an emergency is waiting there. The first time, a learn card teaches it.
+	if need_for_station(station_id) != "" and not is_emergency(key):
+		start_need_job(station_id, key)
+		return
 	if key == "":
+		learn_station(station_id)
 		return
 	var task: Dictionary = tasks[key]
 	if task["kind"] == "clean":
@@ -423,6 +437,7 @@ func use_station(station_id: String) -> void:
 		"routine":
 			GameState.data_sent += float(rules["routine_data_gb"])
 			flight_log.add_line(words["task_log"].format({"task": task["task"]}), "good")
+			learn_station(station_id)   # the first time here: what this station is for (C2)
 
 
 # The most urgent open task at a station ("" = none).
@@ -433,7 +448,9 @@ func task_key_at(station_id: String) -> String:
 		var task: Dictionary = tasks[key]
 		if task["station"] != station_id:
 			continue
-		var left: float = task.get("left", INF - 1.0)
+		# A calm task has no timer: rank it after every emergency. (Bug fixed 2026-11-15:
+		# it used INF - 1.0, which is still INF, so calm tasks and the Clean Room never opened.)
+		var left: float = task.get("left", 1.0e9)
 		if left < best_left:
 			best = key
 			best_left = left
@@ -474,7 +491,10 @@ func update_near_station() -> void:
 		prompt_label.text = ""
 		return
 	var key: String = task_key_at(near_station)
-	if key == "":
+	var need: String = need_for_station(near_station)
+	if need != "" and not is_emergency(key):
+		prompt_label.text = Data.story["ship_life"]["prompt"].format({"job": Data.story["ship_life"]["bars"][need]["job"], "bar": Data.story["ship_life"]["bars"][need]["name"], "value": int(needs[need])})
+	elif key == "":
 		prompt_label.text = words["all_good"].format({"label": station_label(near_station)})
 	elif is_emergency(key):
 		# Two ways to fix it (extras): hold E (proper) or R (quick, costs later).
@@ -589,7 +609,7 @@ func open_clean_task() -> void:
 # its timers and the player all wait until it is finished.
 func start_cleaning() -> void:
 	cleaning = CanvasLayer.new()
-	cleaning.layer = 40   # over the ship's own panels, under the Hud's pause menu (50)
+	cleaning.layer = 55   # over the ship's panels AND the Hud's top bar (2026-11-15: the key strip covered its title)
 	var game: Control = CLEAN_SCENE.instantiate()
 	var frame: Control = game.get_node("Frame")
 	frame.embedded = true
@@ -613,6 +633,7 @@ func _on_cleaning_done() -> void:
 	player.process_mode = Node.PROCESS_MODE_INHERIT
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	AudioManager.play_sfx("task_done")
+	Achievements.unlock("clean_instrument")
 	var score: String = GameState.fmt(GameState.get_team_score("clean"))
 	flight_log.add_line(Data.story["extras"]["clean"]["flight_done"].format({"score": score}), "good")
 
@@ -764,6 +785,7 @@ func build_sky_bodies() -> void:
 				window_spots.append(Vector3(rect.position.x, y, c))
 			_:
 				window_spots.append(Vector3(rect.end.x, y, c))
+	build_satellites()
 	update_sky_bodies(0.0)
 
 
@@ -772,10 +794,81 @@ func update_sky_bodies(progress: float) -> void:
 	var back_z: float = room_rects["comms_room"].end.y
 	var angle: float = deg_to_rad(lerpf(float(info["earth_start_degrees"]), float(info["earth_end_degrees"]), progress))
 	var distance: float = float(info["earth_radius"]) / tan(angle / 2.0)
-	sky_bodies["earth"].position = Vector3(0, 1.6, back_z + distance)
-	if sky_bodies.has("moon"):
-		var offset: Vector3 = MeshKit.vec3(info["moon_offset"]) * (distance / 40.0)
+	var behind := Vector3(0, 1.6, back_z + distance)
+	# 2026-11-15 (team note): first you see Earth out the FRONT window (we just
+	# left it), then it swings past the right-hand windows to behind the ship,
+	# while the destination grows ahead. earth_swing_until = the share of the
+	# trip the swing takes; after it, Earth shrinks behind (the back window).
+	var swing: Dictionary = info.get("earth_swing", {})
+	var until: float = float(swing.get("until", 0.0))
+	if until > 0.0 and progress < until:
+		var s: float = progress / until
+		var front: Vector3 = earth_front_point(info, swing)
+		var side := Vector3(float(swing["side_x"]), 1.0, 2.0)
+		sky_bodies["earth"].position = front * (1.0 - s) * (1.0 - s) + side * 2.0 * (1.0 - s) * s + behind * s * s
+	else:
+		sky_bodies["earth"].position = behind
+	# Earth's Moon rides next to Earth, but only when the Moon is NOT where we are
+	# going (bug fixed 2026-11-15: on Moon trips the destination was pulled back
+	# next to Earth, so it never showed in the Bridge window).
+	if GameState.get_destination_key() != "moon" and sky_bodies.has("moon"):
+		var offset: Vector3 = MeshKit.vec3(info["moon_offset"]) * (maxf(distance, 24.0) / 40.0)
 		sky_bodies["moon"].position = sky_bodies["earth"].position + offset
+	update_satellites(progress)
+
+
+# Where Earth sits at the start: low and to the right in the Bridge window, big.
+func earth_front_point(info: Dictionary, swing: Dictionary) -> Vector3:
+	var bridge: Rect2 = room_rects["bridge"]
+	var eye := Vector3(0, 1.6, bridge.position.y + 2.5)
+	var size: float = deg_to_rad(float(info["earth_start_degrees"]))
+	var reach: float = float(info["earth_radius"]) / tan(size / 2.0)
+	var yaw: float = deg_to_rad(float(swing["front_right_degrees"]))
+	var pitch: float = deg_to_rad(float(swing["front_down_degrees"]))
+	var dir := Vector3(sin(yaw) * cos(pitch), -sin(pitch), -cos(yaw) * cos(pitch))
+	return eye + dir * reach
+
+
+# Satellites drifting past the side windows while we are still near Earth.
+var satellites: Array = []   # { "node": Node3D, "x": float, "y": float, "from": float, "to": float, "spin": float }
+
+func build_satellites() -> void:
+	var info: Dictionary = Data.extras["spotting"].get("satellites", {})
+	var count: int = int(info.get("count", 0))
+	var sat_rng := RandomNumberGenerator.new()
+	sat_rng.seed = 7
+	for i in count:
+		var sat := Node3D.new()
+		add_child(sat)
+		MeshKit.box(sat, Vector3(0.9, 0.9, 1.2), Vector3.ZERO, Color(info["body_color"]))
+		for side in [-1.0, 1.0]:
+			MeshKit.box(sat, Vector3(2.4, 0.05, 0.9), Vector3(side * 1.75, 0, 0), Color(info["panel_color"]))
+		MeshKit.cylinder(sat, 0.45, 0.05, 0.3, Vector3(0, 0.6, 0), Color(info["dish_color"]))
+		sat.rotation = Vector3(sat_rng.randf_range(-0.6, 0.6), sat_rng.randf_range(0, TAU), sat_rng.randf_range(-0.4, 0.4))
+		var side_sign: float = -1.0 if i % 2 == 0 else 1.0
+		satellites.append({
+			"node": sat,
+			"x": side_sign * sat_rng.randf_range(float(info["side_min"]), float(info["side_max"])),
+			"y": sat_rng.randf_range(-1.0, 4.0),
+			"from": -float(info["start_ahead"]) - i * float(info["gap"]),
+			"to": float(info["start_ahead"]) + 20.0,
+			"spin": sat_rng.randf_range(-0.4, 0.4),
+		})
+	update_satellites(0.0)
+
+
+func update_satellites(progress: float) -> void:
+	if satellites.is_empty():
+		return
+	var until: float = float(Data.extras["spotting"]["satellites"]["until"])
+	var s: float = progress / until
+	for sat in satellites:
+		var node: Node3D = sat["node"]
+		node.visible = s < 1.0
+		if not node.visible:
+			continue
+		node.position = Vector3(sat["x"], sat["y"], lerpf(sat["from"], sat["to"], s))
+		node.rotation.y += sat["spin"] * get_process_delta_time()
 
 
 func update_extras(delta: float) -> void:
@@ -841,6 +934,7 @@ func snap_postcard(body_id: String) -> void:
 		inner_voice.say(spot_words["got"].format({"name": name_text, "count": GameState.sightings.size(), "total": sky_bodies.size()}))
 	else:
 		inner_voice.say(spot_words["got_again"].format({"name": name_text}))
+	Achievements.unlock("postcard")
 	if GameState.postcards.size() < int(info["max_postcards"]) and DisplayServer.get_name() != "headless":
 		take_photo()
 
@@ -865,8 +959,12 @@ func take_photo() -> void:
 		GameState.postcards.append(image)
 
 
-# Ask the crew: one line about the room the staff member stands in.
+# Ask the crew: a real astronaut gets a paused fact card (UPGRADE_PLAN_V6 C1);
+# other staff say one line about the room they stand in.
 func ask_crew() -> void:
+	if crew_near.has_meta("crew_id"):
+		start_crew_talk(str(crew_near.get_meta("crew_id")))
+		return
 	var here := Vector2(crew_near.global_position.x, crew_near.global_position.z)
 	var room: String = "hallway"
 	for room_id in room_rects:
@@ -875,6 +973,200 @@ func ask_crew() -> void:
 	var crew_words: Dictionary = Data.story["extras"]["ask_crew"]
 	AudioManager.play_sfx("preview")
 	inner_voice.say(crew_words["speaker"] + ": " + crew_words["rooms"].get(room, crew_words["rooms"]["hallway"]))
+
+
+# ---------- life on the ship (UPGRADE_PLAN_V6 C2 + C5) ----------
+# Three bars: Hunger, Hydration, Air. They drain as the trip goes. Food, Water
+# and Air in Life Support refill them, each with a short hands-on job. Low bars
+# slow you down; an empty one ends the trip and it starts again (the design stays).
+
+const LEARN_CARD = preload("res://scripts/learn_card.gd")
+const SHIP_TASK = preload("res://scripts/ship_task.gd")
+
+var needs: Dictionary = {}       # bar id -> 0..100
+var need_bars: Dictionary = {}   # bar id -> ProgressBar
+var ship_task: Control = null    # the open station job (the trip waits)
+var trip_over: bool = false
+var learned_here: Array = []     # stations whose learn card was shown on this trip
+
+
+func build_need_bars(layer: CanvasLayer) -> void:
+	var info: Dictionary = Data.supplies["needs"]
+	var panel := PanelContainer.new()
+	panel.theme_type_variation = &"GlassPanel"
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.anchor_top = 1.0
+	panel.anchor_bottom = 1.0
+	panel.offset_left = 16
+	panel.offset_right = 16 + 180
+	panel.offset_bottom = -16
+	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	layer.add_child(panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 4)
+	panel.add_child(column)
+	for need_id in info["bars"]:
+		needs[need_id] = float(info["start"])
+		var label := Label.new()
+		label.theme_type_variation = &"SmallText"
+		label.text = Data.story["ship_life"]["bars"][need_id]["name"]
+		column.add_child(label)
+		var bar := ProgressBar.new()
+		bar.show_percentage = false
+		bar.custom_minimum_size = Vector2(148, 12)
+		bar.max_value = 100.0
+		column.add_child(bar)
+		need_bars[need_id] = bar
+	update_need_bars()
+
+
+func need_for_station(station_id: String) -> String:
+	var bars: Dictionary = Data.supplies["needs"]["bars"]
+	for need_id in bars:
+		if bars[need_id]["station"] == station_id:
+			return need_id
+	return ""
+
+
+func drain_needs(delta: float) -> void:
+	if trip_over:
+		return
+	var info: Dictionary = Data.supplies["needs"]
+	var seconds: float = maxf(flight_log.trip_seconds, 1.0)
+	for need_id in needs:
+		needs[need_id] = maxf(needs[need_id] - float(info["bars"][need_id]["empties_per_trip"]) * 100.0 * delta / seconds, 0.0)
+		if needs[need_id] <= 0.0:
+			fail_trip(need_id)
+			return
+	update_need_bars()
+	# A low bar makes walking slow (you are tired, thirsty or out of breath).
+	var low: bool = needs.values().any(func(v): return v < float(info["slow_below"]))
+	player.walk_speed = float(info["walk_speed"]) * (float(info["slow_factor"]) if low else 1.0)
+
+
+func update_need_bars() -> void:
+	var info: Dictionary = Data.supplies["needs"]
+	for need_id in need_bars:
+		var bar: ProgressBar = need_bars[need_id]
+		bar.value = needs[need_id]
+		var color_name: String = "go_color"
+		if needs[need_id] < float(info["slow_below"]):
+			color_name = "danger_color"
+		elif needs[need_id] < float(info["remind_below"]):
+			color_name = "caution_color"
+		bar.modulate = bar.get_theme_color(color_name, &"Status")
+
+
+# The lowest bar under the reminder line, for the voice bar's "what to do now" ("" = none).
+func low_need() -> String:
+	var info: Dictionary = Data.supplies["needs"]
+	var worst: String = ""
+	for need_id in needs:
+		if needs[need_id] < float(info["remind_below"]) and (worst == "" or needs[need_id] < needs[worst]):
+			worst = need_id
+	return worst
+
+
+# E at Food, Water or Air: the learn card the first time, then the small job, then the refill.
+func start_need_job(station_id: String, routine_key: String) -> void:
+	var go := func(): open_ship_task(station_id, routine_key)
+	if not learn_station(station_id, go):
+		go.call()
+
+
+func open_ship_task(station_id: String, routine_key: String) -> void:
+	var need_id: String = need_for_station(station_id)
+	var job: String = Data.supplies["needs"]["bars"][need_id]["job"]
+	var layer := CanvasLayer.new()
+	layer.layer = 55
+	add_child(layer)
+	ship_task = SHIP_TASK.new()
+	ship_task.setup(job)
+	layer.add_child(ship_task)
+	player.frozen = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	ship_task.done.connect(func():
+		layer.queue_free()
+		ship_task = null
+		player.frozen = false
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		needs[need_id] = minf(needs[need_id] + float(Data.supplies["needs"]["bars"][need_id]["restore"]), 100.0)
+		update_need_bars()
+		GameState.ship_log_add(Data.supplies["needs"]["bars"][need_id]["log"])
+		Achievements.unlock("first_" + need_id)
+		inner_voice.say(Data.story["ship_life"]["bars"][need_id]["done_voice"])
+		# A calm task here is done by the same job.
+		if routine_key != "" and tasks.has(routine_key):
+			tasks.erase(routine_key)
+			GameState.data_sent += float(rules["routine_data_gb"])
+			flight_log.add_line(words["task_log"].format({"task": station_label(station_id)}), "good"))
+
+
+# The first time a station is used: a paused card teaches what it is (story.json ship_life > learn).
+# Gives back true when a card opened (then on_close runs after it).
+func learn_station(station_id: String, on_close: Callable = Callable()) -> bool:
+	var cards: Dictionary = Data.story["ship_life"]["learn"]
+	if not cards.has(station_id) or learned_here.has(station_id):
+		return false
+	learned_here.append(station_id)
+	GameState.ship_log_add("stations_learned", station_id)
+	Achievements.unlock("learn_" + station_id)
+	LEARN_CARD.open(self, cards[station_id], Data.story["ship_life"]["learn_button"], on_close)
+	return true
+
+
+# A bar hit zero: the crew cannot go on. The trip starts again (the design stays).
+func fail_trip(need_id: String) -> void:
+	trip_over = true
+	GameState.ship_log_add("trips_failed")
+	Achievements.unlock("ran_out")
+	var life: Dictionary = Data.story["ship_life"]
+	var card: Dictionary = {"kicker": life["fail_kicker"], "title": life["bars"][need_id]["fail_title"], "lines": [life["bars"][need_id]["fail_text"], life["fail_how"]]}
+	LEARN_CARD.open(self, card, life["fail_button"], func():
+		GameState.restart_trip()
+		StageManager.go_to("flight"))
+
+
+# ---------- talking to the real crew (UPGRADE_PLAN_V6 C1) ----------
+# The trip pauses. The voice bar shows the astronaut's name and portrait and a
+# narrator tells their sourced facts one at a time (E or Enter for the next).
+# The last line always says that their place on this crew is our game's idea.
+
+var talk_lines: Array = []     # what is still to come
+var talk_crew: String = ""     # "" = nobody is being talked to
+
+
+func start_crew_talk(crew_id: String) -> void:
+	var person: Dictionary = Data.crew["people"][crew_id]
+	talk_crew = crew_id
+	talk_lines = [person["one_line"] + "."] + person["facts"]
+	talk_lines.append(Data.crew["game_choice_line"].format({"name": person["name"]}))
+	talk_lines.append(Data.story["crew_talk"]["source_label"] + " " + str(person["source"]))
+	flight_log.process_mode = Node.PROCESS_MODE_DISABLED
+	player.frozen = true
+	inner_voice.set_speaker(person["name"], "crew_" + crew_id)
+	inner_voice.set_meta("hold", true)   # the fact stays until E / Enter
+	AudioManager.play_sfx("preview")
+	GameState.ship_log_add("crew_talks", crew_id)
+	Achievements.unlock("met_" + crew_id)
+	next_talk_line()
+
+
+func next_talk_line() -> void:
+	if talk_lines.is_empty():
+		end_crew_talk()
+		return
+	var line: String = talk_lines.pop_front()
+	inner_voice.say(line + "   " + Data.story["crew_talk"]["next_hint"])
+
+
+func end_crew_talk() -> void:
+	talk_crew = ""
+	inner_voice.set_meta("hold", false)
+	flight_log.process_mode = Node.PROCESS_MODE_INHERIT
+	player.frozen = false
+	inner_voice.set_speaker(Data.voice["speaker_name"], "")
+	inner_voice.say(Data.story["crew_talk"]["back_line"])
 
 
 # ---------- the Hud (tablet map, waypoints, timers, goal) ----------
@@ -930,8 +1222,22 @@ func get_goal_text() -> String:
 	var urgent: Dictionary = most_urgent()
 	if not urgent.is_empty():
 		return words["goal_fix"].format({"task": urgent["task"]})
+	# A low life bar comes right after the alarms (UPGRADE_PLAN_V6 C2).
+	var need: String = low_need()
+	if need != "":
+		return Data.story["ship_life"]["bars"][need]["low_goal"]
 	if clean_state == "open":
 		return Data.story["extras"]["clean"]["flight_goal"]
+	# The next calm job (UPGRADE_PLAN_V6 A5): the open yellow task nearest to the player.
+	var best: String = ""
+	var best_distance: float = INF
+	for task in tasks.values():
+		var d: float = player.global_position.distance_to(stations[task["station"]]["pos"])
+		if d < best_distance:
+			best = task["task"]
+			best_distance = d
+	if best != "":
+		return words["goal_next"].format({"task": best})
 	return words["goal_trip"].format({"planet": flight_log.planet})
 
 

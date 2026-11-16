@@ -1,5 +1,54 @@
 # PROGRESS.md: where we stopped
 
+## Final copy (2026-11-15 afternoon): UPGRADE_PLAN_V6 A1, A2 + three team requests, waiting for Holden's test
+
+| Change | Key files |
+|---|---|
+| A1: launch caption "head for ." now names Mars / Venus (only the Moon had `in_sentence`; now falls back to the name) | `launch.gd` |
+| A2: the report's header (stamp, Redesign, New mission, Notebook, Leaderboard) scrolls with the page; a second Redesign button at the bottom | `debrief.tscn`, `debrief.gd` |
+| Previous button in the Design Lab (top left, from the 2nd station on; Backspace does the same) | `choice_room.gd`, `story.json` choice_room > previous_button |
+| Ship window: Earth first (big, front right), swings past the right windows to behind; the destination grows ahead; 4 satellites drift past early in the trip. **Bug fixed:** on Moon trips the destination Moon was pulled next to Earth behind the ship, so it never showed ahead | `flight.gd`, `extras.json` spotting > earth_swing, satellites |
+| Voice bar never blocks: clicks pass through, 860 px wide and centered, fades after the line is read (stays while a Next button waits) | `inner_voice_bar.gd`, `game_data.json` hud > voice_bar_* |
+| Review: the Notebook button moved into the bottom button row (the floating one covered the title) | `review.gd`, `game_data.json` hud > notebook_button_scenes |
+
+**Rest of Tier 1 (3:00 pm):**
+
+| Step | What changed | Key files |
+|---|---|---|
+| A3 | Key caps strip at the top of the walking screens ([WASD] move, [E] use...) | `Hud.gd` fill_key_strip, `story.json` controls > key_strip |
+| A4 | Build job start card: "Press Q to learn why..." + the Q ? sign pulses; the Q ? sign no longer covers the "?" button | `minigame_frame.gd`, `Hud.gd` pulse_question_tag, `story.json` minigames > q_reminder |
+| A5 | Ship and planet: after a line is read, the voice bar quietly shows the task at hand (alarm first, then the nearest yellow job) | `inner_voice_bar.gd`, `flight.gd` get_goal_text, `game_data.json` hud > voice_goal_scenes |
+| A6 | Drill green zone 0.74-0.84 (was 0.70-0.86); a paused card explains the drill and the ice race before the first drill | `destinations.json`, `arrival.gd` show_explain_card, `story.json` arrival_screen > explain |
+| A7 | Hammering = 8 named panels (nose cone, body ring, fin, engine skirt, door hatch...), 3 nails along each seam, panels slide in, a corner rocket fills up | `minigame_hammer.gd`, `minigames.json` hammer > panels |
+| Sound | Fixed bus layout file (Music / SFX / Voice made at start, not at run time). Browser check in headless Edge: audio running, sounds start on the first click | `default_bus_layout.tres` |
+| Test | Python is not installed: `serve_web.ps1` serves `build/web` for the browser test | `serve_web.ps1` |
+
+Web export 3:02 PM. No git in this folder.
+
+**Tier 2 (3:25 pm) + Credits removed from the start menu:**
+
+| Step | What changed | Key files |
+|---|---|---|
+| B1 | Launch dates: Best = +8 M$ waiting, short trip, scrub 15% (max 1); OK = +3 M$, scrub 40% (max 2); Poor = soonest, long trip, +120 kg, scrub 70% (max 3). A scrub can come back after you wait; poor dates say "That is what a poor date costs". Wall chips: Wait · Trip · Scrub risk | `extras.json` launch_window, `launch.gd` roll_scrub, `choice_room.gd`, `story.json` extras > launch_window |
+| B2 | New "Build complete" screen after the fuel job: rocket rolls out, 3 scores count up, staff jump, confetti, cheer sized to the build, "Ready to launch" | `scenes/build_done.tscn`, `scripts/build_done.gd`, `game_data.json` build_done + stages, `story.json` build_done |
+| B3 | Redesign by character: Scientist keeps the design, opens at the instruments if a key instrument was forgotten, amber arrow + name over what to pick; Janitor and Student start the design again from station 1 | `GameState.start_retry / guide_options`, `choice_room.gd` update_retry_marks, `game_data.json` stages > retry_by_level |
+| B4 | "LAST TIME" tag over last run's pick and one line per station in the character's own words (good / okay / bad) | `GameState.save_last_attempt`, `inner_voice.json` last_time |
+
+Browser sound re-checked on the 3:24 pm export (audio running, sounds start on the first click).
+
+**Tier 3 (3:55 pm) + the instrument-bay bug:**
+
+| Step | What changed | Key files |
+|---|---|---|
+| Bug | Calm ship tasks (and the Clean Room at Instruments) never opened: `task_key_at` ranked them with INF - 1.0, which equals INF. Now 1e9. The cleaning game also draws above the Hud | `flight.gd` |
+| C1 | Real astronauts walk the ship, the same three all mission (Moon: Koch, Glover, Glenn; Mars: Whitson, Pettit, Mann; Venus: Ride, Mann, Pettit). Toy figures with matching skin, hair, age and suit, a chest name tag and a floating name; drawn portraits. E = the trip pauses, the voice bar shows their name + portrait and narrates 3 sourced facts (NASA links, checked 2026-11-15), then "our game's idea" line. A hidden PLACEHOLDER slot for the unconfirmed intro person | `data/crew.json`, `characters/astronaut.gd/.tscn`, `Bots.gd`, `Portraits.gd`, `flight.gd` |
+| C2 | Hunger / Hydration / Air bars (bottom left). Food, Water, Air stations refill them; a learn card the first time (sourced); low bars = reminder + slow walk; a bar at 0 = trip over, start the trip again (design kept). "Life on the ship" box on the report | `supplies.json` needs, `learn_card.gd`, `flight.gd`, `debrief.gd`, `story.json` ship_life / life_report |
+| C3 | 31 achievements (explore / skill / outcome), pop-up, saved on the computer; Notebook (N) right side lists them with badges and how to get them; a board behind the start spot in the Character Room | `data/achievements.json`, `autoload/Achievements.gd`, `Hud.gd`, `choice_room.gd` |
+| C4 | Mars: three dig sites (radar reading on each), three samples one at a time, deeper = longer drill, farther = longer run; list shows the current site + "Ice samples n of 3" | `destinations.json` mars arrival, `arrival.gd` text_of / current_site |
+| C5 | Small jobs: Air = drag the dirty filter out and the clean one in; Water = hold the valve, let go in the green; Food = add water, then eat | `ship_task.gd`, `minigames.json` ship_tasks |
+
+Web export 3:54 PM; browser sound re-checked. New autoload (Achievements): Project → Reload Current Project.
+
 ## Innovation features (2026-11-15, 11:05–11:35 am): Feature A + B built and tested, see INNOVATION.md
 
 - **Feature A, "Three voices, one decision":** rocket, orbit and instruments stations; the inner voice gives the

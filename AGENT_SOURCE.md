@@ -387,7 +387,15 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
 - **Three voices, one decision + The voice learns (INNOVATION.md):** hints on the rocket, orbit and instruments stations, in the existing voice bar; a word is learned when a mission or a checkpoint fails (the main cause, ranked by overshoot); each character keeps its own Notebook, saved between sessions; hint and notebook text drafted by Claude for the Head Writer to edit; on-screen name "The Assistant Scientist".
   Why: Holden pasted the feature brief and said "Add of this into the game without stopping. If it asks for a choice just chose the recommended" (2026-11-15).
 
+- **Redesign depends on the character (2026-11-15).** The Assistant Scientist keeps the design and is guided with amber arrows and names; the Janitor and the Lost Student pick the whole design again. Why: "When it's the janitor, we wanted to reset back to the beginning... Scientist has way more direction and will make it kind of easier."
+- **Launch dates trade off waiting money against trip length and scrubs (2026-11-15).** Why: "poor dates are sooner... but there's a lot of variability... We want trade-offs for all of those. And for it to be apparent."
+- **Credits removed from the start menu (2026-11-15).** Team request.
+- **Real astronauts as crew, facts only (2026-11-15).** Narrator fact cards with NASA sources, drawn in-game portraits, no photos, no invented first-person lines; the game says the crew assignment is our idea. Why: the team wants players to "learn about the person who's in there... who they are, what they've done".
+- **Life bars with consequences (2026-11-15).** A bar at zero restarts the trip with the same design (DEFAULT). Why: "if one of these things go bad, there's actual consequences to it".
+
 ## 3. Rejected choices
+
+- **"Try again keeps the part choices" for every character.** Replaced on 2026-11-15 for the Janitor and the Student (they start the design again); the Scientist still keeps the design.
 
 - The Design Lab back-wall screen with three option cards, a resource strip and an orange Confirm button (UI_POLISH_PLAN_V4 Step 2), plus floating pedestal labels and the CONFIRM marker (replaced 2026-11-15 by ROOM_LAYOUT_PLAN_V5: two side screens and nameplates).
 - Q = go back one choice (replaced 2026-11-14 by Q = Question, Backspace = back; UPGRADE_PLAN_V3).

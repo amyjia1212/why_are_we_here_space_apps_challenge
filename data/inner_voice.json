@@ -1,6 +1,26 @@
 {
   "_readme": "Everything the inner voice says. Writers can change any sentence. Keep the key names (left of the colons). Words in {curly braces} are filled in by the game: {value} = the player's total, {limit} = the mission limit, {unit} = the unit.",
   "speaker_name": "Your inner voice",
+  "last_time": {
+    "_readme": "UPGRADE_PLAN_V6 B3/B4: said once per Design Lab station on a retry. guide_* = the Scientist's guided retry (an amber arrow points at {name}). easy/medium/hard = what this character says about last run's pick {name}: good = it worked, okay = it worked but cost us, bad = it caused a failure.",
+    "guide_instrument": "We forgot the {name} last time, and it is the whole point of the mission. Pack the {name}: the arrow shows it.",
+    "guide_part": "This is what went wrong last time. Pick the {name}: the arrow shows it.",
+    "easy": {
+      "good": "Last time we picked the {name}. That was the correct choice.",
+      "okay": "Last time we picked the {name}. That could work too, but it is less effective.",
+      "bad": "Last time we picked the {name}. That was not the correct choice."
+    },
+    "medium": {
+      "good": "Last time we chose the {name}. Good idea. I'd do that again.",
+      "okay": "Last time we chose the {name}. It sort of worked. Sort of.",
+      "bad": "Last time we chose the {name}. Not a good idea."
+    },
+    "hard": {
+      "good": "The {name} worked last time, I think?",
+      "okay": "The {name}... it did not really help. Maybe something else?",
+      "bad": "The {name} did not work. Maybe we should try something else."
+    }
+  },
   "minigames": {
     "_readme": "What the inner voice says on each minigame's results screen (TASKS.md step 14). good / ok / bad depends on the team average (data/minigames.json, \"voice\"). Hammering has only good and bad: the line is the launch's structure check (data/timing.json, structure_check). One line per level: easy = the scientist, medium = the janitor, hard = the student. The voice says what the score will change later, so the player sees the link.",
     "assembly": {

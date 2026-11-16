@@ -5,10 +5,11 @@
     "default": "ok",
     "order": ["best", "ok", "poor"],
     "options": {
-      "best": { "trip_factor": 0.85, "effects": { "budget": 0, "mass": -60 }, "tightness_factor": 1.25 },
-      "ok": { "trip_factor": 1.0, "effects": { "budget": 0, "mass": 0 }, "tightness_factor": 1.0 },
-      "poor": { "trip_factor": 1.3, "effects": { "budget": 8, "mass": 120 }, "tightness_factor": 0.8 }
+      "best": { "trip_factor": 0.85, "effects": { "budget": 8, "mass": -60 }, "tightness_factor": 1.25, "scrub_chance": 0.15, "max_scrubs": 1 },
+      "ok": { "trip_factor": 1.0, "effects": { "budget": 3, "mass": 0 }, "tightness_factor": 1.0, "scrub_chance": 0.4, "max_scrubs": 2 },
+      "poor": { "trip_factor": 1.3, "effects": { "budget": 0, "mass": 120 }, "tightness_factor": 0.8, "scrub_chance": 0.7, "max_scrubs": 3 }
     },
+    "_scrub_readme": "UPGRADE_PLAN_V6 B1 (2026-11-15): effects budget = the money spent WAITING for that date (the best date is far away, the poor date is the soonest). scrub_chance = how likely the weather scrubs the launch (amber weather) each time you are on the pad; max_scrubs = the most scrubs in a row for that date. Waiting out a scrub costs weather > wait_cost each time. All PLACEHOLDER: game-design choice.",
     "mars_every_months": 26,
     "source": "trip_factor, effects and tightness_factor: PLACEHOLDER: game-design choice (2026-11-14), waiting for the team's pass. mars_every_months: \"about once every 26 months they are aligned in a way that allows the most energy-efficient trip to Mars\": https://mars.nasa.gov/msl/timeline/launch/launch-windows/ (also https://www.nasa.gov/news-release/nasa-suspends-2016-launch-of-insight-mission-to-mars/: \"only a few weeks every 26 months\"). Moon windows: NASA Artemis II, \"approximately one week of launch opportunities, followed by three weeks without\": https://www.nasa.gov/wp-content/uploads/2026/01/artemis-ii-mission-availability.pdf"
   },
@@ -71,6 +72,10 @@
     "sun_radius": 9,
     "sun_color": "#fff2a8",
     "postcard_pixels": [320, 180],
+    "_earth_swing_readme": "2026-11-15 team note: first you see Earth, then the destination. earth_swing: Earth starts big in the Bridge window (front_right_degrees to the right, front_down_degrees below eye level), then swings out past the right-hand windows (side_x meters to the side) and ends behind the ship by 'until' (share of the trip, 0 to 1). Set until to 0 for the old look (Earth always behind).",
+    "earth_swing": { "until": 0.3, "front_right_degrees": 16, "front_down_degrees": 9, "side_x": 45 },
+    "_satellites_readme": "Satellites that drift past the windows while the ship is still near Earth (the first 'until' share of the trip). count = how many; side_min / side_max = meters to the left or right of the ship's middle (outside the 9.5 m walls); start_ahead = how far in front the first one starts; gap = extra distance between them. Colors: looks only.",
+    "satellites": { "count": 4, "until": 0.3, "side_min": 16, "side_max": 22, "start_ahead": 45, "gap": 18, "body_color": "#d4a537", "panel_color": "#2d4f8f", "dish_color": "#e8e8e8" },
     "source": "Game-design choice (look and layout only)."
   },
   "ask_crew": {

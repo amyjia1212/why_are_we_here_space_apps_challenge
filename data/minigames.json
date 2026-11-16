@@ -32,6 +32,14 @@
     "part_color": "#ffb347",
     "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), words and times changed at UPGRADE_PLAN_V2 step 18 (2026-11-14), waiting for the team's pass"
   },
+  "ship_tasks": {
+    "_readme": "UPGRADE_PLAN_V6 C5: the small jobs at the ship's Life Support stations (scripts/ship_task.gd). fill_seconds = how long holding the valve takes to fill the gauge to the top; green_start / green_end = the green zone (0-1) to let go in; done_pause_seconds = the job stays on screen this long after it is done. Game-design choice.",
+    "fill_seconds": 2.2,
+    "green_start": 0.65,
+    "green_end": 0.85,
+    "done_pause_seconds": 0.8,
+    "source": "PLACEHOLDER: game-design choice (2026-11-15)"
+  },
   "hammer": {
     "_readme": "Hammer the nails on the rocket panel (UPGRADE_PLAN_V2 step 19). nails_per_turn = how many nails pop up in one turn (the 'Nails left' count). spawn_every_seconds = a new nail every this many seconds. nail_life_seconds = how long a nail stays before it slides back out (a miss). hit_radius_pixels = how close to a nail a click must be. nail_size_pixels = how big a nail head looks. dent_limit = the most dents shown at once (looks only; dents cost no points). Score = nails hit / nails_per_turn x 100.",
     "becomes": "structure_strength",
@@ -41,6 +49,16 @@
     "hit_radius_pixels": 46,
     "nail_size_pixels": 40,
     "dent_limit": 30,
+    "_panels_readme": "UPGRADE_PLAN_V6 A7 (2026-11-15): the turn is a row of ship panels, not one panel with random nails. Every nails_per_panel nails the finished panel slides away and the next shape slides in; the nails sit in order along its seam. shapes = the outline of each panel, points from 0 to 1 inside the play area (they repeat if there are more panels than shapes). The small rocket in the corner fills one piece per finished panel. slide_seconds = how long a new panel takes to slide in.",
+    "nails_per_panel": 3,
+    "slide_seconds": 0.35,
+    "panels": [
+      { "name": "Nose cone", "points": [[0.5, 0.08], [0.78, 0.92], [0.22, 0.92]] },
+      { "name": "Body ring", "points": [[0.18, 0.15], [0.82, 0.15], [0.82, 0.85], [0.18, 0.85]] },
+      { "name": "Fin", "points": [[0.3, 0.1], [0.72, 0.55], [0.72, 0.9], [0.3, 0.9]] },
+      { "name": "Engine skirt", "points": [[0.36, 0.12], [0.64, 0.12], [0.84, 0.88], [0.16, 0.88]] },
+      { "name": "Door hatch", "points": [[0.5, 0.1], [0.72, 0.2], [0.8, 0.5], [0.72, 0.8], [0.5, 0.9], [0.28, 0.8], [0.2, 0.5], [0.28, 0.2]] }
+    ],
     "source": "PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), changed at UPGRADE_PLAN_V2 step 19 (2026-11-14), waiting for the team's pass"
   },
   "fuel": {

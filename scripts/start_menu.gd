@@ -104,7 +104,7 @@ func build_menu() -> void:
 	add_menu_button(column, words["leaderboard"], Hud.open_page.bind("leaderboard"))
 	add_menu_button(column, words["controls"], Hud.open_page.bind("controls"))
 	add_menu_button(column, words["settings"], Hud.open_page.bind("settings"))
-	add_menu_button(column, words["credits"], Hud.open_page.bind("credits"))
+	# Credits button removed 2026-11-15 (team request).
 
 	var filler := Control.new()
 	filler.size_flags_vertical = Control.SIZE_EXPAND_FILL
