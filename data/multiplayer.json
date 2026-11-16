@@ -1,0 +1,56 @@
+{
+  "_readme": "MULTIPLAYER_PLAN_V6 (2026-11-15): every number for parties, bots, voting and difficulty by team size. Read by scripts/autoload/Party.gd and Net.gd. Words are in story.json \"party\". relay_url = the internet relay (must start with wss:// for the web build on https). While it says PLACEHOLDER the game uses local_relay_url (a relay running on this computer: serve_relay.ps1).",
+  "relay_url": "PLACEHOLDER: the coach fills this in. It starts with wss://",
+  "local_relay_url": "ws://localhost:9080",
+  "relay_port": 9080,
+  "connect_timeout_seconds": 15,
+  "max_players": 4,
+  "vote_seconds": 60,
+  "tie_revote_seconds": 20,
+  "ready_go_anyway_seconds": 20,
+  "_ready_readme": "Ready checks (DEFAULT): a screen moves on when every human is ready. After ready_go_anyway_seconds the party leader gets a quiet 'Go anyway' button.",
+  "score_wait_seconds": 30,
+  "_score_wait_readme": "Minigames (DEFAULT, the plan said 15 s after time is up): once the party leader has a score, a player who has not sent theirs within score_wait_seconds gets 0, so nobody waits forever. Each new score that arrives starts the wait again.",
+  "scaling": {
+    "_readme": "Harder with more players (bots count as players). ship_problems = how many times the ship's emergencies; supply_drain = how much faster the life bars and crew supplies go down; data_goal = how many times the data target. The first two columns are Holden's numbers; data_goal is a DEFAULT.",
+    "1": { "ship_problems": 1, "supply_drain": 1.0, "data_goal": 1 },
+    "2": { "ship_problems": 2, "supply_drain": 1.2, "data_goal": 2 },
+    "3": { "ship_problems": 3, "supply_drain": 1.3, "data_goal": 3 },
+    "4": { "ship_problems": 4, "supply_drain": 1.4, "data_goal": 4 },
+    "source": "Game-design choice (Holden's note, 2026-11-15). Amy playtests and tunes it."
+  },
+  "bots": {
+    "_readme": "What bots do. Everyone is on ONE ship (2026-11-15): bots walk there and work at the stations. walk_speed in meters per second; a bot does a calm task nobody took after take_routine_after_seconds, in routine_seconds. On the planet a bot takes a task nobody is on after take_planet_task_after_seconds (a task whose instrument was not packed too: it walks there and tells the team); with nothing to do it wanders (wander_radius meters around an open task spot or the player, pausing wander_pause_min to max seconds) (press_seconds / hold_seconds of work; a send takes the mission's send base_seconds) and goes straight on to the next step of a chain it started. minigame scores: a random whole number from min to max, new for each minigame (Holden). A bot takes a ship problem nobody has started after take_problem_after_seconds and fixes it in fix_problem_in_seconds (DEFAULT). data_share_min/max = each bot gathers this share of one player's data target during the flight, at a steady pace (DEFAULT, same 85-100% as the minigames).",
+    "minigame_score_min": 85,
+    "minigame_score_max": 100,
+    "take_problem_after_seconds": 5,
+    "fix_problem_in_seconds": 10,
+    "take_routine_after_seconds": 12,
+    "routine_seconds": 4,
+    "walk_speed": 3.0,
+    "take_planet_task_after_seconds": 3,
+    "wander_radius": 3.0,
+    "wander_pause_min": 1.5,
+    "wander_pause_max": 3.5,
+    "press_seconds": 2,
+    "hold_seconds": 6,
+    "data_share_min": 0.85,
+    "data_share_max": 1.0,
+    "source": "Game-design choice (Holden's note + MULTIPLAYER_PLAN_V6 defaults, 2026-11-15)."
+  },
+  "ship_sync": {
+    "_readme": "The shared ship (2026-11-15). sends_per_second = how often each computer sends where its player stands, and the leader sends the ship (tasks, life bars, trip progress, bots). name_tag_height = meters above a teammate's feet for their name.",
+    "sends_per_second": 5,
+    "name_tag_height": 2.2,
+    "source": "Game-design choice (2026-11-15)."
+  },
+  "code": {
+    "_readme": "Party codes: length letters from letters (no vowels and no look-alike letters, so a code cannot spell a word). The relay makes the codes.",
+    "length": 4,
+    "letters": "BCDFGHJKMNPQRSTVWXZ"
+  },
+  "debug": {
+    "_readme": "Testing with bots on one computer (MULTIPLAYER_PLAN_V6 A4/A5): fake_vote_key casts a fake human vote in a vote, or flips a fake human's GO / NO-GO on the launch pad. It only works in a bots party.",
+    "fake_vote_key": "F8"
+  }
+}

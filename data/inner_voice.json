@@ -165,8 +165,8 @@
     "player_count": {
       "_readme": "What the inner voice says after the player picks how many players. One line per number.",
       "1": "Just me. Every build job is mine. No pressure. Lots of pressure.",
-      "2": "Two of us. We take turns, and our scores get averaged. Teamwork!",
-      "3": "Three of us. Everybody gets a turn at every job.",
+      "2": "Two of us. We vote on every part, and our scores get averaged. Teamwork!",
+      "3": "Three of us. Everybody votes, everybody builds.",
       "4": "A team of four. That's a real mission crew."
     },
     "character": {

@@ -76,6 +76,13 @@ func _ready() -> void:
 	GameState.start_arrival()
 	refresh_task_list()
 	inner_voice.say(voice["start"])
+	# The party on the same planet (bots walk to the tasks; other players show as their characters).
+	if ship_builder != null:
+		room_rects = ship_builder.room_rects
+	crew = PLANET_CREW.new()
+	world.add_child(crew)
+	crew.setup(self)
+	Party.ship_note.connect(_on_planet_note)
 
 
 # Nothing on top covers the task list (it starts under the Hud's hint bar and
@@ -594,7 +601,7 @@ func _on_spot_entered(body: Node3D, spot_id: String) -> void:
 	# Reach tasks are done just by standing here.
 	for task in tasks_at(spot_id):
 		if task["type"] == "reach" and state[task["id"]] == "open" and ready_now(task):
-			finish_task(task)
+			player_did(task)
 	# Discover a missing instrument here: say why the task can't be done.
 	for task in tasks_at(spot_id):
 		if state[task["id"]] == "open" and not instrument_ok(task):
@@ -784,11 +791,13 @@ var ice_left: float = -1.0        # seconds left (-1 = no ice yet)
 var ice_cube: MeshInstance3D
 var ice_locked: bool = false      # true once the analyzer has started
 
-func start_ice() -> void:
+func start_ice(in_my_hands: bool = true) -> void:
 	var info: Dictionary = Data.extras["ice_race"]
 	ice_left = float(info["vanish_seconds"])
 	ice_locked = false   # a new sample: the race starts again (C4)
 	GameState.ice_share = 1.0
+	if not in_my_hands:
+		return   # a teammate drilled it: the timer runs, the cube is in their hands
 	var cube := BoxMesh.new()
 	var s: float = info["carry_size"]
 	cube.size = Vector3(s, s, s)
@@ -846,7 +855,7 @@ func let_go(task: Dictionary) -> void:
 	GameState.drill_tries += 1
 	if hold_value >= task["green_start"] and hold_value <= task["green_end"]:
 		drill_meter.visible = false
-		finish_task(task)
+		player_did(task)
 	elif hold_value < task["green_start"]:
 		inner_voice.say(task_voice(task["id"], "early"))
 	else:
@@ -858,7 +867,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var task: Dictionary = current_task()
 		if not task.is_empty():
 			if task["type"] == "press":
-				finish_task(task)
+				player_did(task)
 			elif task["type"] == "send":
 				start_send(task)
 	# Enter (the "confirm" key) leaves once every task is done or can't be done.
@@ -902,22 +911,25 @@ func update_send(delta: float) -> void:
 		sending = ""
 		send_bar.visible = false
 		var share: float = GameState.ice_share if text_of(task["id"]) == Data.extras["ice_race"]["send_task"] else 1.0
-		GameState.data_sent += task.get("data_gb", 0.0) * share   # the data counts in the report (less if the ice vanished)
 		if share < 1.0 and ice_cube != null:
 			ice_cube.queue_free()
 			ice_cube = null
-		finish_task(task)
+		player_did(task)
 
 
-func finish_task(task: Dictionary) -> void:
+# mine = I did it here (my voice line, the ice cube in my hands); otherwise a
+# teammate did it and a short flash says who.
+func finish_task(task: Dictionary, mine: bool = true, who: String = "") -> void:
 	state[task["id"]] = "done"
 	make_done_prop(task["id"])
 	Sfx.play("good")
 	var line: String = task_voice(task["id"], "ok")
-	if line != "":
+	if mine and line != "":
 		inner_voice.say(line)
+	elif not mine and who != "":
+		Hud.flash(Data.story["party"]["planet_did"].format({"name": who, "task": task_label(task)}))
 	if text_of(task["id"]) == Data.extras["ice_race"]["after_task"]:
-		start_ice()   # Race the ice: the sample starts turning to gas
+		start_ice(mine)   # Race the ice: the sample starts turning to gas
 	elif text_of(task["id"]) == Data.extras["ice_race"]["send_task"]:
 		if ice_cube != null:
 			ice_cube.queue_free()
@@ -1035,6 +1047,117 @@ func leave() -> void:
 	StageManager.go_next()
 
 
+# --- The shared planet (2026-11-15) ---------------------------------------------
+# The whole party walks ONE planet and works on ONE task list. Online, the party
+# leader's game owns it: it counts every finished task (and the data it sends
+# home), moves the bots, and sends the planet state 5 times a second. The others
+# show that state and tell the leader when they finish a task ("planet_do").
+# A bots party is one computer, like a leader. Solo: nothing here changes anything.
+
+const PLANET_CREW = preload("res://scripts/planet_crew.gd")
+
+var crew: Node3D                  # planet_crew.gd: teammates and the bots' jobs
+var room_rects: Dictionary = {}   # Venus (on the ship): the rooms, so bots find the doors
+
+
+func is_client() -> bool:
+	return Party.is_online() and not Party.is_leader()
+
+
+func to_rect(box: Dictionary) -> Rect2:
+	return ship_builder.to_rect(box)
+
+
+func task_by_id(task_id: String) -> Dictionary:
+	for task in tasks:
+		if task["id"] == task_id:
+			return task
+	return {}
+
+
+# The data a finished send task sends home (less when the Mars ice melted).
+func credit_send(task: Dictionary, seat: int) -> void:
+	if task["type"] != "send":
+		return
+	var share: float = 1.0
+	if text_of(task["id"]) == Data.extras["ice_race"]["send_task"] and ice_left >= 0.0:
+		share = GameState.ice_share if ice_locked else ice_share_now()
+	var gb: float = float(task.get("data_gb", 0.0)) * share
+	GameState.data_sent += gb   # the data counts in the report
+	if seat != Party.my_seat:
+		Party.note_bot_data(seat, gb)   # on that teammate's report line, not mine
+
+
+# I finished a task here.
+func player_did(task: Dictionary) -> void:
+	if is_client():
+		Net.send({"t": "planet_do", "id": task["id"]}, Party.LEADER)
+		finish_task(task)   # shows at once; the leader's planet counts it for everyone
+		return
+	credit_send(task, Party.my_seat)
+	finish_task(task)
+
+
+# Leader / bots party: a bot or another player finished a task.
+func bot_did(task_id: String, seat: int) -> void:
+	var task: Dictionary = task_by_id(task_id)
+	if task.is_empty() or state[task_id] != "open" or not ready_now(task):
+		return
+	credit_send(task, seat)
+	finish_task(task, false, Party.seat_name(seat))
+
+
+# Leader / bots party: a bot walked to a task whose instrument we did not pack.
+# The same as a player finding out: those tasks fail, and the team is told why.
+func bot_found_missing(task: Dictionary, seat: int) -> void:
+	if task.is_empty() or state[task["id"]] != "open" or instrument_ok(task):
+		return
+	fail_missing(task["needs_instrument"])
+	Sfx.play("bad")
+	Hud.flash(Data.story["party"]["planet_missing"].format({"name": Party.seat_name(seat), "task": task_label(task)}))
+	after_task_change()
+
+
+func shared_state() -> Dictionary:
+	return {
+		"t": "planet", "state": state, "data": GameState.data_sent, "samples": GameState.ice_samples,
+		"ice_left": ice_left, "bots": crew.bot_positions(),
+	}
+
+
+func _on_planet_note(from_seat: int, data: Dictionary) -> void:
+	if not is_inside_tree():
+		return
+	var t: String = str(data.get("t", ""))
+	if t == "pos":
+		var p: Array = data.get("p", [0, 0, 0])
+		crew.set_target(from_seat, Vector3(float(p[0]), float(p[1]), float(p[2])), float(data.get("y", 0.0)))
+	elif t == "planet_do" and Party.is_leader():
+		bot_did(str(data["id"]), from_seat)
+	elif t == "planet" and from_seat == Party.LEADER and not Party.is_leader():
+		apply_planet_state(data)
+
+
+# Client: show the leader's planet. A task done here never goes back to open.
+func apply_planet_state(data: Dictionary) -> void:
+	var new_state: Dictionary = data.get("state", {})
+	var changed: bool = false
+	for task_id in new_state:
+		if not state.has(task_id) or state[task_id] == "done" or state[task_id] == new_state[task_id]:
+			continue
+		state[task_id] = str(new_state[task_id])
+		changed = true
+		if state[task_id] == "done":
+			make_done_prop(task_id)
+	GameState.data_sent = float(data.get("data", GameState.data_sent))
+	GameState.ice_samples = int(data.get("samples", GameState.ice_samples))
+	if ice_cube == null:
+		ice_left = float(data.get("ice_left", ice_left))   # the ice timer of a teammate's sample
+	crew.apply_bot_positions(data.get("bots", {}))
+	if changed:
+		after_task_change()
+
+
 # --- The Hud (Tab tablet, waypoints, goal; UPGRADE_PLAN_V2 steps 22-24) ---------
 
 # Tasks the player can walk to now (open, ready, instrument packed).
@@ -1055,7 +1178,11 @@ func get_tablet_map() -> Dictionary:
 		for room_id in ship_builder.room_rects:
 			rooms.append({"name": Data.story["ship"]["room_names"][room_id], "rect": ship_builder.room_rects[room_id]})
 		rooms.append({"name": "", "rect": ship_builder.to_rect(Data.game_data["ship"]["hallway"])})
-	return {"player": player.global_position, "yaw": player.rotation.y, "rooms": rooms, "points": open_spots()}
+	var points: Array = open_spots()
+	if crew != null:
+		for seat in crew.avatars:
+			points.append({"pos": crew.avatars[seat]["node"].global_position, "label": Party.seat_name(seat), "urgent": false})
+	return {"player": player.global_position, "yaw": player.rotation.y, "rooms": rooms, "points": points}
 
 
 func get_waypoints() -> Array:

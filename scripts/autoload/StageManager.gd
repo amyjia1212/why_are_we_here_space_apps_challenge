@@ -20,6 +20,9 @@ func go_next() -> void:
 	if next_index <= 0 or next_index >= order.size():
 		push_error("StageManager: there is no screen after '" + get_current() + "'")
 		return
+	# The party screen (MULTIPLAYER_PLAN_V6) is only for 2-4 players: solo skips it.
+	if order[next_index] == "party" and GameState.player_count <= 1:
+		next_index += 1
 	go_to(order[next_index])
 
 
@@ -29,6 +32,10 @@ func go_to(stage_id: String) -> void:
 	var stages: Dictionary = Data.game_data["stages"]
 	if not stages["order"].has(stage_id):
 		push_error("StageManager: '" + stage_id + "' is not in the stages list")
+		return
+	# In an online party, moving on means "I am ready": the party leader moves
+	# everyone together (Party.gd). A bots party moves at once, as before.
+	if Party.wants_stage(stage_id):
 		return
 	# Give the mouse back on every screen change. A 3D room locks it for looking
 	# around; the next screen may need it for buttons. Screens with a walking

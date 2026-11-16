@@ -124,6 +124,12 @@ func show_card(index: int) -> void:
 func card_lines(index: int) -> Array:
 	match index:
 		0:
+			if Party.is_party():
+				# A bigger crew: more problems, faster drain, more data (MULTIPLAYER_PLAN_V6 3a).
+				return [cards_words["why"], Data.story["party"]["crew_line"].format({
+					"n": Party.size(), "problems": GameState.fmt(Party.scale("ship_problems")),
+					"drain": GameState.fmt(Party.scale("supply_drain")), "data": GameState.fmt(Party.scale("data_goal")),
+				})]
 			return [cards_words["why"]]
 		1:
 			# The checklist by phase, one line per phase.

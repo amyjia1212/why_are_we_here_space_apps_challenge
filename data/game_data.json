@@ -4,7 +4,7 @@
     "_readme": "The order of the game screens. go_next() in StageManager.gd walks down this list, one screen at a time. Each name is a scene file in the scenes folder (cutscene_intro means scenes/cutscene_intro.tscn). To change the order, change this list. Nothing else needs to change. The first screen in the list must also be the main scene in Project Settings.",
     "source": "Game-design choice by the coach. It is NOT a NASA number.",
     "scene_folder": "res://scenes/",
-    "order": ["start_menu", "cutscene_intro", "name", "character_room", "player_count", "your_file", "mission_room", "mission_briefing", "mission_school", "design_room", "review", "minigame_assembly", "minigame_hammer", "minigame_fuel", "build_done", "launch", "flight", "landing", "arrival", "cutscene_return", "debrief"],
+    "order": ["start_menu", "cutscene_intro", "name", "character_room", "player_count", "party", "your_file", "mission_room", "mission_briefing", "mission_school", "design_room", "review", "minigame_assembly", "minigame_hammer", "minigame_fuel", "build_done", "launch", "flight", "landing", "arrival", "cutscene_return", "debrief"],
     "redesign_to": "design_room",
     "_retry_readme": "UPGRADE_PLAN_V6 B3 (2026-11-15): what Redesign does for each level. guided = keep the design; the Design Lab opens at the instruments station if a key instrument was forgotten, and amber arrows point at what to pick (Scientist). fresh = every choice is cleared and picked again from the first station (Janitor, Student). Team decision; replaces 'Try again keeps the part choices' for medium and hard.",
     "retry_by_level": { "easy": "guided", "medium": "fresh", "hard": "fresh" },

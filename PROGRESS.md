@@ -1,5 +1,52 @@
 # PROGRESS.md: where we stopped
 
+## Shared planet (2026-11-15 night, not committed yet): waiting for Holden's test
+
+| What changed | Key files |
+|---|---|
+| Online: the leader's game owns the planet's task list, data sent, ice samples and bots, and sends them 5x a second; the others send planet_do when they finish a task. A task done never goes back to open | `arrival.gd` (shared planet section: player_did, bot_did, credit_send, apply_planet_state), `Party.gd` |
+| Bots on the planet: walk to an open task nobody is on (3 s), do it, and go straight to the next step of their chain; with nothing to do they wander (never stand still); they report a task whose instrument was not packed; Venus uses the ship's doors and hallway. Fix after Holden's fail (bots stood still: 15 s wait, and tasks with an unpacked instrument were skipped) | new `scripts/planet_crew.gd` (extends `ship_crew.gd`), `multiplayer.json` bots |
+| Teammates on the planet with name tags and on the Tab map; a teammate's task flashes "Nova did it: …" | `arrival.gd`, `story.json` party > planet_did |
+| `arrival.gd` line endings made LF (the repo's .gitattributes rule) | |
+
+Self-checks (passed): compile check; bots on the Moon, Mars and Venus (they did every task, Mars drill → analyze straight away, Venus through the ship rooms); online leader + player + bot (the player's tasks show on the leader's planet and the leader's on theirs, checklist ticks on both); solo planet unchanged; screenshot of a bot walking to a seismometer.
+
+## Shared ship (2026-11-15 night, branch `multiplayer-v6`, not committed yet): waiting for Holden's test
+
+Holden: teammates (bots or people) must all be on the same ship working on the same tasks.
+
+| What changed | Key files |
+|---|---|
+| Online: the leader's game runs the one ship and sends it 5x a second (tasks, life bars, trip progress, bots, data, cash). Others send ship_do / ship_need; the leader does the job for everyone and the log says who fixed it | `flight.gd` (shared ship section: do_task, ask_leader, apply_ship_state, refill_need), `Party.gd` ship_note |
+| Teammates on the ship: bots and other players as their characters with a fixed-size name tag; also dots on the Tab map | new `scripts/ship_crew.gd`, `flight.gd` get_tablet_map |
+| Bots walk room door → hallway → room door to the station, fix problems nobody started (5 s, then 10 s at the station) and do calm tasks nobody took (12 s, then 4 s) | `ship_crew.gd`, `multiplayer.json` bots + ship_sync |
+| Problems x party size on the one ship; online a job/talk/Clean Room no longer pauses the trip; only the leader skips; a life bar at 0 restarts the trip for everyone | `flight.gd`, `Party.gd` |
+
+Self-checks (passed): compile check; bots party on the ship (a bot walked Bridge → hallway → Life Support and fixed the air filter; it also took a calm task); solo flight unchanged (no teammates, normal problem count); online leader + player + bot (the player sees the leader's problem, fixes it, it is gone on the leader's ship and credited to them; a refill reaches the leader; each sees the other and the bot); the earlier online test still passes; screenshots of bots on the ship.
+
+## Multiplayer V6 (2026-11-15 evening, branch `multiplayer-v6`): Phase A + Phase B built, waiting for Holden's test
+
+Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: `AGENT_SOURCE.md` section 2 (multiplayer lines).
+
+| Step | What changed | Key files |
+|---|---|---|
+| A1 | Party screen + lobby (create / join, other players or bots, seat rows with portrait and Waiting / Joined / Bot, "Fill with a bot", START when every seat is filled). 1 player skips it | `scenes/party.tscn`, `scripts/party.gd`, `scripts/autoload/Party.gd`, `StageManager.gd`, `game_data.json` stages, `story.json` party |
+| A2 | Harder with more players: ship problems, supply drain (life bars + crew supplies), data goal; bots fix untouched problems (5 s / 10 s) and gather data; briefing line "Crew of 3: …" | `data/multiplayer.json`, `flight.gd`, `GameState.gd` get_data_target / get_supply_use_per_day, `mission_briefing.gd` |
+| A3 | Minigames: everyone plays once on their own screen; bots roll 85-100; every score + the team average | `minigame_frame.gd` (minigame scenes unchanged) |
+| A4 | Votes in the Mission Room and Design Lab: Enter = my vote, dots over the nameplates, "2 of 3 votes in · 45 s", tie → revote → coin flip, instruments by majority. Test key F8 (bots party) = a fake human vote | `choice_room.gd`, `Party.gd` |
+| A5 | Launch pad crew rows (GO / NO-GO / …), "Say GO" button, GO FOR LAUNCH locked until all GO. F8 = a fake human flips NO-GO / GO. Ready checks = moving on together (below) | `launch.gd`, `Party.gd` |
+| A6 | Report: "The crew" box (build-job scores, problems fixed, data per player); leaderboard row with the party's names | `debrief.gd` |
+| B1 | Relay plan written (no sign-ups, nothing downloaded): Godot relay; the internet address waits for the coach | `relay/README.md`, `AGENT_SOURCE.md` |
+| B2 | Relay (`relay/relay.gd`, its own tiny project, ignored by the game) + `Net` autoload (WebSocketPeer) | `relay/`, `serve_relay.ps1`, `scripts/autoload/Net.gd` |
+| B3 | Move together: a screen that wants to move on = "I'm ready"; the leader moves everyone with its GameState (each keeps own name + character). "Go anyway" for the leader after 20 s | `Party.gd`, `StageManager.gd` |
+| B4 | Votes, minigame scores (0 after 30 s) and GO calls over the network | `Party.gd` |
+| B5 | Smaller version: each player flies their own ship (fair share of problems); data, ticked goals, problems fixed and launch damage (averaged) are merged when the screen ends | `Party.gd` merge_contribs, `flight.gd` |
+| B6 | Not built (first on the cut list) | |
+| B7 | Holden's test (below) | |
+
+Self-checks run (all passed): compile check of every changed script; bots-party logic test (scores, win, tie → revote → coin, timer restart, instruments, GO lock); scenes in a bots party (party, design room vote, assembly scores, launch lock, flight with 3x problems and a bot fix, report); solo check (1 player skips the party screen, no votes, no crew rows, normal problem count); relay test (create, join, lowercase code, messages, full, wrong code, leader left); two-process online test (join, lobby names, START, ready sync, tie vote, scores, leader leaves → start menu); three-process test (2 humans + bot, a player leaves → bot, late join → "already started", wrong code). Web export to `build/web` (relay not in the .pck). `docs/` not updated (only on push).
+
+
 ## Final copy (2026-11-15 afternoon): UPGRADE_PLAN_V6 A1, A2 + three team requests, waiting for Holden's test
 
 | Change | Key files |
