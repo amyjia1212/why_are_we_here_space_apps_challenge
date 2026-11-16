@@ -280,7 +280,86 @@ func plan_crew_emergencies() -> void:
 			if absf(float(Data.flight["events"][event_id]["at"]) - at) < 0.06:
 				at += 0.07
 		crew_plan.append({"at": at, "id": crew_ids[i]})
+	add_party_emergencies(design_fails + crew_plan.size(), crew_ids)
 	crew_plan.sort_custom(func(a, b): return a["at"] < b["at"])
+
+
+# A bigger party gets more problems (MULTIPLAYER_PLAN_V6 3a: multiplayer.json
+# scaling "ship_problems"). The trip stays the same length, so some come at
+# the same time. Online, each ship gets its fair share (Party.ship_problem_factor).
+func add_party_emergencies(base_count: int, crew_ids: Array) -> void:
+	var extra: int = base_count * (Party.ship_problem_factor() - 1)
+	for k in extra:
+		var at: float = 0.1 + 0.8 * (float(k) + 0.5) / float(extra)
+		var crew_id: String = crew_ids[k % crew_ids.size()]
+		crew_plan.append({"at": at, "id": crew_id, "key": "crew:" + crew_id + "#" + str(k + 2)})
+
+
+# Bots on this ship (MULTIPLAYER_PLAN_V6 3e): a bot takes a problem nobody has
+# started after a few seconds and fixes it; bots also gather their share of
+# the data at a steady pace during the trip.
+var bot_busy: Dictionary = {}          # bot seat -> task key it is fixing
+var bot_data_shares: Dictionary = {}   # bot seat -> share of one player's data target
+var bot_data_done: Dictionary = {}     # bot seat -> data it added on this trip
+
+
+func tick_bots(delta: float) -> void:
+	var bots: Array = Party.bots_on_my_ship()
+	if bots.is_empty():
+		return
+	var bot_rules: Dictionary = Data.mp["bots"]
+	var party_words: Dictionary = Data.story["party"]
+	for key in tasks.keys():
+		var task: Dictionary = tasks[key]
+		if not task.has("left"):
+			continue
+		task["age"] = float(task.get("age", 0.0)) + delta
+		if task.has("bot"):
+			task["bot_left"] -= delta
+			if task["bot_left"] <= 0.0:
+				bot_fixed(key, task)
+			continue
+		if task["age"] < float(bot_rules["take_problem_after_seconds"]) or fixing_key == key:
+			continue
+		for seat in bots:
+			if not bot_busy.has(seat):
+				bot_busy[seat] = key
+				task["bot"] = seat
+				task["bot_left"] = float(bot_rules["fix_problem_in_seconds"])
+				flight_log.add_line(party_words["bot_fixing"].format({"name": Party.seat_name(seat)}), "warn")
+				break
+	# The bots' data, at a steady pace through the trip (a skip adds the rest at once).
+	if bot_data_shares.is_empty():
+		for seat in bots:
+			bot_data_shares[seat] = randf_range(float(bot_rules["data_share_min"]), float(bot_rules["data_share_max"]))
+	var per_player: float = float(GameState.get_destination()["report"]["data_target_gb"])
+	var progress: float = clampf(flight_log.progress, 0.0, 1.0)
+	for seat in bot_data_shares:
+		var should: float = bot_data_shares[seat] * per_player * progress
+		var done: float = float(bot_data_done.get(seat, 0.0))
+		if should > done:
+			GameState.data_sent += should - done
+			Party.note_bot_data(seat, should - done)
+			bot_data_done[seat] = should
+
+
+func bot_fixed(key: String, task: Dictionary) -> void:
+	var seat: int = int(task["bot"])
+	bot_busy.erase(seat)
+	tasks.erase(key)
+	AudioManager.play_sfx("task_done")
+	if task["kind"] == "event":
+		flight_log.resolve_event(task["id"], true)
+	else:
+		flight_log.add_line(words["crew"][task["id"]]["fixed"], "good")
+	flight_log.add_line(Data.story["party"]["bot_fixed"].format({"name": Party.seat_name(seat)}), "good")
+	Party.note_fixed(seat)
+
+
+# A problem is gone (fixed by the player or missed): its bot is free again.
+func free_bot(task: Dictionary) -> void:
+	if task.has("bot"):
+		bot_busy.erase(int(task["bot"]))
 
 
 func _process(delta: float) -> void:
@@ -291,7 +370,8 @@ func _process(delta: float) -> void:
 	day_label.text = words["day"].format({"day": flight_log.get_day(), "days": flight_log.get_trip_days()})
 	if not arrived:
 		while not crew_plan.is_empty() and progress >= crew_plan[0]["at"]:
-			start_crew_emergency(crew_plan.pop_front()["id"])
+			var planned: Dictionary = crew_plan.pop_front()
+			start_crew_emergency(planned["id"], str(planned.get("key", "")))
 		if clean_state == "waiting" and progress >= float(Data.extras["clean_room"]["flight_at"]):
 			open_clean_task()
 		drain_needs(delta)
@@ -300,6 +380,7 @@ func _process(delta: float) -> void:
 			routine_clock = 0.0
 			open_routine_task()
 		tick_emergencies(delta)
+		tick_bots(delta)
 	update_near_station()
 	update_proper_fix(delta)
 	update_extras(delta)
@@ -371,11 +452,11 @@ func _on_emergency_started(event_id: String, _blanks: Dictionary) -> void:
 	add_emergency("event:" + event_id, "event", event_id, info, text)
 
 
-func start_crew_emergency(crew_id: String) -> void:
+func start_crew_emergency(crew_id: String, key: String = "") -> void:
 	var info: Dictionary = rules["crew"][crew_id]
 	var text: Dictionary = words["crew"][crew_id]
 	flight_log.add_line(text["log"], "warn")
-	add_emergency("crew:" + crew_id, "crew", crew_id, info, text)
+	add_emergency(key if key != "" else "crew:" + crew_id, "crew", crew_id, info, text)
 
 
 func add_emergency(key: String, kind: String, id: String, info: Dictionary, text: Dictionary) -> void:
@@ -396,6 +477,7 @@ func tick_emergencies(delta: float) -> void:
 		task["left"] -= delta
 		if task["left"] <= 0.0:
 			tasks.erase(key)
+			free_bot(task)
 			miss_emergency(task)
 
 
@@ -426,14 +508,17 @@ func use_station(station_id: String) -> void:
 		start_cleaning()   # the task stays open until the minigame is finished
 		return
 	tasks.erase(key)
+	free_bot(task)
 	AudioManager.play_sfx("task_done")
 	match task["kind"]:
 		"event":
 			flight_log.resolve_event(task["id"], true)
 			inner_voice.say(Data.voice["extras"]["proper_fix"] + moment_text(task["id"]))
+			Party.note_fixed(Party.my_seat)
 		"crew":
 			flight_log.add_line(words["crew"][task["id"]]["fixed"], "good")
 			inner_voice.say(Data.voice["extras"]["proper_fix"] + moment_text(task["id"]))
+			Party.note_fixed(Party.my_seat)
 		"routine":
 			GameState.data_sent += float(rules["routine_data_gb"])
 			flight_log.add_line(words["task_log"].format({"task": task["task"]}), "good")
@@ -561,6 +646,7 @@ func skip_to_arrival() -> void:
 func _on_trip_finished() -> void:
 	if arrived:
 		return
+	tick_bots(0.0)   # the bots finish their share of the data (also after a skip)
 	arrived = true
 	for key in tasks.keys():
 		if tasks[key]["kind"] == "routine":
@@ -681,6 +767,8 @@ func update_proper_fix(delta: float) -> void:
 func quick_fix(key: String) -> void:
 	var task: Dictionary = tasks[key]
 	tasks.erase(key)
+	free_bot(task)
+	Party.note_fixed(Party.my_seat)
 	AudioManager.play_sfx("task_done")
 	if task["kind"] == "event":
 		flight_log.resolve_event(task["id"], true)
@@ -1034,7 +1122,7 @@ func drain_needs(delta: float) -> void:
 	var info: Dictionary = Data.supplies["needs"]
 	var seconds: float = maxf(flight_log.trip_seconds, 1.0)
 	for need_id in needs:
-		needs[need_id] = maxf(needs[need_id] - float(info["bars"][need_id]["empties_per_trip"]) * 100.0 * delta / seconds, 0.0)
+		needs[need_id] = maxf(needs[need_id] - float(info["bars"][need_id]["empties_per_trip"]) * 100.0 * delta / seconds * Party.scale("supply_drain"), 0.0)
 		if needs[need_id] <= 0.0:
 			fail_trip(need_id)
 			return

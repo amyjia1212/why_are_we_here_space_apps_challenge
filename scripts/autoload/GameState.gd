@@ -611,7 +611,7 @@ func get_report_score() -> Dictionary:
 		progress_sum += 1.0 if goals[goal_id] == "done" else goal_progress.get(goal_id, 0.0)
 	parts["goals"] = weights["goals"] * (progress_sum / goals.size() if goals.size() > 0 else 0.0)
 
-	var target: float = get_destination()["report"]["data_target_gb"]
+	var target: float = get_data_target()
 	parts["data"] = weights["data"] * clampf(data_sent / target, 0.0, 1.0)
 
 	# Resources: a green row earns full points, a yellow row (close to the
@@ -643,6 +643,12 @@ func get_report_score() -> Dictionary:
 		parts["dictionary"] = mini(bonus, most - total)
 		total += parts["dictionary"]
 	return {"parts": parts, "total": total, "max": most}
+
+
+# The data to send home for full points. A bigger party must gather more
+# (MULTIPLAYER_PLAN_V6 3a: multiplayer.json scaling "data_goal"; solo = x1).
+func get_data_target() -> float:
+	return float(get_destination()["report"]["data_target_gb"]) * Party.scale("data_goal")
 
 
 # The average of the three minigame team scores (0-100).
@@ -755,6 +761,7 @@ func clear_supplies() -> void:
 # How much the whole crew uses in one game day.
 func get_supply_use_per_day(id: String) -> float:
 	var use: float = Data.supplies["per_person_per_day"][id]["value"] * Data.supplies["crew_size"]["value"]
+	use *= Party.scale("supply_drain")   # a bigger party drains faster (MULTIPLAYER_PLAN_V6 3a; solo = x1)
 	if id == "food" and rationing:
 		use *= Data.supplies["tasks"]["ration"]["food_use_factor"]["value"]
 	return use

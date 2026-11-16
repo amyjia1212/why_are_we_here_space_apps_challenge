@@ -30,6 +30,7 @@ var nasa: Dictionary = {}    # from data/nasa_resources.json: NASA resources, se
 var extras: Dictionary = {}  # from data/extras.json: the extra features (launch window, patch, clean room...)
 var crew: Dictionary = {}    # from data/crew.json: the real astronauts on the ship (UPGRADE_PLAN_V6 C1)
 var achievements: Dictionary = {}   # from data/achievements.json (UPGRADE_PLAN_V6 C3)
+var mp: Dictionary = {}   # from data/multiplayer.json: parties, bots, voting, team-size scaling (MULTIPLAYER_PLAN_V6)
 
 
 # _ready() runs automatically when this node starts.
@@ -51,6 +52,7 @@ func _ready() -> void:
 	extras = load_json("res://data/extras.json")
 	crew = load_json("res://data/crew.json")
 	achievements = load_json("res://data/achievements.json")
+	mp = load_json("res://data/multiplayer.json")
 
 	resources = game_data.get("resources", {})
 	parts = game_data.get("parts", {})

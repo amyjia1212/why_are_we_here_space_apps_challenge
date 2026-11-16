@@ -132,6 +132,9 @@ func get_workshop() -> Node:
 func finish_turn(score: int) -> void:
 	playing = false
 	score = clampi(score, 0, 100)
+	if Party.is_party():
+		finish_party_turn(score)
+		return
 	GameState.add_minigame_score(game_id, score)
 	print(game_id, ": ", GameState.get_player_label(player_index), " scored ", score)
 	timer_label.text = ""
@@ -146,7 +149,40 @@ func finish_turn(score: int) -> void:
 
 
 func player_total() -> int:
+	if Party.is_party():
+		return 1   # in a party everyone plays at the same time on their own screen
 	return maxi(GameState.player_count, 1)
+
+
+# A party (MULTIPLAYER_PLAN_V6 3d): send my one score, wait for everyone's
+# (the bots' are rolled by the party leader), then show every score and the average.
+func finish_party_turn(score: int) -> void:
+	print(game_id, ": I scored ", score)
+	timer_label.text = ""
+	AudioManager.play_sfx("done")
+	show_overlay(words["your_score"].format({"player": GameState.get_player_label(0), "score": score}), Data.story["party"]["scores_wait"], words["results_button"], "waiting")
+	overlay_button.visible = false
+	if not Party.scores_ready.is_connected(_on_party_scores):
+		Party.scores_ready.connect(_on_party_scores)
+	Party.submit_score(game_id, score, embedded)
+
+
+func _on_party_scores(id: String) -> void:
+	if id != game_id or not is_inside_tree():
+		return
+	Party.scores_ready.disconnect(_on_party_scores)
+	overlay_button.visible = true
+	show_results()
+
+
+# A name on the results list: party seats (bots tagged), or Player 1, 2...
+func result_name(index: int) -> String:
+	if Party.is_party():
+		var name: String = Party.seat_name(index)
+		if Party.is_bot(index):
+			name += " " + Data.story["party"]["bot_tag"]
+		return name
+	return GameState.get_player_label(index)
 
 
 # The turn card. The first time this minigame is played it is the full
@@ -179,7 +215,7 @@ func show_results() -> void:
 	var lines: PackedStringArray = []
 	var scores: Array = GameState.minigame_scores[game_id]
 	for i in scores.size():
-		lines.append(words["result_line"].format({"player": GameState.get_player_label(i), "score": scores[i]}))
+		lines.append(words["result_line"].format({"player": result_name(i), "score": scores[i]}))
 	var average: String = GameState.fmt(GameState.get_team_score(game_id))
 	lines.append("")
 	lines.append(words["average_line"].format({"score": average}))

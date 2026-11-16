@@ -113,6 +113,10 @@ func _ready() -> void:
 	fill_poll()
 	build_peanut_jar()
 	inner_voice.say(voice_lines["start"])
+	if Party.is_party():
+		Party.go_calls_changed.connect(_on_go_calls_changed)
+		Party.launch_now.connect(_on_launch_now)
+		update_go_lock()
 
 
 func alive() -> bool:
@@ -578,6 +582,89 @@ func fill_poll() -> void:
 	warning.text = words["all_go"] if reasons.is_empty() else words["caution_line"].format({"reason": reasons[0]})
 	warning.add_theme_color_override("font_color", warning.get_theme_color("go_color" if reasons.is_empty() else "caution_color", &"Status"))
 	poll_box.add_child(warning)
+	if Party.is_party():
+		add_crew_rows()
+
+
+# ---------- the crew rows (MULTIPLAYER_PLAN_V6 3c) ----------
+# One row per player: GO, NO-GO or not decided yet. Bots always say GO.
+# GO FOR LAUNCH stays locked until every row says GO.
+
+var crew_box: VBoxContainer
+var call_button: Button
+
+
+func add_crew_rows() -> void:
+	crew_box = VBoxContainer.new()
+	poll_box.add_child(crew_box)
+	call_button = Button.new()
+	call_button.theme_type_variation = &"SmallButton"
+	call_button.pressed.connect(_on_call_pressed)
+	poll_box.add_child(call_button)
+	# At the top of the poll (under its title), so everyone sees why GO is locked.
+	poll_box.move_child(crew_box, 1)
+	poll_box.move_child(call_button, 2)
+	fill_crew_rows()
+
+
+func fill_crew_rows() -> void:
+	if crew_box == null or not is_instance_valid(crew_box):
+		return
+	var party_words: Dictionary = Data.story["party"]
+	for child in crew_box.get_children():
+		child.queue_free()
+	var title := Label.new()
+	title.theme_type_variation = &"AccentText"
+	title.text = party_words["crew_title"]
+	crew_box.add_child(title)
+	for seat in Party.seats.size():
+		var call: String = Party.go_call(seat)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		crew_box.add_child(row)
+		var badge := Label.new()
+		badge.theme_type_variation = &"TableText"
+		badge.custom_minimum_size.x = 104
+		badge.text = party_words["crew_go"] if call == "go" else (party_words["crew_nogo"] if call == "nogo" else party_words["crew_undecided"])
+		if call != "":
+			badge.add_theme_color_override("font_color", badge.get_theme_color("go_color" if call == "go" else "danger_color", &"Status"))
+		row.add_child(badge)
+		var line := Label.new()
+		line.theme_type_variation = &"TinyText"
+		line.text = Party.seat_name(seat) + ((" " + party_words["bot_tag"]) if Party.is_bot(seat) and not Party.fake_humans.has(seat) else "")
+		row.add_child(line)
+	if not Party.all_go():
+		var locked := Label.new()
+		locked.theme_type_variation = &"TinyText"
+		locked.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		locked.text = party_words["go_locked"]
+		crew_box.add_child(locked)
+	if call_button != null and is_instance_valid(call_button):
+		call_button.text = party_words["say_nogo"] if Party.go_call(Party.my_seat) == "go" else party_words["say_go"]
+
+
+func _on_call_pressed() -> void:
+	AudioManager.play_sfx("preview")
+	Party.set_go_call("nogo" if Party.go_call(Party.my_seat) == "go" else "go")
+
+
+func _on_go_calls_changed() -> void:
+	if is_inside_tree():
+		fill_crew_rows()
+		update_go_lock()
+
+
+func update_go_lock() -> void:
+	if go_button == null or not go_button.visible:
+		return
+	go_button.disabled = not Party.all_go()
+	go_button.tooltip_text = "" if Party.all_go() else Data.story["party"]["go_locked"]
+
+
+# Everyone said GO and someone pressed GO FOR LAUNCH: every screen launches now.
+func _on_launch_now() -> void:
+	if is_inside_tree() and go_button.visible:
+		start_launch()
 
 
 func add_poll_row(item_id: String, detail: String, go: bool) -> void:
@@ -652,6 +739,13 @@ func _draw_plush() -> void:
 
 
 func _on_go_pressed() -> void:
+	if Party.is_party():
+		Party.request_launch()   # every crew row must say GO first
+		return
+	start_launch()
+
+
+func start_launch() -> void:
 	if weather_amber:
 		ask_weather()
 		return
@@ -811,6 +905,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		eat_peanut()
 		get_viewport().set_input_as_handled()
+	elif Party.mode == "bots" and go_button.visible and event is InputEventKey and event.pressed and not event.echo and event.keycode == OS.find_keycode_from_string(str(Data.mp["debug"]["fake_vote_key"])):
+		Party.flip_fake_go()   # test key: a fake human says NO-GO / GO (MULTIPLAYER_PLAN_V6 A5)
 
 
 # ---------- the launch, beat by beat ----------
