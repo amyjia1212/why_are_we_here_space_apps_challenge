@@ -85,6 +85,8 @@ func _ready() -> void:
 	build_room()
 	build_wall()
 	build_ui()
+	if party_votes():
+		build_vote_ui()
 	spawn_player()
 	# Toy-like staff walk along the sides of the room and wave (step 27).
 	Bots.spawn_walkers(self, settings.get("bot_routes", []))
@@ -552,6 +554,9 @@ func load_category(index: int) -> void:
 	if previous_button != null:
 		previous_button.visible = index > 0
 	update_retry_marks()
+	if party_votes():
+		Party.begin_vote(cat, options, cat == "instruments")
+		refresh_votes()
 	if cat == "character" or cat == "mission":
 		inner_voice.say(words["nothing_previewed"])
 	elif room_kind == "design":
@@ -724,6 +729,16 @@ func build_pedestals() -> void:
 		area.set_meta("index", i)
 		root.add_child(area)
 		pedestals.append({"root": root, "id": id, "ring": ring, "label": plate["node"], "plate": plate, "holder": holder})
+		if party_votes():
+			# One dot per vote, just above the nameplate (MULTIPLAYER_PLAN_V6 3b).
+			var dots := Label3D.new()
+			dots.font_size = 64
+			dots.pixel_size = float(settings.get("nameplate_letter", 0.0042))
+			dots.outline_size = 8
+			dots.modulate = Color(1, 0.6, 0.2)
+			dots.position = Vector3(0, 0.36, 0.03)
+			plate["node"].add_child(dots)
+			pedestals[-1]["dots"] = dots
 	refresh_pedestals()
 
 
@@ -974,6 +989,7 @@ func refresh_display() -> void:
 
 func _process(delta: float) -> void:
 	bounce_retry_marks()
+	_process_votes()   # the vote countdown (party only)
 	if display_model != null:
 		display_model.rotation.y += delta * float(settings["turn_speed"])   # the floating model turns slowly
 	float_time += delta
@@ -1473,6 +1489,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		confirm()
 	elif event.is_action_pressed("go_back"):
 		go_back()
+	elif party_votes() and Party.mode == "bots" and event is InputEventKey and event.pressed and not event.echo and event.keycode == OS.find_keycode_from_string(str(Data.mp["debug"]["fake_vote_key"])):
+		Party.cast_fake_vote(get_value(category()))   # test key: a fake human vote (MULTIPLAYER_PLAN_V6 A4)
 	elif event.is_action_pressed("office_hours") and room_kind == "design":
 		# Office Hours: the MDL's name for a quick brainstorm; the inner voice gives a hint (N3).
 		AudioManager.play_sfx("preview")
@@ -1570,6 +1588,20 @@ func confirm() -> void:
 		AudioManager.play_sfx("bad")
 		prompt_label.text = words["prompt_locked"]
 		return
+	if party_votes():
+		# In a party, Enter is my vote; the party's pick comes back in _on_vote_done.
+		if not Party.vote_open:
+			return
+		AudioManager.play_sfx("confirm")
+		Party.cast_vote(cat, get_value(cat))
+		refresh_votes()
+		return
+	finish_confirm()
+
+
+# The choice is final (solo: Enter; party: the vote ended).
+func finish_confirm() -> void:
+	var cat: String = category()
 	AudioManager.play_sfx("confirm")
 	snapshot = get_value(cat)
 	report_cml(cat)
@@ -1595,6 +1627,83 @@ func confirm() -> void:
 				leave_after(float(settings["read_seconds"]) * 0.6)
 			else:
 				load_category(cat_index + 1)
+
+
+# ---------- party votes (MULTIPLAYER_PLAN_V6 3b) ----------
+# Every choice after the party forms is a vote. Preview with 1/2/3 as always;
+# Enter locks my vote (it can change until the vote ends). Party.gd counts the
+# votes; the dots over the nameplates and the top line show how it is going.
+
+var vote_label: Label
+
+
+func party_votes() -> bool:
+	return Party.is_party() and room_kind != "character"
+
+
+func build_vote_ui() -> void:
+	Party.votes_changed.connect(_on_votes_changed)
+	Party.vote_done.connect(_on_vote_done)
+	var chip := PanelContainer.new()
+	chip.theme_type_variation = &"HintPanel"
+	chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip.anchor_left = 0.5
+	chip.anchor_right = 0.5
+	chip.offset_top = 16
+	chip.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	inner_voice.get_parent().add_child(chip)   # the UI layer
+	vote_label = Label.new()
+	vote_label.theme_type_variation = &"AccentText"
+	vote_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	chip.add_child(vote_label)
+
+
+func _on_votes_changed(cat: String) -> void:
+	if is_inside_tree() and cat == category():
+		refresh_votes()
+
+
+func refresh_votes() -> void:
+	if vote_label == null:
+		return
+	var cat: String = category()
+	var party_words: Dictionary = Data.story["party"]
+	var tally: Dictionary = Party.vote_tally(cat)
+	for p in pedestals:
+		if p.has("dots"):
+			var count: int = int(tally.get(p["id"], 0))
+			var tied_out: bool = Party.vote_round > 0 and not Party.vote_options.has(p["id"])
+			(p["dots"] as Label3D).text = "" if tied_out else "●".repeat(count)
+	var lines: PackedStringArray = []
+	lines.append(party_words["votes_in"].format({"count": Party.vote_count(cat), "total": Party.human_seats().size(), "seconds": maxi(int(ceil(Party.vote_left)), 0)}))
+	var mine = Party.my_vote(cat)
+	if Party.vote_round > 0:
+		lines.append(party_words["revote"])
+	elif mine != null:
+		lines.append(party_words["vote_locked"].format({"name": category_name(cat) if mine is Array else option_name(cat, str(mine))}))
+	else:
+		lines.append(party_words["vote_hint_instruments" if cat == "instruments" else "vote_hint"])
+	vote_label.text = "\n".join(lines)
+
+
+func _process_votes() -> void:
+	if vote_label != null and Party.vote_open and not busy:
+		refresh_votes()
+
+
+# The vote ended: the party's pick snaps on and everyone moves on together.
+func _on_vote_done(cat: String, value, how: String) -> void:
+	if not is_inside_tree() or cat != category() or busy:
+		return
+	set_value(cat, value)
+	previewed = true
+	refresh_pedestals()
+	refresh_display()
+	refresh_wall()
+	var party_words: Dictionary = Data.story["party"]
+	var picked: String = category_name(cat) if value is Array else option_name(cat, str(value))
+	Hud.flash(party_words["vote_coin" if how == "coin" else "vote_win"].format({"name": picked}))
+	finish_confirm()
 
 
 # The Concept Maturity Level meter (N2): what this confirm means for the idea.
@@ -1642,7 +1751,7 @@ func say_confirm_line(cat: String) -> void:
 func go_back() -> void:
 	if busy:
 		return   # the room is already leaving
-	if cat_index == 0:
+	if cat_index == 0 or party_votes():   # a party moves forward together (no going back)
 		AudioManager.play_sfx("cancel")
 		return
 	set_value(category(), snapshot)

@@ -77,8 +77,24 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
   Why: PLAN.md §2 and §10 (2026-11-11)
 - **Return to Earth: the team makes the cutscene later. For now, `cutscene_return.tscn` is a slot that shows one line of text and moves on.**
   Why: PLAN.md §2 and §11 (2026-11-11)
-- **Multiplayer: Amy's version. Every player plays each minigame, and the scores are averaged. True online multiplayer (each player on their own computer) is built last. Fallback: pass-the-keyboard turns on one computer if online play is not solid by Sunday noon.**
-  Why: PLAN.md §2 and §7 (2026-11-11)
+- **Multiplayer (MULTIPLAYER_PLAN_V6, team decision 2026-11-15): each player on their own computer, joined by a 4-letter party code; or 2-4 seats on one computer filled with bots (no internet). 1 player = solo, exactly as before, with no party screen.**
+  Why: Holden's note, written up as MULTIPLAYER PLAN V6 (2026-11-15).
+- **Everyone votes on every choice after the party forms (mission, rocket, orbit, launch date, the seven parts, instruments). Most votes wins. Tie: "Tie! Talk it over.", one 20-second revote, then a coin flip (DEFAULT). Instruments: in when more than half the party wants it; exactly half = coin flip (DEFAULT, no revote for instruments).**
+  Why: Holden's note (2026-11-15); tie rule = plan DEFAULT.
+- **Every player must say GO before GO FOR LAUNCH unlocks. Bots always say GO.**
+  Why: Holden's note (2026-11-15).
+- **Harder with more players (bots count): ship problems x1/x2/x3/x4, supplies drain x1.0/1.2/1.3/1.4, data goal x1/x2/x3/x4 (data column = DEFAULT). All in data/multiplayer.json.**
+  Why: Holden's note (2026-11-15); Amy playtests the table.
+- **Minigames: everyone plays at the same time on their own screen; the minigames themselves did not change. Bots score a random 85-100, new each minigame, and it counts in the team average. A missing score gets 0 after 30 s (DEFAULT, the plan said 15 s after time is up).**
+  Why: Holden's note (2026-11-15).
+- **Bots: vote with the people's favorite (never change who wins), always GO, always ready; take a ship problem nobody started after 5 s and fix it in 10 s; gather 85-100% of one player's data share during the flight (DEFAULTS).**
+  Why: plan DEFAULT; without it one human with three bots faces 4x the problems alone (2026-11-15).
+- **The party leader's game is the boss: it holds GameState, rolls the dice (bot scores, coin flips, a seed for each stage) and moves everyone to the next screen when all people are ready ("Go anyway" for the leader after 20 s). A player who leaves becomes a bot; if the leader leaves, the mission ends for everyone (DEFAULT).**
+  Why: MULTIPLAYER_PLAN_V6 section 5 (2026-11-15).
+- **Flight and planet in an online party use the plan's smaller version (B5): each player flies their own ship with their fair share of the problems; at the end of each screen their data, ticked checklist items and problems fixed are added to the team. Launch damage = the average of everyone's launch (DEFAULT). Seeing each other's characters (B6) is not built.**
+  Why: plan section 8 cut list, built fast on 2026-11-15.
+- **Relay: a ~150-line Godot program (relay/relay.gd, run headless) that passes notes and knows nothing about the game. No chat box and no public party list. The internet address waits for the coach (B1); until then the game uses ws://localhost:9080 (serve_relay.ps1).**
+  Why: no Node or Python on Holden's PC, Godot runs everywhere; plan sections 4 and 9 (2026-11-15).
 - **Art: the toy-like cast in the cutscene and at NASA. The same characters in PEAK-style suits on the planets.** PEAK inspires the overall feel only; we copy none of its models, places or UI.
   Why: PLAN.md §2 and §12 (2026-11-11)
 - **The report has two buttons: "Redesign and fly again" (keeps the design) and "New mission". Score out of 1000: goals 400, science data 200, resources used well 200, build quality 100, teamwork 100 (DEFAULT weights, kept in data).**
@@ -145,8 +161,8 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
 - **Fueling:** the gauge fills with the turn (a full turn = full); orange mark on the wheel and on the gauge.
 - **Flight ship:** the old flight log became `flight_log.tscn` on the Bridge wall screen; `flight.tscn` is now the walkable ship (3-minute trip). A design check that fails becomes an emergency with a timer; fixing it in time avoids the loss (report says "fixed", with a note that a better part would not need it). A good design gets no emergency for that event. Crew emergencies (water leak, air filter, breaker) top each trip up to 3–5; a missed one costs 6–10 million $ from the cash reserve. Calm tasks give +2 Gb of data. Skipping (after the first trip) lets the design alone decide everything still open.
 - **Planet:** Moon and Mars third person; Venus (on the ship) first person.
-- **Bots:** staff walk in the ship and the Choice Rooms; bot scores are for show only (plan DEFAULT).
-- **Step 28 online multiplayer:** not built (first on the cut list; team chose pass-the-keyboard on 2026-11-13). `MULTIPLAYER_PLAN.md` is the plan.
+- **Bots:** staff walk in the ship and the Choice Rooms; in a solo game three bot crewmates show on the leaderboard for show only. In a party, bots are real crewmates (see the multiplayer lines above, 2026-11-15).
+- **Step 28 online multiplayer:** built on 2026-11-15 from MULTIPLAYER PLAN V6 (branch multiplayer-v6).
   Why: Holden asked to "just do recommended" and keep going until all 28 steps are finished (2026-11-14)
 - **Holden runs Claude Code and says pass. The self-check uses Holden's Windows Godot (`C:\Users\holde\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe`).**
   Why: "Change it to my Windows Godot path" (2026-11-11)
@@ -395,6 +411,10 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
 - **Life bars with consequences (2026-11-15).** A bar at zero restarts the trip with the same design (DEFAULT). Why: "if one of these things go bad, there's actual consequences to it".
 
 ## 3. Rejected choices
+
+- **Multiplayer on one computer with turns at each minigame (pass the keyboard), and "the host picks the parts, the others watch".** Replaced on 2026-11-15 by MULTIPLAYER_PLAN_V6 (separate computers or bots, everyone votes).
+- **Bot scores for show only.** Replaced on 2026-11-15: in a party, bot scores (85-100) count in the team average.
+- **One GO button for the whole team.** Replaced on 2026-11-15: every player must say GO.
 
 - **"Try again keeps the part choices" for every character.** Replaced on 2026-11-15 for the Janitor and the Student (they start the design again); the Scientist still keeps the design.
 

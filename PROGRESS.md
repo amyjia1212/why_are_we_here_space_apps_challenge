@@ -1,5 +1,28 @@
 # PROGRESS.md: where we stopped
 
+## Multiplayer V6 (2026-11-15 evening, branch `multiplayer-v6`): Phase A + Phase B built, waiting for Holden's test
+
+Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: `AGENT_SOURCE.md` section 2 (multiplayer lines).
+
+| Step | What changed | Key files |
+|---|---|---|
+| A1 | Party screen + lobby (create / join, other players or bots, seat rows with portrait and Waiting / Joined / Bot, "Fill with a bot", START when every seat is filled). 1 player skips it | `scenes/party.tscn`, `scripts/party.gd`, `scripts/autoload/Party.gd`, `StageManager.gd`, `game_data.json` stages, `story.json` party |
+| A2 | Harder with more players: ship problems, supply drain (life bars + crew supplies), data goal; bots fix untouched problems (5 s / 10 s) and gather data; briefing line "Crew of 3: …" | `data/multiplayer.json`, `flight.gd`, `GameState.gd` get_data_target / get_supply_use_per_day, `mission_briefing.gd` |
+| A3 | Minigames: everyone plays once on their own screen; bots roll 85-100; every score + the team average | `minigame_frame.gd` (minigame scenes unchanged) |
+| A4 | Votes in the Mission Room and Design Lab: Enter = my vote, dots over the nameplates, "2 of 3 votes in · 45 s", tie → revote → coin flip, instruments by majority. Test key F8 (bots party) = a fake human vote | `choice_room.gd`, `Party.gd` |
+| A5 | Launch pad crew rows (GO / NO-GO / …), "Say GO" button, GO FOR LAUNCH locked until all GO. F8 = a fake human flips NO-GO / GO. Ready checks = moving on together (below) | `launch.gd`, `Party.gd` |
+| A6 | Report: "The crew" box (build-job scores, problems fixed, data per player); leaderboard row with the party's names | `debrief.gd` |
+| B1 | Relay plan written (no sign-ups, nothing downloaded): Godot relay; the internet address waits for the coach | `relay/README.md`, `AGENT_SOURCE.md` |
+| B2 | Relay (`relay/relay.gd`, its own tiny project, ignored by the game) + `Net` autoload (WebSocketPeer) | `relay/`, `serve_relay.ps1`, `scripts/autoload/Net.gd` |
+| B3 | Move together: a screen that wants to move on = "I'm ready"; the leader moves everyone with its GameState (each keeps own name + character). "Go anyway" for the leader after 20 s | `Party.gd`, `StageManager.gd` |
+| B4 | Votes, minigame scores (0 after 30 s) and GO calls over the network | `Party.gd` |
+| B5 | Smaller version: each player flies their own ship (fair share of problems); data, ticked goals, problems fixed and launch damage (averaged) are merged when the screen ends | `Party.gd` merge_contribs, `flight.gd` |
+| B6 | Not built (first on the cut list) | |
+| B7 | Holden's test (below) | |
+
+Self-checks run (all passed): compile check of every changed script; bots-party logic test (scores, win, tie → revote → coin, timer restart, instruments, GO lock); scenes in a bots party (party, design room vote, assembly scores, launch lock, flight with 3x problems and a bot fix, report); solo check (1 player skips the party screen, no votes, no crew rows, normal problem count); relay test (create, join, lowercase code, messages, full, wrong code, leader left); two-process online test (join, lobby names, START, ready sync, tie vote, scores, leader leaves → start menu); three-process test (2 humans + bot, a player leaves → bot, late join → "already started", wrong code). Web export to `build/web` (relay not in the .pck). `docs/` not updated (only on push).
+
+
 ## Final copy (2026-11-15 afternoon): UPGRADE_PLAN_V6 A1, A2 + three team requests, waiting for Holden's test
 
 | Change | Key files |

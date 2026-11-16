@@ -80,6 +80,8 @@ func _ready() -> void:
 			add_finding(i + 1, failures[i])
 	fill_readings()
 	add_life_report()
+	if Party.is_party():
+		add_team_report()
 	Achievements.check_report()   # UPGRADE_PLAN_V6 C3: an achievement for every kind of ending
 	# A second "Redesign" button at the very bottom, so nobody scrolls back up (UPGRADE_PLAN_V6 A2).
 	var bottom_button := Button.new()
@@ -136,7 +138,14 @@ func add_notebook_card(learned: Dictionary) -> void:
 func add_to_leaderboard() -> void:
 	if not GameState.run_recorded:
 		GameState.run_recorded = true
-		Leaderboard.add_run(GameState.get_report_score()["total"])
+		if Party.is_party():
+			# One team score, saved with the party's names (MULTIPLAYER_PLAN_V6 A6).
+			var names: PackedStringArray = []
+			for seat in Party.size():
+				names.append(Party.seat_name(seat))
+			Leaderboard.add_run(GameState.get_report_score()["total"], " + ".join(names))
+		else:
+			Leaderboard.add_run(GameState.get_report_score()["total"])
 		Bots.add_scores_to_leaderboard()
 	var button := Button.new()
 	button.text = Data.story["leaderboard"]["title"]
@@ -485,6 +494,31 @@ func add_life_report() -> void:
 	if int(trip.get("trips_failed", 0)) > 0:
 		add_line(column, w["failed"].format({"n": int(trip["trips_failed"])}), &"BodyText")
 	add_line(column, w["tip"], &"SmallText")
+
+
+# The crew (MULTIPLAYER_PLAN_V6 A6): one line per player with their build-job
+# scores, the ship problems they fixed and the data they gathered.
+func add_team_report() -> void:
+	var w: Dictionary = Data.story["party"]
+	var panel := PanelContainer.new()
+	panel.theme_type_variation = &"NavyPanel"
+	get_node("Margin/Column/Scroll/Body").add_child(panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 4)
+	panel.add_child(column)
+	add_line(column, w["team_title"], &"AccentText")
+	for seat in Party.size():
+		var scores: PackedStringArray = []
+		for game_id in ["assembly", "hammer", "fuel"]:
+			var list: Array = GameState.minigame_scores.get(game_id, [])
+			scores.append(str(list[seat]) if seat < list.size() else "-")
+		var name: String = Party.seat_name(seat)
+		if Party.is_bot(seat):
+			name += " " + w["bot_tag"]
+		add_line(column, w["team_line"].format({
+			"name": name, "scores": " / ".join(scores), "fixed": int(Party.stat(seat, "fixed")),
+			"data": GameState.fmt(Party.stat(seat, "data")),
+		}), &"BodyText")
 
 
 # Keep the whole design, fly again (the player changes one thing).
