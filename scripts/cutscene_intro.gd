@@ -112,7 +112,10 @@ func check_plaques() -> void:
 	if _plaques_done or _leaving or not animation_player.is_playing():
 		return
 	var info: Dictionary = Data.nasa.get("intro_plaques", {})
-	if info.is_empty() or animation_player.current_animation_position < float(info["at_seconds"]):
+	if info.is_empty() or not info.get("enabled", true):
+		_plaques_done = true   # turned off (2026-11-15): the astronauts meet you on the ship instead
+		return
+	if animation_player.current_animation_position < float(info["at_seconds"]):
 		return
 	_plaques_done = true
 	show_plaques(info)
@@ -121,7 +124,7 @@ func check_plaques() -> void:
 func show_plaques(info: Dictionary) -> void:
 	animation_player.pause()
 	_plaque_layer = CanvasLayer.new()
-	_plaque_layer.layer = 5
+	_plaque_layer.layer = 0   # UNDER the cutscene's bars (layer 1), so the subtitle line stays visible
 	add_child(_plaque_layer)
 	var dim := ColorRect.new()
 	dim.color = Color(0.02, 0.03, 0.07, 0.92)

@@ -194,6 +194,8 @@
     { "name": "STS-30 crew (Space Shuttle Atlantis)", "mission": "STS-30", "year": 1989, "sentence": "Released Magellan, the first planetary probe launched from a Space Shuttle.", "short_source": "nasa.gov", "shows_in": ["venus", "launch_vehicle"], "source": "https://www.nasa.gov/history/magellan-mission-to-venus-began-25-years-ago-aboard-atlantis-on-sts-30-mission/" }
   ],
   "intro_plaques": {
+    "_enabled_readme": "2026-11-15 team note: the plaques felt out of place in the intro, and the real astronauts now meet you on the ship (data/crew.json). enabled = false turns them off; true brings them back.",
+    "enabled": false,
     "_readme": "UPGRADE_PLAN_V3 C4: the name plaques in the intro (text only, no photos). names = the plaque lines; line = what the General says about them (he is our own character; the real people never speak). Both come from the checked astronaut_facts above.",
     "names": ["BUZZ ALDRIN · APOLLO 11", "DAVID SCOTT · APOLLO 15", "REID WISEMAN · ARTEMIS II", "VICTOR GLOVER · ARTEMIS II", "CHRISTINA KOCH · ARTEMIS II", "JEREMY HANSEN · ARTEMIS II"],
     "line": "Real crews set up seismometers on the Moon. In 2026, Artemis II flew all the way around it.",

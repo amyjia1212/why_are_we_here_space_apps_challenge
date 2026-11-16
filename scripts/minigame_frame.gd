@@ -54,6 +54,8 @@ var example_time: float = 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS   # the "?" card works while the game is paused
+	add_to_group("frees_mouse")   # every build minigame needs the mouse (player.gd never grabs it then)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	overlay_button.pressed.connect(_on_overlay_button_pressed)
 	make_tutorial_parts()
 

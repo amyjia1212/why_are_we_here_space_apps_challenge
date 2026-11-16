@@ -29,6 +29,8 @@ func setup(job: String) -> void:
 func _ready() -> void:
 	settings = Data.minigames["ship_tasks"]
 	words = Data.story["ship_tasks"][mode]
+	add_to_group("frees_mouse")   # the player never grabs the mouse while this job is open
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)   # fill the screen (anchors alone left it 0 x 0)
 	var dim := Panel.new()
 	dim.theme_type_variation = &"DimBackground"

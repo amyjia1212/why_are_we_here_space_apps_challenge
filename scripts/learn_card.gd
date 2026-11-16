@@ -11,6 +11,7 @@ static func open(parent: Node, card: Dictionary, button_text: String, on_close: 
 	var layer := CanvasLayer.new()
 	layer.layer = 60
 	layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	layer.add_to_group("frees_mouse")   # the mouse stays free for the button
 	parent.add_child(layer)
 	var dim := Panel.new()
 	dim.theme_type_variation = &"DimBackground"
