@@ -1,5 +1,29 @@
 # PROGRESS.md: where we stopped
 
+## Shared planet (2026-11-15 night, not committed yet): waiting for Holden's test
+
+| What changed | Key files |
+|---|---|
+| Online: the leader's game owns the planet's task list, data sent, ice samples and bots, and sends them 5x a second; the others send planet_do when they finish a task. A task done never goes back to open | `arrival.gd` (shared planet section: player_did, bot_did, credit_send, apply_planet_state), `Party.gd` |
+| Bots on the planet: walk to an open task nobody is on (3 s), do it, and go straight to the next step of their chain; with nothing to do they wander (never stand still); they report a task whose instrument was not packed; Venus uses the ship's doors and hallway. Fix after Holden's fail (bots stood still: 15 s wait, and tasks with an unpacked instrument were skipped) | new `scripts/planet_crew.gd` (extends `ship_crew.gd`), `multiplayer.json` bots |
+| Teammates on the planet with name tags and on the Tab map; a teammate's task flashes "Nova did it: …" | `arrival.gd`, `story.json` party > planet_did |
+| `arrival.gd` line endings made LF (the repo's .gitattributes rule) | |
+
+Self-checks (passed): compile check; bots on the Moon, Mars and Venus (they did every task, Mars drill → analyze straight away, Venus through the ship rooms); online leader + player + bot (the player's tasks show on the leader's planet and the leader's on theirs, checklist ticks on both); solo planet unchanged; screenshot of a bot walking to a seismometer.
+
+## Shared ship (2026-11-15 night, branch `multiplayer-v6`, not committed yet): waiting for Holden's test
+
+Holden: teammates (bots or people) must all be on the same ship working on the same tasks.
+
+| What changed | Key files |
+|---|---|
+| Online: the leader's game runs the one ship and sends it 5x a second (tasks, life bars, trip progress, bots, data, cash). Others send ship_do / ship_need; the leader does the job for everyone and the log says who fixed it | `flight.gd` (shared ship section: do_task, ask_leader, apply_ship_state, refill_need), `Party.gd` ship_note |
+| Teammates on the ship: bots and other players as their characters with a fixed-size name tag; also dots on the Tab map | new `scripts/ship_crew.gd`, `flight.gd` get_tablet_map |
+| Bots walk room door → hallway → room door to the station, fix problems nobody started (5 s, then 10 s at the station) and do calm tasks nobody took (12 s, then 4 s) | `ship_crew.gd`, `multiplayer.json` bots + ship_sync |
+| Problems x party size on the one ship; online a job/talk/Clean Room no longer pauses the trip; only the leader skips; a life bar at 0 restarts the trip for everyone | `flight.gd`, `Party.gd` |
+
+Self-checks (passed): compile check; bots party on the ship (a bot walked Bridge → hallway → Life Support and fixed the air filter; it also took a calm task); solo flight unchanged (no teammates, normal problem count); online leader + player + bot (the player sees the leader's problem, fixes it, it is gone on the leader's ship and credited to them; a refill reaches the leader; each sees the other and the bot); the earlier online test still passes; screenshots of bots on the ship.
+
 ## Multiplayer V6 (2026-11-15 evening, branch `multiplayer-v6`): Phase A + Phase B built, waiting for Holden's test
 
 Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: `AGENT_SOURCE.md` section 2 (multiplayer lines).

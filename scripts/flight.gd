@@ -92,6 +92,13 @@ func _ready() -> void:
 	Bots.spawn_walkers(self, ship["bot_routes"], Data.crew["missions"].get(GameState.get_destination_key(), []))
 	Bots.set_alert(false)
 
+	# The party on the same ship (bots walk to the jobs; other players show as their characters).
+	crew = SHIP_CREW.new()
+	add_child(crew)
+	crew.setup(self)
+	Party.ship_note.connect(_on_ship_note)
+	if is_client():
+		skip_label.visible = false   # only the party leader can skip the trip
 	flight_log.emergency_started.connect(_on_emergency_started)
 	flight_log.trip_finished.connect(_on_trip_finished)
 	plan_crew_emergencies()
@@ -295,40 +302,18 @@ func add_party_emergencies(base_count: int, crew_ids: Array) -> void:
 		crew_plan.append({"at": at, "id": crew_id, "key": "crew:" + crew_id + "#" + str(k + 2)})
 
 
-# Bots on this ship (MULTIPLAYER_PLAN_V6 3e): a bot takes a problem nobody has
-# started after a few seconds and fixes it; bots also gather their share of
-# the data at a steady pace during the trip.
-var bot_busy: Dictionary = {}          # bot seat -> task key it is fixing
+# The bots' share of the data (MULTIPLAYER_PLAN_V6 3e): each bot gathers
+# 85-100% of one player's data target at a steady pace through the trip (a
+# skip adds the rest at once). Their walking and fixing is in ship_crew.gd.
 var bot_data_shares: Dictionary = {}   # bot seat -> share of one player's data target
 var bot_data_done: Dictionary = {}     # bot seat -> data it added on this trip
 
 
-func tick_bots(delta: float) -> void:
+func tick_bots(_delta: float) -> void:
 	var bots: Array = Party.bots_on_my_ship()
 	if bots.is_empty():
 		return
 	var bot_rules: Dictionary = Data.mp["bots"]
-	var party_words: Dictionary = Data.story["party"]
-	for key in tasks.keys():
-		var task: Dictionary = tasks[key]
-		if not task.has("left"):
-			continue
-		task["age"] = float(task.get("age", 0.0)) + delta
-		if task.has("bot"):
-			task["bot_left"] -= delta
-			if task["bot_left"] <= 0.0:
-				bot_fixed(key, task)
-			continue
-		if task["age"] < float(bot_rules["take_problem_after_seconds"]) or fixing_key == key:
-			continue
-		for seat in bots:
-			if not bot_busy.has(seat):
-				bot_busy[seat] = key
-				task["bot"] = seat
-				task["bot_left"] = float(bot_rules["fix_problem_in_seconds"])
-				flight_log.add_line(party_words["bot_fixing"].format({"name": Party.seat_name(seat)}), "warn")
-				break
-	# The bots' data, at a steady pace through the trip (a skip adds the rest at once).
 	if bot_data_shares.is_empty():
 		for seat in bots:
 			bot_data_shares[seat] = randf_range(float(bot_rules["data_share_min"]), float(bot_rules["data_share_max"]))
@@ -343,32 +328,165 @@ func tick_bots(delta: float) -> void:
 			bot_data_done[seat] = should
 
 
-func bot_fixed(key: String, task: Dictionary) -> void:
-	var seat: int = int(task["bot"])
-	bot_busy.erase(seat)
+# ---------- the shared ship (2026-11-15) ----------
+# The whole party is on ONE ship. Online, the party leader's game runs it:
+# it makes the problems, drains the life bars, moves the bots, and sends the
+# ship state 5 times a second. The others show that state; when they fix or
+# refill something they send a request ("ship_do", "ship_need") and the
+# leader does it for everyone. A bots party is one computer, like a leader.
+
+const SHIP_CREW = preload("res://scripts/ship_crew.gd")
+
+var crew: Node3D                     # ship_crew.gd: teammates and the bots' jobs
+var resolved_early: Dictionary = {}  # client: event id -> fixed?, for events the leader settled first
+var done_recently: Dictionary = {}   # client: task key -> seconds since I did it (hidden until the leader agrees)
+
+
+# Not the leader in an online party: this ship only shows the leader's ship.
+func is_client() -> bool:
+	return Party.is_online() and not Party.is_leader()
+
+
+func shared_state() -> Dictionary:
+	return {
+		"t": "ship", "tasks": tasks, "needs": needs, "progress": flight_log.progress,
+		"data": GameState.data_sent, "cash": GameState.cash_reserve, "bots": crew.bot_positions(),
+	}
+
+
+# A log line here, and on everyone's screen when I am the leader.
+func log_line(text: String, kind: String) -> void:
+	flight_log.add_line(text, kind)
+	if Party.is_online() and Party.is_leader():
+		Net.send({"t": "ship_log", "text": text, "kind": kind})
+
+
+# A design event is settled (fixed or missed): the leader tells everyone.
+func resolve_event(event_id: String, fixed: bool) -> void:
+	flight_log.resolve_event(event_id, fixed)
+	if Party.is_online() and Party.is_leader():
+		Net.send({"t": "ship_resolved", "id": event_id, "fixed": fixed})
+
+
+# Leader / bots party: someone finished a job. how = "proper", "quick", "bot",
+# "routine" or "clean"; seat = who did it (a bot, me, or another player).
+func do_task(key: String, how: String, seat: int, extra: Dictionary = {}) -> void:
+	if not tasks.has(key):
+		return
+	var task: Dictionary = tasks[key]
+	var who: String = Party.seat_name(seat)
+	if how == "clean":
+		if extra.has("scores"):
+			var scores: Array = []
+			for value in extra["scores"]:
+				scores.append(int(value))
+			GameState.minigame_scores["clean"] = scores
+		finish_clean_task()
+		return
 	tasks.erase(key)
 	AudioManager.play_sfx("task_done")
+	if how == "routine":
+		GameState.data_sent += float(rules["routine_data_gb"])
+		log_line(words["task_log"].format({"task": task["task"]}) + (("  (" + who + ")") if Party.is_party() else ""), "good")
+		return
 	if task["kind"] == "event":
-		flight_log.resolve_event(task["id"], true)
+		resolve_event(task["id"], true)
 	else:
-		flight_log.add_line(words["crew"][task["id"]]["fixed"], "good")
-	flight_log.add_line(Data.story["party"]["bot_fixed"].format({"name": Party.seat_name(seat)}), "good")
+		log_line(words["crew"][task["id"]]["fixed"], "good")
+	if how == "quick":
+		log_line(Data.story["extras"]["two_way_fix"]["quick_note"], "warn")
+		GameState.quick_fixes.append({"kind": task["kind"], "day": flight_log.get_day()})
 	Party.note_fixed(seat)
+	if seat != Party.my_seat:
+		log_line(Data.story["party"]["bot_fixed" if Party.is_bot(seat) else "fixed_by"].format({"name": who}), "good")
 
 
-# A problem is gone (fixed by the player or missed): its bot is free again.
-func free_bot(task: Dictionary) -> void:
-	if task.has("bot"):
-		bot_busy.erase(int(task["bot"]))
+# Client: tell the leader I did a job; hide it here until the leader's ship agrees.
+func ask_leader(key: String, how: String, extra: Dictionary = {}) -> void:
+	var note: Dictionary = {"t": "ship_do", "key": key, "how": how}
+	note.merge(extra)
+	Net.send(note, Party.LEADER)
+	tasks.erase(key)
+	done_recently[key] = 0.0
+
+
+func _on_ship_note(from_seat: int, data: Dictionary) -> void:
+	if not is_inside_tree():
+		return
+	var t: String = str(data.get("t", ""))
+	if t == "pos":
+		var p: Array = data.get("p", [0, 0, 0])
+		crew.set_target(from_seat, Vector3(float(p[0]), float(p[1]), float(p[2])), float(data.get("y", 0.0)))
+		return
+	if Party.is_leader():
+		match t:
+			"ship_do":
+				do_task(str(data["key"]), str(data["how"]), from_seat, data)
+			"ship_need":
+				refill_need(str(data["need"]), str(data.get("routine", "")), from_seat)
+		return
+	if from_seat != Party.LEADER:
+		return
+	match t:
+		"ship":
+			apply_ship_state(data)
+		"ship_log":
+			flight_log.add_line(str(data["text"]), str(data["kind"]))
+		"ship_resolved":
+			var event_id: String = str(data["id"])
+			if flight_log.pending.has(event_id):
+				flight_log.resolve_event(event_id, bool(data["fixed"]))
+			else:
+				resolved_early[event_id] = bool(data["fixed"])
+		"ship_skip":
+			if not arrived:
+				skip_to_arrival()
+
+
+# Client: show the leader's ship.
+func apply_ship_state(data: Dictionary) -> void:
+	var new_tasks: Dictionary = data.get("tasks", {})
+	for key in done_recently.keys():
+		new_tasks.erase(key)
+	tasks = new_tasks
+	var new_needs: Dictionary = data.get("needs", {})
+	for need_id in new_needs:
+		needs[need_id] = float(new_needs[need_id])
+	update_need_bars()
+	if not arrived:
+		flight_log.progress = maxf(flight_log.progress, minf(float(data.get("progress", 0.0)), 0.999))
+	GameState.data_sent = float(data.get("data", GameState.data_sent))
+	GameState.cash_reserve = float(data.get("cash", GameState.cash_reserve))
+	crew.apply_bot_positions(data.get("bots", {}))
+
+
+# Leader / bots party: a life bar is refilled (by me or another player).
+func refill_need(need_id: String, routine_key: String, seat: int) -> void:
+	if not needs.has(need_id):
+		return
+	needs[need_id] = minf(needs[need_id] + float(Data.supplies["needs"]["bars"][need_id]["restore"]), 100.0)
+	update_need_bars()
+	if routine_key != "" and tasks.has(routine_key):
+		do_task(routine_key, "routine", seat)
 
 
 func _process(delta: float) -> void:
-	if cleaning != null or talk_crew != "" or ship_task != null:
+	for key in done_recently.keys():
+		done_recently[key] += delta
+		if done_recently[key] > 2.0:
+			done_recently.erase(key)
+	var busy_here: bool = cleaning != null or talk_crew != "" or ship_task != null
+	if busy_here and not Party.is_online():
 		return   # the Clean Room, a crew talk or a station job is open: the whole trip waits
 	var progress: float = flight_log.progress
 	update_planet(progress)
 	day_label.text = words["day"].format({"day": flight_log.get_day(), "days": flight_log.get_trip_days()})
-	if not arrived:
+	if is_client():
+		# Only the timers count down here; the leader's ship decides what happens.
+		for task in tasks.values():
+			if task.has("left"):
+				task["left"] = maxf(float(task["left"]) - delta, 0.0)
+	elif not arrived:
 		while not crew_plan.is_empty() and progress >= crew_plan[0]["at"]:
 			var planned: Dictionary = crew_plan.pop_front()
 			start_crew_emergency(planned["id"], str(planned.get("key", "")))
@@ -381,6 +499,8 @@ func _process(delta: float) -> void:
 			open_routine_task()
 		tick_emergencies(delta)
 		tick_bots(delta)
+	if busy_here:
+		return   # online: the shared trip goes on while my own job is open
 	update_near_station()
 	update_proper_fix(delta)
 	update_extras(delta)
@@ -419,9 +539,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				flight_log.map.set_view(i)
 				AudioManager.play_sfx("preview")
 		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("confirm") and skip_label.visible and not arrived:
+	elif event.is_action_pressed("confirm") and skip_label.visible and not arrived and not is_client():
 		skip_label.visible = false
 		get_viewport().set_input_as_handled()
+		if Party.is_online():
+			Net.send({"t": "ship_skip"})   # the leader skips for the whole ship
 		skip_to_arrival()
 
 
@@ -447,6 +569,11 @@ func key_instrument_name() -> String:
 
 # The flight log says a design check failed: an emergency with a timer.
 func _on_emergency_started(event_id: String, _blanks: Dictionary) -> void:
+	if is_client():
+		# The leader's ship has this problem too; it comes with the ship state.
+		if resolved_early.has(event_id):
+			flight_log.resolve_event(event_id, resolved_early[event_id])
+		return
 	var info: Dictionary = rules["emergencies"][event_id]
 	var text: Dictionary = words["emergencies"][event_id]
 	add_emergency("event:" + event_id, "event", event_id, info, text)
@@ -477,14 +604,13 @@ func tick_emergencies(delta: float) -> void:
 		task["left"] -= delta
 		if task["left"] <= 0.0:
 			tasks.erase(key)
-			free_bot(task)
 			miss_emergency(task)
 
 
 func miss_emergency(task: Dictionary) -> void:
 	AudioManager.play_sfx("bad")
 	if task["kind"] == "event":
-		flight_log.resolve_event(task["id"], false)
+		resolve_event(task["id"], false)
 	else:
 		var cost: float = rules["crew"][task["id"]]["miss_cost"]
 		GameState.cash_reserve -= cost
@@ -507,21 +633,29 @@ func use_station(station_id: String) -> void:
 	if task["kind"] == "clean":
 		start_cleaning()   # the task stays open until the minigame is finished
 		return
+	if is_client():
+		# Shared ship: the leader's game does the job for everyone.
+		AudioManager.play_sfx("task_done")
+		ask_leader(key, "routine" if task["kind"] == "routine" else "proper")
+		if task["kind"] == "routine":
+			learn_station(station_id)
+		else:
+			inner_voice.say(Data.voice["extras"]["proper_fix"] + moment_text(task["id"]))
+		return
 	tasks.erase(key)
-	free_bot(task)
 	AudioManager.play_sfx("task_done")
 	match task["kind"]:
 		"event":
-			flight_log.resolve_event(task["id"], true)
+			resolve_event(task["id"], true)
 			inner_voice.say(Data.voice["extras"]["proper_fix"] + moment_text(task["id"]))
 			Party.note_fixed(Party.my_seat)
 		"crew":
-			flight_log.add_line(words["crew"][task["id"]]["fixed"], "good")
+			log_line(words["crew"][task["id"]]["fixed"], "good")
 			inner_voice.say(Data.voice["extras"]["proper_fix"] + moment_text(task["id"]))
 			Party.note_fixed(Party.my_seat)
 		"routine":
 			GameState.data_sent += float(rules["routine_data_gb"])
-			flight_log.add_line(words["task_log"].format({"task": task["task"]}), "good")
+			log_line(words["task_log"].format({"task": task["task"]}), "good")
 			learn_station(station_id)   # the first time here: what this station is for (C2)
 
 
@@ -701,7 +835,8 @@ func start_cleaning() -> void:
 	frame.embedded = true
 	frame.get_node("Workshop").free()   # no build workshop here: the ship is the background
 	frame.all_done.connect(_on_cleaning_done)
-	flight_log.process_mode = Node.PROCESS_MODE_DISABLED
+	if not Party.is_online():
+		flight_log.process_mode = Node.PROCESS_MODE_DISABLED   # online, the shared trip goes on
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 	prompt_label.text = ""
 	alert_panel.visible = false
@@ -713,15 +848,25 @@ func start_cleaning() -> void:
 func _on_cleaning_done() -> void:
 	cleaning.queue_free()
 	cleaning = null
-	tasks.erase("clean")
-	clean_state = "done"
 	flight_log.process_mode = Node.PROCESS_MODE_INHERIT
 	player.process_mode = Node.PROCESS_MODE_INHERIT
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	AudioManager.play_sfx("task_done")
 	Achievements.unlock("clean_instrument")
+	if is_client():
+		AudioManager.play_sfx("task_done")
+		clean_state = "done"
+		ask_leader("clean", "clean", {"scores": GameState.minigame_scores.get("clean", [])})
+		return
+	finish_clean_task()
+
+
+# The Clean Room job is done (by me, or another player on the shared ship).
+func finish_clean_task() -> void:
+	tasks.erase("clean")
+	clean_state = "done"
+	AudioManager.play_sfx("task_done")
 	var score: String = GameState.fmt(GameState.get_team_score("clean"))
-	flight_log.add_line(Data.story["extras"]["clean"]["flight_done"].format({"score": score}), "good")
+	log_line(Data.story["extras"]["clean"]["flight_done"].format({"score": score}), "good")
 
 
 # The ship arrived and nobody cleaned: CLEANLINESS gets missed_score.
@@ -766,15 +911,19 @@ func update_proper_fix(delta: float) -> void:
 
 func quick_fix(key: String) -> void:
 	var task: Dictionary = tasks[key]
+	if is_client():
+		AudioManager.play_sfx("task_done")
+		ask_leader(key, "quick")   # shared ship: the leader's game does it (and adds the bill)
+		inner_voice.say(Data.voice["extras"]["quick_fix"] + moment_text(task["id"]))
+		return
 	tasks.erase(key)
-	free_bot(task)
 	Party.note_fixed(Party.my_seat)
 	AudioManager.play_sfx("task_done")
 	if task["kind"] == "event":
-		flight_log.resolve_event(task["id"], true)
+		resolve_event(task["id"], true)
 	else:
-		flight_log.add_line(words["crew"][task["id"]]["fixed"], "good")
-	flight_log.add_line(Data.story["extras"]["two_way_fix"]["quick_note"], "warn")
+		log_line(words["crew"][task["id"]]["fixed"], "good")
+	log_line(Data.story["extras"]["two_way_fix"]["quick_note"], "warn")
 	GameState.quick_fixes.append({"kind": task["kind"], "day": flight_log.get_day()})
 	inner_voice.say(Data.voice["extras"]["quick_fix"] + moment_text(task["id"]))
 
@@ -1183,11 +1332,18 @@ func open_ship_task(station_id: String, routine_key: String) -> void:
 		GameState.ship_log_add(Data.supplies["needs"]["bars"][need_id]["log"])
 		Achievements.unlock("first_" + need_id)
 		inner_voice.say(Data.story["ship_life"]["bars"][need_id]["done_voice"])
+		if is_client():
+			# Shared ship: the bar is everyone's; the leader's game refills it for real.
+			Net.send({"t": "ship_need", "need": need_id, "routine": routine_key}, Party.LEADER)
+			if routine_key != "":
+				tasks.erase(routine_key)
+				done_recently[routine_key] = 0.0
+			return
 		# A calm task here is done by the same job.
 		if routine_key != "" and tasks.has(routine_key):
 			tasks.erase(routine_key)
 			GameState.data_sent += float(rules["routine_data_gb"])
-			flight_log.add_line(words["task_log"].format({"task": station_label(station_id)}), "good"))
+			log_line(words["task_log"].format({"task": station_label(station_id)}), "good"))
 
 
 # The first time a station is used: a paused card teaches what it is (story.json ship_life > learn).
@@ -1212,7 +1368,10 @@ func fail_trip(need_id: String) -> void:
 	var card: Dictionary = {"kicker": life["fail_kicker"], "title": life["bars"][need_id]["fail_title"], "lines": [life["bars"][need_id]["fail_text"], life["fail_how"]]}
 	LEARN_CARD.open(self, card, life["fail_button"], func():
 		GameState.restart_trip()
-		StageManager.go_to("flight"))
+		if Party.is_online():
+			Party.advance("flight")   # shared ship: everyone starts the trip again together
+		else:
+			StageManager.go_to("flight"))
 
 
 # ---------- talking to the real crew (UPGRADE_PLAN_V6 C1) ----------
@@ -1230,7 +1389,8 @@ func start_crew_talk(crew_id: String) -> void:
 	talk_lines = [person["one_line"] + "."] + person["facts"]
 	talk_lines.append(Data.crew["game_choice_line"].format({"name": person["name"]}))
 	talk_lines.append(Data.story["crew_talk"]["source_label"] + " " + str(person["source"]))
-	flight_log.process_mode = Node.PROCESS_MODE_DISABLED
+	if not Party.is_online():
+		flight_log.process_mode = Node.PROCESS_MODE_DISABLED   # online, the shared trip goes on
 	player.frozen = true
 	inner_voice.set_speaker(person["name"], "crew_" + crew_id)
 	inner_voice.set_meta("hold", true)   # the fact stays until E / Enter
@@ -1267,6 +1427,8 @@ func get_tablet_map() -> Dictionary:
 	var points: Array = []
 	for task in tasks.values():
 		points.append({"pos": stations[task["station"]]["pos"], "label": task["task"], "urgent": task.has("left")})
+	for seat in crew.avatars:
+		points.append({"pos": crew.avatars[seat]["node"].global_position, "label": Party.seat_name(seat), "urgent": false})
 	return {"player": player.global_position, "yaw": player.rotation.y, "center": Vector3(0, 0, 2), "rooms": rooms, "points": points}
 
 
