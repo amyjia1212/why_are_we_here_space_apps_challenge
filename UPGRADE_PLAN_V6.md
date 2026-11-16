@@ -5,8 +5,6 @@ Build folder: **`How did we get here final`** only. Never touch `How did we get 
 (that is the saved draft on GitHub). No git, no commits, no push from this folder.
 
 **Which file wins.** This file wins over the older plans wherever they disagree. The rules in
-`CLAUDE.md` still apply: numbers in data files, text in `story.json` / `inner_voice.json`, theme
-for all colors and sizes, PLACEHOLDER on every made-up number, web export must still run.
 
 **Be honest about time.** The team has **a few hours today**. The list has about 20 features and
 the full list is several days of work. So the steps are in three tiers, ordered so the game works
@@ -18,7 +16,7 @@ Step 0 still confirms the details before anything changes.
 
 ---
 
-## 1. Team decisions made for this plan (record in `AGENT_SOURCE.md`, dated 2026-11-15)
+## 1. Team decisions made for this plan
 
 | Topic | Decision |
 |---|---|
@@ -185,7 +183,7 @@ Change the retry by character:
 - For the Scientist, also show the arrow on any station whose last choice caused a failure
   (`GameState.most_blamed_choice`).
 - This replaces the old rule "Try again keeps the part choices" for the Janitor and the Student.
-  Move that rule to Rejected choices in `AGENT_SOURCE.md`.
+  Drop that rule.
 - Jump targets go in `game_data.json` (`redesign_by_character`), not in code.
 Done when: fly Mars without the ice drill as each character and the three retries differ.
 
@@ -341,33 +339,11 @@ and the form.
 
 | Person | Job for this plan |
 |---|---|
-| Holden (Lead Programmer) | Runs Claude Code through the steps and tests each tier |
+| Holden (Lead Programmer) | Builds the steps and tests each tier |
 | Amy (Science & Data) | Checks every astronaut fact and station fact has a NASA link. Confirms the eighth name |
 | Rena (Head Writer) | "Last time" lines for the three characters, learn-card text, achievement names |
 | Jeremy (Art Designer) | Checks each astronaut's look is respectful and correct. Picks the badge look |
 | Richard (Video Editor) | Films the celebration scene and the crew fact cards once they work |
-
----
-
-## 7. Kickoff prompt (paste into Claude Code with Opus)
-
-```
-Work only in "How did we get here final". Do not use git and do not touch
-"How did we get here + more stuff".
-
-Read CLAUDE.md, AGENT_SOURCE.md and UPGRADE_PLAN_V6.md. UPGRADE_PLAN_V6.md wins
-wherever they disagree. Record the decisions in its sections 1 and 2 in AGENT_SOURCE.md.
-
-Do Step 0 (read-only) and give me the short report. Then build the steps back to back in
-the order of section 5, without waiting for "pass" after each one. For each step: PLAN in
-two sentences, DO, SELF-CHECK. Stop and give me one MY TEST list at the end of each tier.
-
-Build the small version of every Tier 3 step first. Keep numbers in the data files and mark
-every made-up number PLACEHOLDER. Never invent a fact, quote or number about a real person:
-open the NASA page, copy the fact, save the link. A fact with no link is not shown. Never
-write first-person lines for a real astronaut. Ask before downloading anything.
-Re-export the web build at the end of each tier.
-```
 
 ---
 

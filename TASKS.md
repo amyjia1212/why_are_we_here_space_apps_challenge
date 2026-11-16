@@ -146,9 +146,8 @@ flight log, the report with reasons.
 
 ## Other open items
 
-- [x] **Confirm the 2026 rules (Nov 13).** S. (2026-11-13: the criteria are Impact, Creativity, Validity, Relevance, Presentation; `CLAUDE.md` and `reviewer.md` updated. The judging guide page did not load for the agent, so a person should read it once.) Read the 2026 Space Apps guide. Confirm
-  the judging criteria names and what a submission needs. Update `CLAUDE.md` and
-  `reviewer.md`.
+- [x] **Confirm the 2026 rules (Nov 13).** S. (2026-11-13: the criteria are Impact, Creativity, Validity, Relevance, Presentation; The judging guide page did not load for the agent, so a person should read it once.) Read the 2026 Space Apps guide. Confirm
+  the judging criteria names and what a submission needs.
 - [ ] **Public link for judges.** S. Host the newest tested `build/web`. Where to host
   it is still open.
 - [ ] **Toy-like character scenes (old 19c).** Built in Kaleb's template; waiting for

@@ -2,7 +2,7 @@
 
 Written 2026-11-13. A person on the team does the upload. Agents never publish
 anything. **Ask the coach first** which account to use. Use a team or coach account,
-and never a student's real name, face or photo (CLAUDE.md privacy rule).
+and never a student's real name, face or photo (team privacy rule).
 
 ## Why this is easy
 

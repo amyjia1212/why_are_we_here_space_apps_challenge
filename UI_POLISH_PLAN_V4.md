@@ -4,7 +4,7 @@ Written Nov 15, 2026 (Sunday, 9 am) by Fable, from Holden's note: *the UI is clu
 
 Freeze is still **today at 2:00 pm**.
 
-**Which file wins.** This file replaces **Phase E** of `UPGRADE_PLAN_V3.md`. Phase E was about *removing* things. This plan is about how what is left *looks*. Everything else in V3 and `CLAUDE.md` still applies.
+**Which file wins.** This file replaces **Phase E** of `UPGRADE_PLAN_V3.md`. Phase E was about *removing* things. This plan is about how what is left *looks*. Everything else in V3 still applies.
 
 **Be honest about time.** About five hours are left, and the web export, playthroughs and video need the last part of it. The whole plan is about 3 hours. The first three steps are about 2 hours and fix most of what Holden described. Stop wherever you are at **1:00 pm** and move to export.
 
@@ -55,4 +55,4 @@ Cut: extras → 3b → Step 5 start menu/tablet → number counting → Step 4. 
 ## 7. Safety rules
 Look-only pass. No changes to game rules, data, scoring or stage order. Test in the web export. Check longest part name, biggest number, smallest window.
 
-(Full original text was pasted into Claude Code on 2026-11-15; this is the condensed copy kept in the game folder.)
+(This is the condensed copy of the original text, kept in the game folder.)

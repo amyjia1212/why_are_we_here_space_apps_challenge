@@ -2,7 +2,7 @@
   "_readme": "Sound and music settings for scripts/autoload/AudioManager.gd (UPGRADE_PLAN_V2 steps 9, 25, 26). There are NO downloaded sound files: every sound and every music track is made in code, so they are free to use (made by the team). sfx: a sound name -> a file path. Leave \"file\" empty to use the code-made recipe of the same name in game_data.json \"sounds\" (a missing name plays a simple beep). music: one recipe per situation (state). voices: the beep-talk pitch for each speaker. buses: the starting volume of each volume slider (0 = silent, 1 = full).",
   "buses": { "Music": 0.55, "SFX": 0.8, "Voice": 0.7 },
   "sfx": {
-    "_readme": "Put a real sound file path here later (for example res://assets/sounds/door.ogg) and it is used instead of the code-made one. Write its source in AGENT_SOURCE.md.",
+    "_readme": "Put a real sound file path here later (for example res://assets/sounds/door.ogg) and it is used instead of the code-made one.",
     "click": { "file": "" },
     "hover": { "file": "" }
   },

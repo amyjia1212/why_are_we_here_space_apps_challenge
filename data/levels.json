@@ -1,6 +1,6 @@
 {
   "_readme": "What each play level changes. The character picks the level (see \"characters\" in game_data.json). The levels change only how much the inner voice tells you: full (names the problem and the part), some (names the problem), few (only the warning). Budget, mass, timing windows and supply use are the same for every level. To change how much help a level gives, change hint_detail here and nothing else.",
-  "source": "Written game-design choice by the coach, passed 2026-11-10 (AGENT_SOURCE.md section 2, levels change guidance only). It is NOT a NASA number and NOT a PLACEHOLDER.",
+  "source": "Written game-design choice by the coach, passed 2026-11-10 (levels change guidance only). It is NOT a NASA number and NOT a PLACEHOLDER.",
   "levels": {
     "easy": {
       "hint_detail": "full",

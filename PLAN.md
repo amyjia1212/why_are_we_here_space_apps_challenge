@@ -3,7 +3,7 @@
 Written Nov 11, 2026 by Fable, from the team's choices. Engine: Godot 4, web export.
 Challenge: NASA Space Apps 2026, **Space Mission Design Game**. Hackathon: Nov 14–15.
 
-**How to use this file.** Put it in the game folder next to `GAME_PLAN.md`. This file wins wherever the two disagree. The rules in `CLAUDE.md` still apply (numbers in data files, PLACEHOLDER marking, PLAN / DO / SELF-CHECK / MY TEST / WAIT). Where this plan says **DEFAULT**, build it that way and list it in the report so the team can change it later.
+**How to use this file.** Put it in the game folder next to `GAME_PLAN.md`. This file wins wherever the two disagree. Where this plan says **DEFAULT**, build it that way and list it in the report so the team can change it later.
 
 ---
 
@@ -236,8 +236,6 @@ Places to look: the challenge's Resources tab (check first), NASA Technical Repo
 | Dashboard, review | `build`: 7 part categories + instruments | Ripple effect panel | Life support, supplies |
 | Launch, timed press | `flight`: map + flight log | Three arrival scenes | Mars shadow-pass event |
 | Debrief | `debrief`: score and reasons | `cutscene_return` slot, `data/minigames.json` | |
-
-Record each of these as a team decision in `AGENT_SOURCE.md`, dated Nov 11, 2026.
 
 ## 15. Build order
 

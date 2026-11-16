@@ -595,7 +595,7 @@
     "general_default_name": "designer"
   },
   "office_hours": {
-    "_readme": "Office Hours (NASA_RESOURCES_PLAN.md N3): the hint key O in the Design Room and the button on the Equipment List. It looks at the six resources and talks about the first problem. Hint detail per level (AGENT_SOURCE.md): easy names the problem AND the parts that change it, medium names the problem, hard only warns. {warning} = the dashboard warning line for that resource, {parts} = the part names that change it (from the part data). Hints never give the answer.",
+    "_readme": "Office Hours (NASA_RESOURCES_PLAN.md N3): the hint key O in the Design Room and the button on the Equipment List. It looks at the six resources and talks about the first problem. Hint detail per level : easy names the problem AND the parts that change it, medium names the problem, hard only warns. {warning} = the dashboard warning line for that resource, {parts} = the part names that change it (from the part data). Hints never give the answer.",
     "all_good": {
       "easy": "Office Hours: every resource is inside its limit. Now the trade-offs are yours.",
       "medium": "Office Hours: everything looks inside the limits. I think.",

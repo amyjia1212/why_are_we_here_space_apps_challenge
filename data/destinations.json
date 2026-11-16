@@ -199,7 +199,7 @@
       },
       "key_instruments": {
         "value": ["ice_drill"],
-        "source": "Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker (AGENT_SOURCE.md, 2026-11-12)."
+        "source": "Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker."
       },
       "default_instruments": {
         "value": ["camera_basic"],

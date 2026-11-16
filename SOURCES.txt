@@ -8,7 +8,7 @@ What is in this file:
           or for the team to agree it is a game-design choice.
   PART 4  Every web link in the data files, A to Z.
 Other places with sources: REFERENCES.md (outside files), STEP11_TABLES.md (the rocket and instrument tables),
-AGENT_SOURCE.md section 9 (NASA data used), INNOVATION.md section 4 (numbers used in the hints).
+INNOVATION.md section 4 (numbers used in the hints).
 
 How to fix a number: open the data file named in Part 3, find the line (Ctrl+F), change the value and paste the
 link into its "source" text. If no real source exists, keep the number and write "Game-design choice: <reason>"
@@ -16,7 +16,7 @@ in its "source" text instead, once the team agrees. Hints and screens update by 
 
 
 ====================================================================================================
-  PART 1: THE SIX OPEN NUMBERS (web search 2026-11-15, by Claude; the Science & Data Lead checks each one)
+  PART 1: THE SIX OPEN NUMBERS (web search 2026-11-15, by the team; the Science & Data Lead checks each one)
 ====================================================================================================
 Nothing in the game was changed by this search. The values below are what real missions did, so the team can
 decide to keep the game value as a game-design choice "inside the real range", or change it.
@@ -165,7 +165,7 @@ decide to keep the game value as a game-design choice "inside the real range", o
   [destinations > mars > instruments > ground radar > source]
       PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers)
   [destinations > mars > key instruments > source]
-      Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker (AGENT_SOURCE.md, 2026-11-12).
+      Team decision, PLAN.md section 5 (2026-11-11): the ice drill is the Mars key instrument. Leaving it out is a Review blocker.
   [destinations > mars > default instruments > source]
       Game-design choice (2026-11-12): the start build packs the basic camera only (the same as the old default camera), so a new player sees the drill blocker at Review.
   [destinations > mars > arrival >  gravity source]
@@ -369,7 +369,7 @@ decide to keep the game value as a game-design choice "inside the real range", o
   [report > source]
       weights: PLAN.md section 11 DEFAULT (game-design choice). max_lines, good_teamwork, return_seconds: game-design choice.
   [characters > source]
-      Game-design choice by the coach (AGENT_SOURCE.md section 2, 2026-11-10): Scientist = easy, Janitor = medium, Student = hard. It is NOT a NASA number.
+      Game-design choice by the coach (2026-11-10): Scientist = easy, Janitor = medium, Student = hard. It is NOT a NASA number.
   [suit > source]
       Game-design choice (look only).
   [sounds > source]
@@ -383,7 +383,7 @@ decide to keep the game value as a game-design choice "inside the real range", o
   [launch vehicles > vehicles > large > source]
       ULA Atlas V 541 (Step 11b, 2026-11-13). cost ("The total cost for NASA to launch Mars 2020 is approximately $243 million"): https://www.nasa.gov/news-release/nasa-awards-launch-services-contract-for-mars-2020-rover-mission/; capacity (Mars Science Laboratory, 4,050 kg launched toward Mars): https://descanso.jpl.nasa.gov/monograph/series13/DeepCommo_Chapter8--141029.pdf
   [spacecraft base > source]
-      Step 11b (2026-11-13): budget 335 became 276.7 because the medium rocket is now the real Atlas V 401 ($148.3 million instead of the old placeholder $90 million): 490 - 148.3 - 65 = 276.7, so the medium-rocket total is unchanged. Team decision (AGENT_SOURCE.md, 2026-11-12): the simple structure, battery, attitude control and computer cards (all PLACEHOLDER: budget 30 + 10 + 15 + 10 = 65, mass 120 + 20 + 15 + 8 = 163, power -20 - 15 = -35) were taken out of the numbers below. Before that: MRO spacecraft without the swappable parts. budget was 400 = 490 minus the medium rocket's cost of 90 (the rocket's cost is taken OUT of the base, see "launch_vehicles"; the rocket's 90 is PLACEHOLDER). So the total with the medium rocket is still exactly 490, the same as before the rocket question. The 490 comes from: ("Cost: About $720 million total, consisting approximately of $450 million spacecraft development and science instruments; $90 million launch; $180 million mission operations"; minus the game costs of MRO's parts, large solar 70 + high resolution camera 110 + large antenna 50 = 230: 720 - 230 = 490) and mass ("139 kilograms ... science payload, 892 kilograms ... other dry weight" = 1,031 kg dry; minus MRO's solar arrays 96.6, HiRISE 65 and 3 m antenna 20.7: 1,031 - 96.6 - 65 - 20.7 = 848.7; the 3 kg CTX camera stays in the base): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; power: no public source; communications and data: game-design choice (the body sends and collects nothing by itself); mission_lifetime: game-design choice
+      Step 11b (2026-11-13): budget 335 became 276.7 because the medium rocket is now the real Atlas V 401 ($148.3 million instead of the old placeholder $90 million): 490 - 148.3 - 65 = 276.7, so the medium-rocket total is unchanged. Team decision: the simple structure, battery, attitude control and computer cards (all PLACEHOLDER: budget 30 + 10 + 15 + 10 = 65, mass 120 + 20 + 15 + 8 = 163, power -20 - 15 = -35) were taken out of the numbers below. Before that: MRO spacecraft without the swappable parts. budget was 400 = 490 minus the medium rocket's cost of 90 (the rocket's cost is taken OUT of the base, see "launch_vehicles"; the rocket's 90 is PLACEHOLDER). So the total with the medium rocket is still exactly 490, the same as before the rocket question. The 490 comes from: ("Cost: About $720 million total, consisting approximately of $450 million spacecraft development and science instruments; $90 million launch; $180 million mission operations"; minus the game costs of MRO's parts, large solar 70 + high resolution camera 110 + large antenna 50 = 230: 720 - 230 = 490) and mass ("139 kilograms ... science payload, 892 kilograms ... other dry weight" = 1,031 kg dry; minus MRO's solar arrays 96.6, HiRISE 65 and 3 m antenna 20.7: 1,031 - 96.6 - 65 - 20.7 = 848.7; the 3 kg CTX camera stays in the base): https://www.jpl.nasa.gov/news/press_kits/mro-launch-Aug05.pdf; power: no public source; communications and data: game-design choice (the body sends and collects nothing by itself); mission_lifetime: game-design choice
   [parts > structure > versions > small > source]
       PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass (all numbers). This simple card's numbers were taken out of spacecraft_base.
   [parts > structure > versions > medium > source]
@@ -469,7 +469,7 @@ decide to keep the game value as a game-design choice "inside the real range", o
   data/levels.json
 ----------------------------------------------------------------------------------------------------
   [source]
-      Written game-design choice by the coach, passed 2026-11-10 (AGENT_SOURCE.md section 2, levels change guidance only). It is NOT a NASA number and NOT a PLACEHOLDER.
+      Written game-design choice by the coach, passed 2026-11-10 (levels change guidance only). It is NOT a NASA number and NOT a PLACEHOLDER.
   [levels > easy > source]
       Written game-design choice (Scientist). Most guidance.
   [levels > medium > source]

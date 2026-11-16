@@ -1,12 +1,11 @@
 # GAME_PLAN.md — "How Did We Get Here?" full game
 
 Owner: Kaleb. Written Nov 10, 2026. Engine: Godot 4, web export.
-This file is the design source for the full game. AGENT_SOURCE.md is still the record of how Kaleb makes choices. If the two files conflict, ask Kaleb.
-Updated Nov 10, 2026 with Kaleb's answers to the conflict list C1–C16. Each answer is also recorded in AGENT_SOURCE.md.
+This file is the design source for the full game.  If the two files conflict, ask Kaleb.
+Updated Nov 10, 2026 with Kaleb's answers to the conflict list C1–C16.
 
 ## 0. How agents use this file
 
-- Read this file and AGENT_SOURCE.md before any work.
 - Build in the phase order in section 13. Do not skip ahead.
 - **Skeleton first, tweaks later.** Until Phase C is done, do not polish, rebalance, or restyle. Gray boxes and plain text are correct.
 - Every number goes in a data file. Every new number is real NASA data with a source link, or it is marked `"source": "PLACEHOLDER"`.
@@ -146,7 +145,7 @@ Heat has one mechanic only: the heater switch on the power panel. There is no he
 
 The type comes from the destination. What is left of the supplies from Flight is what the player starts with here. **Mission lifetime** means how long the spacecraft works after arrival.
 
-**Orbit type (Mars orbit).** A timed press (E) for the orbit burn. Then the mission clock runs on the ship: this is the existing walk. The **Mars shadow pass** happens here, with the Reroute Power mini-game, and keeps its win/lose tests (AGENT_SOURCE.md section 6, items 7–9). The player also does 3 science passes. In each pass the player presses E when the target is in view (capture), then when the ground station is in view (downlink). Storage, power, and antenna speed limit how much science gets home.
+**Orbit type (Mars orbit).** A timed press (E) for the orbit burn. Then the mission clock runs on the ship: this is the existing walk. The **Mars shadow pass** happens here, with the Reroute Power mini-game, and keeps its win/lose tests. The player also does 3 science passes. In each pass the player presses E when the target is in view (capture), then when the ground station is in view (downlink). Storage, power, and antenna speed limit how much science gets home.
 
 **Surface type (three Mars sites).**
 1. Landing: a chain of timed presses. Heat shield off, parachute out, landing engine on, touchdown. Misses cost fuel, damage, or distance from the target.

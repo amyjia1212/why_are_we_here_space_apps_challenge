@@ -2,9 +2,9 @@
 
 Written Nov 15, 2026 (Sunday, 5:30 pm) by Fable, from Holden's note.
 
-**How to use this file.** Put it in the game folder as `MULTIPLAYER_PLAN_V6.md`. Paste the kickoff prompt (section 10) into Claude Code.
+**How to use this file.** Put it in the game folder as `MULTIPLAYER_PLAN_V6.md`.
 
-**Which file wins.** This file replaces the "True multiplayer" part of `FINAL GAME PLAN` section 7 and Steps 27 and 28 of `UPGRADE_PLAN_V2.md`. The rules in `CLAUDE.md` still apply (numbers in data files, PLACEHOLDER marking, PLAN / DO / SELF-CHECK / MY TEST / WAIT). Where this plan says **DEFAULT**, build it that way and list it in the report so the team can change it.
+**Which file wins.** This file replaces the "True multiplayer" part of `FINAL GAME PLAN` section 7 and Steps 27 and 28 of `UPGRADE_PLAN_V2.md`. Where this plan says **DEFAULT**, build it that way and list it in the report so the team can change it.
 
 **Be honest about time.** The freeze was 2:00 pm today and the form is due tonight. This plan is about **two to three build days**. Phase A alone is one long afternoon. So:
 
@@ -17,8 +17,6 @@ Written Nov 15, 2026 (Sunday, 5:30 pm) by Fable, from Holden's note.
 ---
 
 ## 1. Decisions that change
-
-Record each row in `AGENT_SOURCE.md` as a team decision dated Nov 15, 2026.
 
 | Topic | Before | Now |
 |---|---|---|
@@ -140,7 +138,7 @@ It saves nothing and knows nothing about the game. **All the game rules stay in 
 **What the coach has to do.**
 
 - Pick where the relay runs. The game page is served over `https`, so the relay address must start with `wss://` (the secure kind). Browsers block the plain `ws://` kind from an `https` page.
-- Free hosting changes often, and accounts belong to an adult. Claude Code suggests options and **asks before downloading or signing up for anything**.
+- Free hosting changes often, and accounts belong to an adult. The team suggests options and **asks before downloading or signing up for anything**.
 - Some free hosts go to sleep when nobody is using them. The game shows "Connecting…" for up to 15 seconds before it gives up.
 
 **Testing without the internet.** Run the relay on one laptop and connect to `ws://localhost`. Godot's Debug menu can run more than one copy of the game at once, so one person can test a 2-player party alone.
@@ -221,7 +219,7 @@ Done when: with a fake human set to NO-GO, the launch cannot start.
 
 ### Phase B: Real players on separate computers
 
-**B1. Plan the connection. (S, read-only, with the coach)** Claude Code proposes how to build the relay and where it could run. The coach decides. Write the decision in `AGENT_SOURCE.md`. Nothing is downloaded before the coach says yes.
+**B1. Plan the connection. (S, read-only, with the coach)** The team proposes how to build the relay and where it could run. The coach decides. Write the decision down. Nothing is downloaded before the coach says yes.
 
 **B2. The relay and `Net`. (M–L)** Build the relay and the autoload. Test on one laptop with two game windows.
 Done when: one window creates, the other joins with the code, both lobbies match, and these all show a clear message: wrong code, full party, a player leaving, the leader leaving.
@@ -272,39 +270,11 @@ Done when: a problem fixed in one window disappears in the other, and both windo
 
 ---
 
-## 10. Kickoff prompt (paste into Claude Code)
-
-```
-Read CLAUDE.md, AGENT_SOURCE.md, FINAL GAME PLAN, UPGRADE_PLAN_V2.md, then
-MULTIPLAYER_PLAN_V6.md. For anything about players, parties, bots, voting or
-difficulty by team size, MULTIPLAYER_PLAN_V6.md wins.
-
-Before changing anything: commit the current game and make a branch called
-multiplayer-v6.
-
-Start with Step 0. It is read-only: change no files. Give me the Step 0 report,
-then WAIT.
-
-Then do ONE step at a time in this order: A1, A2, A3, A4, A5, A6, then B1 to B7.
-For each step use PLAN / DO / SELF-CHECK / MY TEST / WAIT, and commit after I approve.
-
-Rules for the whole plan:
-- Solo play must work exactly as before. Check it in every SELF-CHECK.
-- Do not change anything inside the minigame scenes.
-- Every number goes in data/multiplayer.json.
-- The party leader's game owns GameState and rolls every random number.
-- B1 is read-and-plan only. Do not download, install or sign up for anything
-  without asking me first.
-- If a step is bigger than expected, stop and offer the smaller version.
-```
-
----
-
 ## 11. Who does what
 
 | Person | Job |
 |---|---|
-| Holden (Lead Programmer) | Runs Claude Code through Step 0 → A → B. Tests with two game windows |
+| Holden (Lead Programmer) | Builds Step 0 → A → B. Tests with two game windows |
 | The coach | Decides where the relay runs and owns that account (B1) |
 | Amy (Science & Data) | Playtests the scaling table. Is ×4 problems fair with 4 players? Changes the numbers in the data file |
 | Rena (Head Writer) | Party screen text, bot names, waiting lines, error sentences, "Tie! Talk it over." |

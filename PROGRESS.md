@@ -26,7 +26,7 @@ Self-checks (passed): compile check; bots party on the ship (a bot walked Bridge
 
 ## Multiplayer V6 (2026-11-15 evening, branch `multiplayer-v6`): Phase A + Phase B built, waiting for Holden's test
 
-Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: `AGENT_SOURCE.md` section 2 (multiplayer lines).
+Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: team decisions (multiplayer lines).
 
 | Step | What changed | Key files |
 |---|---|---|
@@ -36,7 +36,7 @@ Plan: `MULTIPLAYER PLAN V6  MD.md`. Decisions: `AGENT_SOURCE.md` section 2 (mult
 | A4 | Votes in the Mission Room and Design Lab: Enter = my vote, dots over the nameplates, "2 of 3 votes in · 45 s", tie → revote → coin flip, instruments by majority. Test key F8 (bots party) = a fake human vote | `choice_room.gd`, `Party.gd` |
 | A5 | Launch pad crew rows (GO / NO-GO / …), "Say GO" button, GO FOR LAUNCH locked until all GO. F8 = a fake human flips NO-GO / GO. Ready checks = moving on together (below) | `launch.gd`, `Party.gd` |
 | A6 | Report: "The crew" box (build-job scores, problems fixed, data per player); leaderboard row with the party's names | `debrief.gd` |
-| B1 | Relay plan written (no sign-ups, nothing downloaded): Godot relay; the internet address waits for the coach | `relay/README.md`, `AGENT_SOURCE.md` |
+| B1 | Relay plan written (no sign-ups, nothing downloaded): Godot relay; the internet address waits for the coach | `relay/README.md` |
 | B2 | Relay (`relay/relay.gd`, its own tiny project, ignored by the game) + `Net` autoload (WebSocketPeer) | `relay/`, `serve_relay.ps1`, `scripts/autoload/Net.gd` |
 | B3 | Move together: a screen that wants to move on = "I'm ready"; the leader moves everyone with its GameState (each keeps own name + character). "Go anyway" for the leader after 20 s | `Party.gd`, `StageManager.gd` |
 | B4 | Votes, minigame scores (0 after 30 s) and GO calls over the network | `Party.gd` |
@@ -110,7 +110,7 @@ Web export 3:54 PM; browser sound re-checked. New autoload (Achievements): Proje
   ("87 kg over the Atlas V 401's payload capacity of 2315 kg"); other characters' notebooks stay empty.
 - The character is now called "The Assistant Scientist" on screen (was "The Scientist").
 - Answers chosen for the brief's questions (recommended): rocket/orbit/instruments; the existing voice bar; learn on
-  mission AND checkpoint failures; the notebook is kept between sessions; Claude drafted the text (Head Writer edits).
+  mission AND checkpoint failures; the notebook is kept between sessions; AI-drafted text (Head Writer edits).
 - No git, so no commits. Web export 11:30 AM. Holden: Project → Reload Current Project (new autoload).
 
 ## ROOM_LAYOUT_PLAN_V5 (2026-11-15, 10:15–10:40 am): Steps 0–5 built, waiting for Holden's test
@@ -313,7 +313,7 @@ Yourself: Satellite!), Mission Viz (nasa.github.io/mission-viz).
 each mission, the challenge's six points, NASA number examples). The Head Writer can
 reuse it. If the game's numbers change, re-check its "How to win" hints.
 
-## Decided 2026-11-13 (in AGENT_SOURCE.md)
+## Decided 2026-11-13
 
 - **Rockets:** keep the real numbers (Falcon 9 is cheapest and lifts the most) and
   teach why: a "Did you know?" on the rocket screen. The trade-off is cost and lift
@@ -346,7 +346,7 @@ console prints are off in the web build; student/coach names removed from the da
 - Workshop shadows off for browser speed; ripple panel scrolls.
 - Arrival props and lander sizes moved into `game_data.json` (`arrival_props` > `kinds`, `lander_parts`).
 - Workshop sounds (PLAN.md §7): a drill when a worker starts a job, and a radio beep every 11 s (based on the Apollo Quindar tones).
-- Out-of-date notes fixed (base budget readme, AGENT_SOURCE orbit fuel line, lunar night note).
+- Out-of-date notes fixed (base budget readme, lunar night note).
 - Reviewer #1 (rocket balance): settled 2026-11-13. The real numbers stay, and the rocket screen teaches why the Falcon 9 is cheap.
 
 ## Rough edges (not fixed)
@@ -381,7 +381,6 @@ Added and checked (headless test of every screen for Moon, Mars and Venus, scree
 
 ## How to resume
 
-- Read `CLAUDE.md`, `TASKS.md`, `AGENT_SOURCE.md` (section "Step 11b").
 - Self-check:
   `& "C:\Users\holde\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe" --headless --path "C:\Users\holde\onedrive\desktop\Nasa_space_apps\how-did-we-get-here-" --quit`
 - Web export: `... --headless --path "<project>" --export-release "Web" "build/web/index.html"`

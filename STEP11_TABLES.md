@@ -1,7 +1,7 @@
 # Step 11a: real-number tables (for Amy to check)
 
 Made 2026-11-12 by web search of NASA sources (no downloads). **Update 2026-11-13:
-step 11b put the ✅ rows in with the recommended answers** (see AGENT_SOURCE.md, "Step 11b").
+step 11b put the ✅ rows in with the recommended answers**.
 Amy still checks every row; anything she changes gets put in afterward. Amy checks each row: ✅ use it, ✏️ change it, or ❌ keep the
 game value. Then Holden says pass, and step 11b puts the numbers in.
 

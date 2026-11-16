@@ -3,11 +3,11 @@
 Written Nov 14, 2026 (Saturday evening) by Fable, from the team's day-1 playtest notes.
 Freeze is still **Sunday Nov 15, 2:00 pm**.
 
-**How to use this file.** Put it in the game folder next to `UPGRADE_PLAN_V2.md` and `NASA_RESOURCES_PLAN.md`. Paste the kickoff prompt (section 8) into Claude Code.
+**How to use this file.** Put it in the game folder next to `UPGRADE_PLAN_V2.md` and `NASA_RESOURCES_PLAN.md`.
 
-**Which file wins.** This file wins over the older plans wherever they disagree. The rules in `CLAUDE.md` still apply (numbers in data files, PLACEHOLDER marking, PLAN / DO / SELF-CHECK / MY TEST / WAIT).
+**Which file wins.** This file wins over the older plans wherever they disagree.
 
-**Be honest about time.** There is less than one working day left. Most of this list is *words and data*, which is good news: Rena and Amy can write while Holden and Claude Code build. The steps are ordered so the game still works after every step. Stop at the freeze and submit what you have.
+**Be honest about time.** There is less than one working day left. Most of this list is *words and data*, which is good news: Rena and Amy can write while Holden builds. The steps are ordered so the game still works after every step. Stop at the freeze and submit what you have.
 
 **What I have not seen.** I wrote this from the plans, not from the running game. Step 0 checks the plan against the real project before anything changes.
 
@@ -26,8 +26,6 @@ These add to the seven "fun first" rules in the NASA Resources Plan (20 words pe
 ---
 
 ## 2. Decisions that change
-
-Record each row in `AGENT_SOURCE.md` as a team decision dated Nov 14, 2026.
 
 | Topic | Before | Now |
 |---|---|---|
@@ -172,7 +170,7 @@ The three launch vehicles use real names, real payload capacity and real cost (A
 ### Phase D: The view out the window (M)
 
 **D1. Real Earth and Mars.**
-- Wrap real NASA map images around the spheres: NASA's Blue Marble for Earth and a NASA/USGS global Mars mosaic for Mars. These are real NASA data, so they also count in the NASA Data field. Claude Code **asks before downloading**, and writes the exact source page in `AGENT_SOURCE.md`.
+- Wrap real NASA map images around the spheres: NASA's Blue Marble for Earth and a NASA/USGS global Mars mosaic for Mars. These are real NASA data, so they also count in the NASA Data field. The team **asks before downloading** and writes down the exact source page.
 - Keep each image at 2048 pixels wide or smaller so the web build stays fast.
 - Earth: a thin blue glow at the edge, a slow spin, a soft cloud layer if the map has one. Mars: a thin pale-orange edge, visible polar cap, slow spin.
 - One strong light from the Sun's side so each planet has a day side and a night side.
@@ -236,7 +234,7 @@ An honest note for the briefing: no astronaut has been to Mars or Venus. Our cre
 
 | Person | Tonight and Sunday morning |
 |---|---|
-| Holden (Lead Programmer) | Runs Claude Code through Step 0 → A → B → D. Tests each step |
+| Holden (Lead Programmer) | Builds Step 0 → A → B → D. Tests each step |
 | Rena (Head Writer) | Staff cards (B1), mission cards (B2), briefing cards (B3), the General's 13 lines (B4), Q card text |
 | Amy (Science & Data) | Checks section 5, fills sources, confirms every number the General says |
 | Jeremy (Art Designer) | Leads the declutter audit (E), picks the planet look (D), designs the plushie |
@@ -251,27 +249,6 @@ An honest note for the briefing: no astronaut has been to Mars or Venus. Our cre
 **Never cut:** A1, A2, A3, B1, B3. They are small, and they fix the notes players will feel most.
 
 **Stop at 2:00 pm Sunday.** Then: web export, one playthrough per mission, the video, the form.
-
----
-
-## 8. Kickoff prompt (paste into Claude Code)
-
-```
-Read CLAUDE.md, AGENT_SOURCE.md, UPGRADE_PLAN_V2.md, NASA_RESOURCES_PLAN.md, then
-UPGRADE_PLAN_V3.md. UPGRADE_PLAN_V3.md wins wherever they disagree.
-
-Before changing anything: commit the current game and make a branch called upgrade-v3.
-
-Start with Step 0. It is read-only: change no files. Give me the Step 0 report, then WAIT.
-
-Then do ONE step at a time in this order: A1, A2, A3, B1, B2, B3, B4, C1–C4, D1, E.
-For each step use PLAN / DO / SELF-CHECK / MY TEST / WAIT, and commit after I approve.
-
-For every line of player-facing text: create the slot in the data file, mark it
-PLACEHOLDER, and tell me which lines the writers need to fill. Never invent a real-looking
-fact, name, number or quote. Never write dialogue for a real person. Ask before
-downloading anything. If a step is bigger than expected, offer a smaller version.
-```
 
 ---
 
