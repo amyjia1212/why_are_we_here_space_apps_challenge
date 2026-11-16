@@ -55,6 +55,8 @@ var wall_cards: Array = []            # the option cards on the wall (same order
 var last_wall_totals: Dictionary = {} # the numbers at the last wall refresh (for count-up and the change marks)
 var prompt_label: Label
 var previous_button: Button   # Design Lab only: back one station (shown from the 2nd station on)
+var confirm_mark: Label       # "Press ENTER to confirm" watermark once something is picked
+var confirm_pill: PanelContainer   # the dark see-through box behind it
 var inner_voice: PanelContainer
 var hired_camera: Camera3D
 var hired_target: Vector3
@@ -361,6 +363,26 @@ func build_ui() -> void:
 	name_label.theme_type_variation = &"AccentText"
 	name_label.text = words["room_names"][room_kind]
 	name_chip.add_child(name_label)
+	# The confirm watermark (2026-11-15 team note): once something is picked, a big
+	# see-through "Press ENTER to confirm" sits just under the middle of the screen.
+	# On a dark see-through pill so it reads on the white walls too.
+	confirm_pill = PanelContainer.new()
+	confirm_pill.theme_type_variation = &"HintPanel"
+	confirm_pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	confirm_pill.anchor_left = 0.5
+	confirm_pill.anchor_right = 0.5
+	confirm_pill.anchor_top = 0.5
+	confirm_pill.anchor_bottom = 0.5
+	confirm_pill.offset_top = float(settings.get("confirm_mark_offset_y", 40))
+	confirm_pill.offset_bottom = confirm_pill.offset_top
+	confirm_pill.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	confirm_pill.modulate.a = float(settings.get("confirm_mark_alpha", 0.7))
+	confirm_pill.visible = false
+	layer.add_child(confirm_pill)
+	confirm_mark = Label.new()
+	confirm_mark.theme_type_variation = &"TitleText"   # HugeText ran off the screen
+	confirm_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	confirm_pill.add_child(confirm_mark)
 	# A Previous button (2026-11-15 team note): go back one station in the Design
 	# Lab and change that choice. Backspace does the same; Esc frees the mouse to click it.
 	if room_kind == "design":
@@ -1497,6 +1519,7 @@ func update_prompt() -> void:
 	# marker points at the console instead (never both, they would overlap).
 	if console_tag != null:
 		console_tag.visible = false   # ROOM_LAYOUT_PLAN_V5: never floating text in the middle
+	update_confirm_mark()
 	if busy:
 		prompt_label.text = ""
 		return
@@ -1525,6 +1548,16 @@ func update_prompt() -> void:
 		prompt_label.text = Data.story["extras"]["tap_part"]["hint"] + ": " + tap_target_name()
 	else:
 		prompt_label.text = ""
+
+
+# The watermark shows once a choice is picked (instruments: always, it says "when done packing").
+func update_confirm_mark() -> void:
+	if confirm_mark == null:
+		return
+	var cat: String = category()
+	var picked: bool = previewed and str(get_value(cat)) != ""
+	confirm_pill.visible = picked and not busy
+	confirm_mark.text = words["confirm_mark_instruments" if cat == "instruments" else "confirm_mark"]
 
 
 func confirm() -> void:

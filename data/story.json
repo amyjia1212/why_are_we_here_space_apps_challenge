@@ -1144,6 +1144,8 @@
     "_readme": "Words for the 3D Choice Room (UPGRADE_PLAN_V2 steps 13-14). titles = the big title on the wall for each choice; room_names = the sign over the screen.",
     "room_names": { "character": "Who Are You?", "mission": "Mission Room", "design": "Mission Design Lab" },
     "previous_button": "< Previous step (Backspace)",
+    "confirm_mark": "Press ENTER to confirm",
+    "confirm_mark_instruments": "Press ENTER when you are done packing",
     "retry": { "_readme": "UPGRADE_PLAN_V6 B3/B4: the amber arrow over what the Scientist should pick on a retry, and the tag over last run's pick.", "arrow_color": "#ffb020", "last_tag": "LAST TIME" },
     "wall": {
       "_readme": "The wall screen's small words (UI_POLISH_PLAN_V4 Step 2). short_resources = the six names on the slim strip (short so they fit).",

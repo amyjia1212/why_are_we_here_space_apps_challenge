@@ -77,11 +77,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		# Stop the camera from flipping over or going under the ground.
 		head.rotation.x = clamp(head.rotation.x, deg_to_rad(-look_down_degrees), deg_to_rad(look_up_degrees))
 
-	# Esc frees the mouse. Clicking in the window grabs it again.
+	# Esc frees the mouse. Clicking in the window grabs it again, unless a
+	# minigame or a card is open (it needs the mouse; 2026-11-15 fix).
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.pressed and not mouse_is_needed():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+# True while a minigame, a station job or a learn card is open: anything in the
+# "frees_mouse" group. The mouse then stays free so you can click and drag.
+func mouse_is_needed() -> bool:
+	return not get_tree().get_nodes_in_group("frees_mouse").is_empty()
+
+
+func _process(_delta: float) -> void:
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and mouse_is_needed():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 # Runs 60 times a second, for movement and physics.

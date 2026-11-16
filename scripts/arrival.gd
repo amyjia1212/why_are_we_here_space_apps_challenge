@@ -630,6 +630,7 @@ func show_explain_card(card: Dictionary) -> void:
 	explain_layer = CanvasLayer.new()
 	explain_layer.layer = 60
 	explain_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	explain_layer.add_to_group("frees_mouse")   # the mouse stays free for the button
 	add_child(explain_layer)
 	var dim := Panel.new()
 	dim.theme_type_variation = &"DimBackground"

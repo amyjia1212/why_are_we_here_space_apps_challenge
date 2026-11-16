@@ -391,6 +391,7 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
 - **Launch dates trade off waiting money against trip length and scrubs (2026-11-15).** Why: "poor dates are sooner... but there's a lot of variability... We want trade-offs for all of those. And for it to be apparent."
 - **Credits removed from the start menu (2026-11-15).** Team request.
 - **Real astronauts as crew, facts only (2026-11-15).** Narrator fact cards with NASA sources, drawn in-game portraits, no photos, no invented first-person lines; the game says the crew assignment is our idea. Why: the team wants players to "learn about the person who's in there... who they are, what they've done".
+- **No astronaut name plaques in the intro (2026-11-15).** Turned off (nasa_resources.json intro_plaques > enabled = false); the real astronauts meet the player as crew on the ship. Why: "why is that in the first cutscene, I feel like it is a bit out of place" (it also covered the subtitle line).
 - **Life bars with consequences (2026-11-15).** A bar at zero restarts the trip with the same design (DEFAULT). Why: "if one of these things go bad, there's actual consequences to it".
 
 ## 3. Rejected choices
