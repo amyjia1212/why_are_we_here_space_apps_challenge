@@ -22,6 +22,7 @@ var settings: Dictionary        # game_data.json "hud"
 var root: Control
 var hint_panel: PanelContainer
 var hint_label: Label
+var key_strip: HBoxContainer    # key caps on walking screens (story.json controls > key_strip)
 var flash_label: Label
 var flash_tween: Tween
 var timers_panel: PanelContainer
@@ -126,9 +127,17 @@ func make_hint() -> void:
 	hint_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	hint_panel.position.y = 6
 	root.add_child(hint_panel)
+	var hint_row := HBoxContainer.new()
+	hint_row.add_theme_constant_override("separation", 16)
+	hint_panel.add_child(hint_row)
 	hint_label = Label.new()
 	hint_label.theme_type_variation = &"HintText"
-	hint_panel.add_child(hint_label)
+	hint_row.add_child(hint_label)
+	# The key strip (UPGRADE_PLAN_V6 A3): on walking screens each key is a small
+	# key cap with its job next to it, so it reads as "these are the buttons".
+	key_strip = HBoxContainer.new()
+	key_strip.add_theme_constant_override("separation", 12)
+	hint_row.add_child(key_strip)
 
 	flash_label = Label.new()
 	flash_label.theme_type_variation = &"HeadingText"
@@ -346,6 +355,15 @@ func update_question_tag() -> void:
 		question_tag_label.text = Data.story["question_card"]["tag"].format({"word": entry["word"]})
 
 
+# The "Q ?" sign grows and shrinks twice, so the player notices it (UPGRADE_PLAN_V6 A4).
+func pulse_question_tag() -> void:
+	question_tag.pivot_offset = question_tag.size / 2.0
+	var tween := question_tag.create_tween()
+	for i in 2:
+		tween.tween_property(question_tag, "scale", Vector2(1.25, 1.25), 0.25)
+		tween.tween_property(question_tag, "scale", Vector2.ONE, 0.25)
+
+
 func open_question(word_id: String) -> void:
 	var entry: Dictionary = GameState.glossary_entry(word_id)
 	if entry.is_empty():
@@ -385,6 +403,7 @@ func open_question(word_id: String) -> void:
 	UI.fade_in(question_card, Vector2.ZERO)   # 0.18 s fade (Step 3a / Step 4); its height is still settling, so no slide
 	AudioManager.play_sfx("preview")
 	GameState.unlock_stamp(word_id)
+	Achievements.question_opened()
 
 
 func add_question_line(text: String, style: StringName) -> void:
@@ -511,7 +530,9 @@ func _process(_delta: float) -> void:
 func on_scene_changed() -> void:
 	var hints: Dictionary = Data.story["controls"]["hints"]
 	hint_label.text = hints.get(scene_id, Data.story["controls"]["hint_default"])
-	hint_panel.visible = hint_label.text != ""
+	fill_key_strip()
+	hint_label.visible = key_strip.get_child_count() == 0
+	hint_panel.visible = hint_label.text != "" or key_strip.get_child_count() > 0
 	close_tablet()
 	close_dictionary()
 	close_question()
@@ -520,6 +541,30 @@ func on_scene_changed() -> void:
 	if page != "":
 		close_page()
 	update_portrait()
+
+
+# Key caps for this screen: [ WASD ] move  [ E ] use ... (story.json controls > key_strip).
+func fill_key_strip() -> void:
+	for child in key_strip.get_children():
+		child.queue_free()
+		key_strip.remove_child(child)
+	var keys: Array = Data.story["controls"].get("key_strip", {}).get(scene_id, [])
+	for pair in keys:
+		var item := HBoxContainer.new()
+		item.add_theme_constant_override("separation", 4)
+		var cap := PanelContainer.new()
+		cap.theme_type_variation = &"TagPill"
+		cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var cap_text := Label.new()
+		cap_text.theme_type_variation = &"PillSmallText"
+		cap_text.text = pair[0]
+		cap.add_child(cap_text)
+		item.add_child(cap)
+		var job := Label.new()
+		job.theme_type_variation = &"HintText"
+		job.text = pair[1]
+		item.add_child(job)
+		key_strip.add_child(item)
 
 
 func update_portrait() -> void:
@@ -766,12 +811,19 @@ func fill_notebook() -> void:
 	add_title(words["title"].format({"name": Data.story["characters"][who]["name"]}))
 	var earned: Array = Notebook.words_for(who)
 	var all_terms: Array = Notebook.terms()
+	# Two sides (UPGRADE_PLAN_V6 C3): the words on the left, the achievements on the right.
+	var sides := HBoxContainer.new()
+	sides.add_theme_constant_override("separation", 24)
+	modal_box.add_child(sides)
+	var left := VBoxContainer.new()
+	sides.add_child(left)
 	var progress := UI.label(words["progress"].format({"n": earned.size(), "total": all_terms.size()}), &"AccentText")
-	modal_box.add_child(progress)
+	left.add_child(progress)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.custom_minimum_size = Vector2(760, 380)
-	modal_box.add_child(scroll)
+	scroll.custom_minimum_size = Vector2(470, 400)
+	left.add_child(scroll)
+	sides.add_child(make_achievement_list(Vector2(500, 400)))
 	var list := VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 8)
@@ -804,6 +856,43 @@ func fill_notebook() -> void:
 			box.add_child(UI.label(words["this_run"] + " " + entry["run"], &"SmallText", true))
 	modal_box.add_child(UI.label(words["close"], &"TinyText"))
 	add_button(Data.story["pause"]["close"], close_page).grab_focus()
+
+
+# The achievements, earned ones in color first, the rest gray but with how to
+# get them (UPGRADE_PLAN_V6 C3). Used by the Notebook.
+func make_achievement_list(size: Vector2) -> Control:
+	var column := VBoxContainer.new()
+	column.add_child(UI.label(Data.story["achievements"]["title"] + "  ·  " + Achievements.count_text(), &"AccentText"))
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.custom_minimum_size = size
+	column.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 8)
+	scroll.add_child(list)
+	var order: Array = Data.achievements["order"].duplicate()
+	order.sort_custom(func(a, b): return int(Achievements.has(a)) > int(Achievements.has(b)))
+	for id in order:
+		var a: Dictionary = Achievements.info(id)
+		var got: bool = Achievements.has(id)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		list.add_child(row)
+		var badge := Control.new()
+		badge.custom_minimum_size = Vector2(44, 44)
+		badge.draw.connect(func(): Achievements.draw_badge(badge, Rect2(Vector2.ZERO, badge.size), a.get("icon", "star"), Color(a.get("color", "#ffd700")), got))
+		row.add_child(badge)
+		var text := VBoxContainer.new()
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text.add_theme_constant_override("separation", 0)
+		row.add_child(text)
+		var name_label := UI.label(a["name"], &"BodyText")
+		if not got:
+			name_label.modulate.a = 0.6
+		text.add_child(name_label)
+		text.add_child(UI.label(a["how"], &"SmallText", true))
+	return column
 
 
 # Back goes to the pause menu if the game is paused, otherwise closes.

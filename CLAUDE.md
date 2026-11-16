@@ -83,17 +83,20 @@ Every build must move us toward these six points. The game must let players:
 - Each batch of steps (a batch heading in `TASKS.md`) ends with one full playthrough,
   a re-export to `build/web`, and a browser test, done once at the end of the batch.
   The playthrough covers a losing round and a winning round. The agent does the
-  re-export. MY TEST tells Holden how to do the browser test: in PowerShell,
-  `cd build\web; python -m http.server 8000`, then open http://localhost:8000.
+  re-export. MY TEST tells Holden how to do the browser test: Python is NOT installed
+  (2026-11-15), so in PowerShell, from the game folder,
+  `powershell -ExecutionPolicy Bypass -File serve_web.ps1`, then open http://localhost:8000.
 - Amy replaces PLACEHOLDER values with real NASA data and a source link, or a
   written game-design choice the team passes, before the final submission. Agents
   never invent real-looking numbers. Mark every new made-up number
   `"source": "PLACEHOLDER"`.
 - Ask before downloading anything or adding an outside asset. When we use an outside
   image, sound, model, or code file, add it to `REFERENCES.md` with its link.
-- This folder is our saved final draft (2026-11-15). It is the copy pushed to
-  github.com/amyjia1212/why_are_we_here_space_apps_challenge. Do not change it, commit
-  or push from it unless Holden asks. New changes go in "How did we get here final".
+- This folder ("How did we get here final", made 2026-11-15) holds our last changes.
+  Since 2026-11-15 (6 pm) it is a git repo linked to
+  github.com/amyjia1212/why_are_we_here_space_apps_challenge (branch main), and its work
+  was pushed there on Holden's request. Only commit or push when Holden asks.
+  "How did we get here + more stuff" is the older saved draft.
 - Explain each step in short, simple English. Holden is learning Godot and shows this
   work to the team.
 
@@ -102,10 +105,10 @@ Every build must move us toward these six points. The game must let players:
 Run this in PowerShell (the full `--path` means it works from any folder):
 
 ```
-& "C:\Users\holde\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe" --headless --path "C:\Users\holde\Onedrive\Desktop\Nasa_space_apps\How did we get here + more stuff" --quit
+& "C:\Users\holde\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe" --headless --path "C:\Users\holde\Onedrive\Desktop\Nasa_space_apps\How did we get here final" --quit
 ```
 
-(This is the "+ more stuff" copy, 2026-11-14. The original game is in "Original how did we get here".)
+(This is the "final" copy, 2026-11-15. The saved final draft is "How did we get here + more stuff"; the original game is in "Original how did we get here".)
 
 Don't use `--check-only --script`; it reports false autoload errors.
 

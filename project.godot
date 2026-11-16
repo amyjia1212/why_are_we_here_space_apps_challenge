@@ -30,6 +30,7 @@ Portraits="*res://scripts/autoload/Portraits.gd"
 Bots="*res://scripts/autoload/Bots.gd"
 Hud="*res://scripts/autoload/Hud.gd"
 Notebook="*res://scripts/autoload/Notebook.gd"
+Achievements="*res://scripts/autoload/Achievements.gd"
 
 [display]
 

@@ -67,6 +67,12 @@ func make_tutorial_parts() -> void:
 	help_button.custom_minimum_size = Vector2(48, 48)
 	help_button.pressed.connect(_on_help_pressed)
 	top_row.add_child(help_button)
+	# Room for the Hud's "Q ?" sign in the top-right corner, so it no longer
+	# sits on top of the "?" button (UPGRADE_PLAN_V6 A4).
+	var q_gap := Control.new()
+	q_gap.custom_minimum_size.x = float(Data.minigames["tutorial"].get("q_tag_gap_pixels", 200))
+	q_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_row.add_child(q_gap)
 
 	var column: VBoxContainer = overlay_title.get_parent()
 	steps_label = Label.new()
@@ -215,6 +221,10 @@ func show_overlay(title: String, body: String, button_text: String, new_state: S
 	steps_label.visible = tutorial
 	example.visible = tutorial
 	space_label.visible = new_state == "intro"
+	# Before each build job: remind the player that Q explains it (UPGRADE_PLAN_V6 A4).
+	if new_state == "intro" and words.has("q_reminder"):
+		space_label.text = words["press_space"] + "\n" + words["q_reminder"]
+		Hud.pulse_question_tag()
 	overlay_button.text = button_text
 	state = new_state
 	overlay.visible = true

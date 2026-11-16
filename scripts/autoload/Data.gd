@@ -28,6 +28,8 @@ var minigames: Dictionary = {}   # from data/minigames.json: player count and th
 var audio: Dictionary = {}   # from data/audio.json: music, beep-talk voices, volume sliders
 var nasa: Dictionary = {}    # from data/nasa_resources.json: NASA resources, segments, CML, Space Dictionary
 var extras: Dictionary = {}  # from data/extras.json: the extra features (launch window, patch, clean room...)
+var crew: Dictionary = {}    # from data/crew.json: the real astronauts on the ship (UPGRADE_PLAN_V6 C1)
+var achievements: Dictionary = {}   # from data/achievements.json (UPGRADE_PLAN_V6 C3)
 
 
 # _ready() runs automatically when this node starts.
@@ -47,6 +49,8 @@ func _ready() -> void:
 	audio = load_json("res://data/audio.json")
 	nasa = load_json("res://data/nasa_resources.json")
 	extras = load_json("res://data/extras.json")
+	crew = load_json("res://data/crew.json")
+	achievements = load_json("res://data/achievements.json")
 
 	resources = game_data.get("resources", {})
 	parts = game_data.get("parts", {})

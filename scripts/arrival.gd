@@ -235,10 +235,10 @@ func make_spot_props() -> void:
 # for example a seismometer standing where the player set it down.
 func make_done_prop(task_id: String) -> void:
 	var done_props: Dictionary = settings.get("done_props", {})
-	if not done_props.has(task_id):
+	if not done_props.has(text_of(task_id)):
 		return
 	var task: Dictionary = tasks.filter(func(t): return t["id"] == task_id)[0]
-	make_prop(done_props[task_id], to_vector(settings["spots"][task["spot"]]))
+	make_prop(done_props[text_of(task_id)], to_vector(settings["spots"][task["spot"]]))
 
 
 # Builds one prop from its recipe in game_data.json "arrival_props" > "kinds":
@@ -546,7 +546,23 @@ func current_task() -> Dictionary:
 
 
 func task_voice(task_id: String, line: String) -> String:
-	return voice["tasks"].get(task_id, {}).get(line, "")
+	return voice["tasks"].get(text_of(task_id), {}).get(line, "")
+
+
+# The task whose words this task uses (UPGRADE_PLAN_V6 C4: drill_2 talks like "drill").
+func text_of(task_id: String) -> String:
+	for task in tasks:
+		if task["id"] == task_id:
+			return str(task.get("text_as", task_id))
+	return task_id
+
+
+# The task's line in the list, with its dig site number when it has one.
+func task_label(task: Dictionary) -> String:
+	var text: String = words["tasks"][mission_key][text_of(task["id"])]
+	if task.has("site"):
+		text += words["site_suffix"].format({"n": int(task["site"])})
+	return text
 
 
 # A missing instrument: every task that needs it fails, and so does every
@@ -587,6 +603,89 @@ func _on_spot_entered(body: Node3D, spot_id: String) -> void:
 			inner_voice.say(task_voice(task["id"], "missing"))
 			after_task_change()
 			return
+	# The first time a task with an explanation is ready here, a card explains it
+	# before you start (UPGRADE_PLAN_V6 A6: the drill and the ice race).
+	var explain: Dictionary = Data.story["arrival_screen"].get("explain", {})
+	for task in tasks_at(spot_id):
+		if state[task["id"]] == "open" and ready_now(task) and explain.has(text_of(task["id"])) and not explained.has(text_of(task["id"])):
+			explained.append(text_of(task["id"]))
+			show_explain_card(explain[text_of(task["id"])])
+			return
+	# The ground radar reading at a dig site, the first time you step on it (C4 survey).
+	var survey: Dictionary = Data.story["arrival_screen"].get("survey", {}).get(mission_key, {})
+	if survey.has(spot_id) and not surveyed.has(spot_id):
+		surveyed.append(spot_id)
+		inner_voice.say(survey[spot_id])
+
+
+var surveyed: Array = []           # dig sites whose radar reading was said
+
+
+var explained: Array = []          # task ids whose card was shown this run
+var explain_layer: CanvasLayer = null
+
+
+# A paused card in the middle of the screen: a title, a few short lines, "Enter to start".
+func show_explain_card(card: Dictionary) -> void:
+	explain_layer = CanvasLayer.new()
+	explain_layer.layer = 60
+	explain_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(explain_layer)
+	var dim := Panel.new()
+	dim.theme_type_variation = &"DimBackground"
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	explain_layer.add_child(dim)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.add_child(center)
+	var panel := PanelContainer.new()
+	panel.theme_type_variation = &"NavyPanel"
+	panel.custom_minimum_size.x = 620
+	center.add_child(panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 16)
+	panel.add_child(column)
+	var title := Label.new()
+	title.theme_type_variation = &"HeadingText"
+	title.text = card["title"]
+	column.add_child(title)
+	for line in card["lines"]:
+		var label := Label.new()
+		label.theme_type_variation = &"BodyText"
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.text = line
+		column.add_child(label)
+	if card.has("source"):
+		var source := Label.new()
+		source.theme_type_variation = &"TinyText"
+		source.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		source.text = card["source"]
+		column.add_child(source)
+	# A focused button: Enter (or a click) starts. The layer keeps running while
+	# the game is paused, so the button still works.
+	var go := Button.new()
+	go.text = Data.story["arrival_screen"]["explain_start"]
+	go.custom_minimum_size = Vector2(320, 56)
+	go.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	go.pressed.connect(close_explain_card)
+	column.add_child(go)
+	get_tree().paused = true
+	explain_mouse_before = Input.mouse_mode
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	go.call_deferred("grab_focus")
+	AudioManager.play_sfx("preview")
+
+
+var explain_mouse_before: Input.MouseMode = Input.MOUSE_MODE_CAPTURED
+
+
+func close_explain_card() -> void:
+	if explain_layer == null:
+		return
+	explain_layer.queue_free()
+	explain_layer = null
+	get_tree().paused = false
+	Input.mouse_mode = explain_mouse_before
 
 
 func _on_spot_exited(body: Node3D, spot_id: String) -> void:
@@ -687,6 +786,7 @@ var ice_locked: bool = false      # true once the analyzer has started
 func start_ice() -> void:
 	var info: Dictionary = Data.extras["ice_race"]
 	ice_left = float(info["vanish_seconds"])
+	ice_locked = false   # a new sample: the race starts again (C4)
 	GameState.ice_share = 1.0
 	var cube := BoxMesh.new()
 	var s: float = info["carry_size"]
@@ -783,7 +883,7 @@ func start_send(task: Dictionary) -> void:
 		line += " " + voice["slow_send"]
 	line += " " + signal_delay_line()   # the real radio wait, pointed out (extras)
 	# The ice race ends here: what is left of the sample now is what gets analyzed.
-	if task["id"] == Data.extras["ice_race"]["send_task"] and ice_left >= 0.0:
+	if text_of(task["id"]) == Data.extras["ice_race"]["send_task"] and ice_left >= 0.0:
 		ice_locked = true
 		GameState.ice_share = ice_share_now()
 		var ice_key: String = "ice_gone" if ice_left <= 0.0 else "ice_share"
@@ -800,7 +900,7 @@ func update_send(delta: float) -> void:
 		var task: Dictionary = tasks.filter(func(t): return t["id"] == sending)[0]
 		sending = ""
 		send_bar.visible = false
-		var share: float = GameState.ice_share if task["id"] == Data.extras["ice_race"]["send_task"] else 1.0
+		var share: float = GameState.ice_share if text_of(task["id"]) == Data.extras["ice_race"]["send_task"] else 1.0
 		GameState.data_sent += task.get("data_gb", 0.0) * share   # the data counts in the report (less if the ice vanished)
 		if share < 1.0 and ice_cube != null:
 			ice_cube.queue_free()
@@ -815,11 +915,16 @@ func finish_task(task: Dictionary) -> void:
 	var line: String = task_voice(task["id"], "ok")
 	if line != "":
 		inner_voice.say(line)
-	if task["id"] == Data.extras["ice_race"]["after_task"]:
+	if text_of(task["id"]) == Data.extras["ice_race"]["after_task"]:
 		start_ice()   # Race the ice: the sample starts turning to gas
-	elif ice_cube != null and task["id"] == Data.extras["ice_race"]["send_task"]:
-		ice_cube.queue_free()
-		ice_cube = null
+	elif text_of(task["id"]) == Data.extras["ice_race"]["send_task"]:
+		if ice_cube != null:
+			ice_cube.queue_free()
+			ice_cube = null
+		ice_left = -1.0   # ready for the next sample (C4: three samples, one at a time)
+		GameState.ice_samples += 1
+		if GameState.ice_samples >= 3:
+			Achievements.unlock("three_ice")
 	after_task_change()
 
 
@@ -837,13 +942,13 @@ func update_prompt() -> void:
 	var text: String = ""
 	var task: Dictionary = current_task()
 	if not task.is_empty():
-		text = mission_prompts[task["id"]].get("do", "")
+		text = mission_prompts[text_of(task["id"])].get("do", "")
 	else:
 		# Nothing to do here: say why (failed, waiting for another task, or done).
 		for kind in [["failed", "missing"], ["open", "waiting"], ["done", "done"]]:
 			for other in here:
 				if text == "" and state[other["id"]] == kind[0]:
-					text = mission_prompts.get(other["id"], {}).get(kind[1], "")
+					text = mission_prompts.get(text_of(other["id"]), {}).get(kind[1], "")
 	prompt_label.text = text
 
 
@@ -876,14 +981,32 @@ func refresh_task_list() -> void:
 		old.queue_free()
 	var marks: Dictionary = words["marks"]
 	add_list_line(words["tasks_title"], &"AccentText")
+	# Mars (C4): only the dig site you are on now, and "Ice samples: 1 of 3".
+	var site_now: int = current_site()
+	var sites: int = tasks.filter(func(t): return t.has("site")).map(func(t): return int(t["site"])).reduce(func(a, b): return maxi(a, b), 0)
+	if sites > 0:
+		add_list_line(words["samples_line"].format({"n": GameState.ice_samples, "total": sites}), &"BodyText")
 	for task in tasks:
-		var line := add_list_line(marks[state[task["id"]]] + " " + words["tasks"][mission_key][task["id"]], &"BodyText")
+		if task.has("site") and int(task["site"]) != site_now:
+			continue
+		var line := add_list_line(marks[state[task["id"]]] + " " + task_label(task), &"BodyText")
 		if state[task["id"]] == "done":
 			line.modulate.a = 0.55   # finished tasks get quieter (UI_POLISH_PLAN_V4 Step 3a)
 	# The mission checklist as ONE quiet line: "Mission checklist · 3 of 8 done".
 	# The items themselves are on the tablet (Tab) and the report; on screen
 	# they repeated the task list (UI_POLISH_PLAN_V4 Step 3a: small until you ask).
 	add_list_line(words["checklist_title"] + " · " + GameState.checklist_progress_text(), &"TinyText")
+
+
+# The first dig site that still has an open task (0 = no sites, or all done: show the last).
+func current_site() -> int:
+	var last: int = 0
+	for task in tasks:
+		if task.has("site"):
+			last = int(task["site"])
+			if state[task["id"]] == "open":
+				return last
+	return last
 
 
 func add_list_line(text: String, style: StringName) -> Label:
@@ -921,7 +1044,7 @@ func open_spots() -> Array:
 		if state[task["id"]] != "open" or not ready_now(task) or seen.has(task["spot"]):
 			continue
 		seen.append(task["spot"])
-		points.append({"pos": to_vector(settings["spots"][task["spot"]]), "label": words["tasks"][mission_key][task["id"]], "urgent": false})
+		points.append({"pos": to_vector(settings["spots"][task["spot"]]), "label": task_label(task), "urgent": false})
 	return points
 
 

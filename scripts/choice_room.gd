@@ -54,6 +54,7 @@ var wall_root: Control
 var wall_cards: Array = []            # the option cards on the wall (same order as the pedestals)
 var last_wall_totals: Dictionary = {} # the numbers at the last wall refresh (for count-up and the change marks)
 var prompt_label: Label
+var previous_button: Button   # Design Lab only: back one station (shown from the 2nd station on)
 var inner_voice: PanelContainer
 var hired_camera: Camera3D
 var hired_target: Vector3
@@ -86,11 +87,17 @@ func _ready() -> void:
 	# Toy-like staff walk along the sides of the room and wave (step 27).
 	Bots.spawn_walkers(self, settings.get("bot_routes", []))
 	if room_kind == "character":
+		build_achievement_board()
 		general = load(Data.game_data["portraits"]["list"]["general"]).instantiate()
 		add_child(general)
 		general.position = MeshKit.vec3(settings["general_position"])
 		general.rotation.y = deg_to_rad(150)
-	load_category(0)
+	# UPGRADE_PLAN_V6 B3: a guided retry (Scientist) that forgot a key instrument
+	# opens straight at the instruments station.
+	var start: int = 0
+	if room_kind == "design" and GameState.retry_mode == "guided" and not GameState.last_attempt.get("missing_key", []).is_empty():
+		start = maxi(categories.find("instruments"), 0)
+	load_category(start)
 
 
 # ---------- building the room ----------
@@ -354,6 +361,17 @@ func build_ui() -> void:
 	name_label.theme_type_variation = &"AccentText"
 	name_label.text = words["room_names"][room_kind]
 	name_chip.add_child(name_label)
+	# A Previous button (2026-11-15 team note): go back one station in the Design
+	# Lab and change that choice. Backspace does the same; Esc frees the mouse to click it.
+	if room_kind == "design":
+		previous_button = Button.new()
+		previous_button.theme_type_variation = &"SmallButton"
+		previous_button.text = words["previous_button"]
+		previous_button.focus_mode = Control.FOCUS_NONE   # Enter must keep confirming
+		previous_button.position = Vector2(12 + float(Data.game_data["hud"]["portrait_size"]) + 12, 104)
+		previous_button.visible = false
+		previous_button.pressed.connect(go_back)
+		layer.add_child(previous_button)
 
 
 func spawn_player() -> void:
@@ -477,10 +495,11 @@ func option_lines(cat: String, id: String) -> PackedStringArray:
 		"launch_window":
 			var window: Dictionary = Data.extras["launch_window"]["options"][id]
 			var window_words: Dictionary = Data.story["extras"]["launch_window"]
-			var fuel: float = window["effects"].get("mass", 0.0)
+			# UPGRADE_PLAN_V6 B1: three chips that show the trade-off: Wait · Trip · Scrub risk.
+			var wait: float = window["effects"].get("budget", 0.0)
+			lines.append(window_words["wait_line"].format({"value": GameState.fmt(wait)}) if wait > 0.0 else window_words["wait_none"])
 			lines.append(window_words["trip_line"].format({"days": GameState.fmt(roundf(float(GameState.get_destination()["trip_days"]["value"]) * float(window["trip_factor"])))}))
-			lines.append(window_words["fuel_line"].format({"sign": "+" if fuel > 0 else "", "value": GameState.fmt(fuel)}))
-			lines.append(window_words["window_line"].format({"word": window_words["window_words"][id]}))
+			lines.append(window_words["scrub_line"].format({"word": window_words["scrub_words"][id]}))
 		"orbit":
 			lines.append(words["fuel_line"].format({"value": GameState.fmt(GameState.get_destination()["orbits"][id]["fuel_mass"]["value"])}))
 		"instruments":
@@ -508,10 +527,115 @@ func load_category(index: int) -> void:
 	refresh_display()
 	refresh_wall()
 	update_prompt()
+	if previous_button != null:
+		previous_button.visible = index > 0
+	update_retry_marks()
 	if cat == "character" or cat == "mission":
 		inner_voice.say(words["nothing_previewed"])
 	elif room_kind == "design":
-		show_station_hint(index)
+		var retry_line: String = retry_line_for(cat)
+		if retry_line != "":
+			inner_voice.say(retry_line)   # a retry: the guide / last-time line replaces the station hint
+		else:
+			show_station_hint(index)
+
+
+# ---------- the achievement board (UPGRADE_PLAN_V6 C3) ----------
+# A big board on the wall behind the player's start spot: every achievement,
+# with how to get it; earned ones are ticked and bright.
+func build_achievement_board() -> void:
+	var size: Array = settings["room_size"]
+	var wall_z: float = float(size[1]) / 2.0 - 0.2
+	var board_info: Dictionary = settings.get("achievement_board", {"width": 14.0, "height": 4.6, "center_y": 2.7})
+	var w: float = float(board_info["width"])
+	var h: float = float(board_info["height"])
+	var cy: float = float(board_info["center_y"])
+	MeshKit.box(self, Vector3(w, h, 0.06), Vector3(0, cy, wall_z), Color(settings["console_color"]))
+	var words_a: Dictionary = Data.story["achievements"]
+	var title := MeshKit.label(self, words_a["board_title"] + "   " + Achievements.count_text(), Vector3(0, cy + h / 2.0 - 0.35, wall_z - 0.05), 0.008, Color(settings["stripe_color"]))
+	title.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	title.rotation.y = PI
+	var order: Array = Data.achievements["order"]
+	var per_column: int = int(ceil(order.size() / 2.0))
+	for i in order.size():
+		var a: Dictionary = Achievements.info(order[i])
+		var got: bool = Achievements.has(order[i])
+		var col: int = i / per_column
+		var row: int = i % per_column
+		var x: float = (w / 4.0) * (1 if col == 0 else -1)   # turned around: the first column is on the viewer's left
+		var y: float = cy + h / 2.0 - 0.8 - row * ((h - 1.0) / per_column)
+		var line := MeshKit.label(self, "%s %s: %s" % [words_a["got_mark"] if got else words_a["open_mark"], a["name"], a["how"]], Vector3(x, y, wall_z - 0.05), 0.0032, Color(a["color"]) if got else Color(0.75, 0.78, 0.85))
+		line.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+		line.rotation.y = PI
+		line.outline_size = 4
+		line.font_size = 32
+		line.width = (w / 2.0 - 0.3) / 0.0032
+		line.autowrap_mode = TextServer.AUTOWRAP_OFF
+
+
+# ---------- retries (UPGRADE_PLAN_V6 B3 + B4) ----------
+
+var retry_marks: Array = []      # the amber arrows and "Last time" tags in the room
+var retry_said: Array = []       # stations whose retry line was already said (once each)
+
+
+# Amber bouncing arrows over what the Scientist should pick, and a "Last time"
+# tag over last run's pick. Rebuilt for each station.
+func update_retry_marks() -> void:
+	for mark in retry_marks:
+		if is_instance_valid(mark):
+			mark.queue_free()
+	retry_marks.clear()
+	if room_kind != "design" or GameState.last_attempt.is_empty():
+		return
+	var cat: String = category()
+	var guide: Array = GameState.guide_options(cat)
+	var last = GameState.last_attempt["choices"].get(cat, null)
+	var retry_words: Dictionary = words["retry"]
+	for p in pedestals:
+		if p.has("blocked"):
+			continue
+		var top: Vector3 = p["root"].global_position + Vector3(0, float(settings.get("retry_mark_height", 2.2)), 0)
+		if guide.has(p["id"]):
+			var arrow := MeshKit.cylinder(self, 0.32, 0.0, 0.6, top, Color(retry_words["arrow_color"]), 12)   # points down
+			arrow.material_override = MeshKit.glow(Color(retry_words["arrow_color"]), 2.0)
+			arrow.set_meta("bounce_base", top.y)
+			retry_marks.append(arrow)
+			var name_tag := MeshKit.label(self, option_name(cat, p["id"]), top + Vector3(0, 0.75, 0), 0.006, Color(retry_words["arrow_color"]))
+			name_tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+			retry_marks.append(name_tag)
+		var was_last: bool = (last is Array and last.has(p["id"])) or (last is String and last == p["id"])
+		if was_last and cat != "instruments":
+			var tag := MeshKit.label(self, retry_words["last_tag"], top + Vector3(0, -0.5, 0), 0.005, Color.WHITE)
+			tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+			retry_marks.append(tag)
+
+
+# The bouncing arrows (called every frame from _process).
+func bounce_retry_marks() -> void:
+	for mark in retry_marks:
+		if is_instance_valid(mark) and mark.has_meta("bounce_base"):
+			mark.position.y = float(mark.get_meta("bounce_base")) + absf(sin(Time.get_ticks_msec() / 250.0)) * 0.3
+
+
+# One line per station on a retry: the Scientist's guide ("Pick the ice drill"),
+# else what happened last time, in this character's own words.
+func retry_line_for(cat: String) -> String:
+	if GameState.last_attempt.is_empty() or retry_said.has(cat):
+		return ""
+	var retry_words: Dictionary = Data.voice["last_time"]
+	var guide: Array = GameState.guide_options(cat)
+	if not guide.is_empty():
+		retry_said.append(cat)
+		var key: String = "guide_instrument" if cat == "instruments" else "guide_part"
+		return retry_words[key].format({"name": option_name(cat, guide[0])})
+	var last = GameState.last_attempt["choices"].get(cat, null)
+	if last == null or (last is Array):
+		return ""
+	retry_said.append(cat)
+	var verdict: String = GameState.last_attempt["verdicts"].get(cat, "good")
+	var level: String = GameState.level if GameState.level != "" else "medium"
+	return retry_words[level][verdict].format({"name": option_name(cat, str(last))})
 
 
 # Three voices, one decision (INNOVATION.md Feature A): the picked character's
@@ -827,6 +951,7 @@ func refresh_display() -> void:
 
 
 func _process(delta: float) -> void:
+	bounce_retry_marks()
 	if display_model != null:
 		display_model.rotation.y += delta * float(settings["turn_speed"])   # the floating model turns slowly
 	float_time += delta
@@ -1482,6 +1607,8 @@ func say_confirm_line(cat: String) -> void:
 
 # Backspace: back one choice. The current preview is undone first.
 func go_back() -> void:
+	if busy:
+		return   # the room is already leaving
 	if cat_index == 0:
 		AudioManager.play_sfx("cancel")
 		return

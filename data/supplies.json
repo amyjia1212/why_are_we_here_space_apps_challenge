@@ -17,6 +17,20 @@
       "source": "Lopez, Schultz et al. (same paper), Table Gases: 'O 2 Metabolic kg per crew/day 0.82 HIDH / BVAD'. https://ntrs.nasa.gov/api/citations/20150003005/downloads/20150003005.pdf"
     }
   },
+  "needs": {
+    "_readme": "UPGRADE_PLAN_V6 C2 (2026-11-15): the three life bars on the ship (0-100), separate from the six resources. start = each bar at the start of the trip. empties_per_trip = how many times a bar would empty during the whole trip if you never refill it (so the player must eat, drink and swap the filter during the trip). restore = how much one visit refills. station = where you refill it; job = the small hands-on job there (ship_task.gd: eat / fill / swap); log = what the report counts. Under remind_below the voice bar reminds you; under slow_below you walk at slow_factor x walk_speed. A bar at 0 ends the trip: it starts again with the same design. All PLACEHOLDER: game-design choice.",
+    "start": 80,
+    "remind_below": 35,
+    "slow_below": 15,
+    "slow_factor": 0.55,
+    "walk_speed": 4.0,
+    "bars": {
+      "hunger": { "station": "life_food", "job": "eat", "empties_per_trip": 1.6, "restore": 65, "log": "meals" },
+      "hydration": { "station": "life_water", "job": "fill", "empties_per_trip": 2.0, "restore": 65, "log": "drinks" },
+      "air": { "station": "life_air", "job": "swap", "empties_per_trip": 1.4, "restore": 70, "log": "filters" }
+    },
+    "source": "PLACEHOLDER: game-design choice (2026-11-15). The real daily amounts per person are in per_person_per_day above."
+  },
   "crew_size": {
     "value": 4,
     "source": "PLACEHOLDER"

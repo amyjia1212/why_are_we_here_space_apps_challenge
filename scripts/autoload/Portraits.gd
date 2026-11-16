@@ -66,11 +66,21 @@ func build_studio() -> void:
 func take_all() -> void:
 	var settings: Dictionary = Data.game_data["portraits"]
 	DirAccess.make_dir_recursive_absolute("user://portraits")
-	for character_id in settings["list"]:
+	# The real astronauts too (UPGRADE_PLAN_V6 C1): ids "crew_<id>", one figure scene.
+	var jobs: Dictionary = settings["list"].duplicate()
+	for crew_id in Data.crew.get("people", {}):
+		if Data.crew["people"][crew_id].get("show", false):
+			jobs["crew_" + crew_id] = "res://scenes/characters/astronaut.tscn"
+	for character_id in jobs:
 		for child in holder.get_children():
 			child.queue_free()
-		var person: Node3D = load(settings["list"][character_id]).instantiate()
+		var person: Node3D = load(jobs[character_id]).instantiate()
+		if character_id.begins_with("crew_"):
+			person.set("crew_id", character_id.substr(5))
 		holder.add_child(person)
+		for label in person.find_children("*", "Label3D", true, false):
+			if (label as Label3D).billboard != BaseMaterial3D.BILLBOARD_DISABLED:
+				label.visible = false   # no floating name in the picture
 		person.set("idle_bob", false)
 		person.rotation_degrees.y = 180.0 - 20.0   # face the camera, turned a little
 		var height: float = float(person.get("height")) if person.get("height") != null else 1.8

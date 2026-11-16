@@ -79,6 +79,15 @@ func _ready() -> void:
 		for i in failures.size():
 			add_finding(i + 1, failures[i])
 	fill_readings()
+	add_life_report()
+	Achievements.check_report()   # UPGRADE_PLAN_V6 C3: an achievement for every kind of ending
+	# A second "Redesign" button at the very bottom, so nobody scrolls back up (UPGRADE_PLAN_V6 A2).
+	var bottom_button := Button.new()
+	bottom_button.text = words["redesign_button"]
+	bottom_button.custom_minimum_size = redesign_button.custom_minimum_size
+	bottom_button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	bottom_button.pressed.connect(_on_redesign_pressed)
+	get_node("Margin/Column/Scroll/Body").add_child(bottom_button)
 	# The voice learns (INNOVATION.md Feature B): a failed mission or checkpoint
 	# teaches the character the word for the main cause.
 	if not success or not failures.is_empty() or not GameState.get_missing_key_instruments().is_empty():
@@ -109,7 +118,7 @@ func add_notebook_card(learned: Dictionary) -> void:
 	# At the very top of the report's scrolling part, so it is seen right away.
 	var body: VBoxContainer = get_node("Margin/Column/Scroll/Body")
 	body.add_child(card)
-	body.move_child(card, 0)
+	body.move_child(card, 1)   # right under the header (the header scrolls with the page since 2026-11-15)
 	var column := VBoxContainer.new()
 	card.add_child(column)
 	add_line(column, words["new_word_title" if learned["new"] else "known_word_title"].format({"word": t["word"]}), &"HeadingText")
@@ -454,10 +463,34 @@ func add_cell(text: String, color: Color) -> void:
 	readings.add_child(cell)
 
 
+# "Life on the ship" (UPGRADE_PLAN_V6 C2): what the player did on the way.
+func add_life_report() -> void:
+	var w: Dictionary = Data.story["life_report"]
+	var trip: Dictionary = GameState.ship_log
+	var panel := PanelContainer.new()
+	panel.theme_type_variation = &"NavyPanel"
+	get_node("Margin/Column/Scroll/Body").add_child(panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 4)
+	panel.add_child(column)
+	add_line(column, w["title"], &"AccentText")
+	add_line(column, w["meals"].format({"n": int(trip.get("meals", 0))}), &"BodyText")
+	add_line(column, w["drinks"].format({"n": int(trip.get("drinks", 0))}), &"BodyText")
+	add_line(column, w["filters"].format({"n": int(trip.get("filters", 0))}), &"BodyText")
+	var names: Array = []
+	for crew_id in trip.get("crew_talks", []):
+		names.append(Data.crew["people"][crew_id]["name"])
+	add_line(column, w["crew"].format({"names": ", ".join(PackedStringArray(names)) if not names.is_empty() else w["nobody"]}), &"BodyText")
+	add_line(column, w["learned"].format({"n": trip.get("stations_learned", []).size()}), &"BodyText")
+	if int(trip.get("trips_failed", 0)) > 0:
+		add_line(column, w["failed"].format({"n": int(trip["trips_failed"])}), &"BodyText")
+	add_line(column, w["tip"], &"SmallText")
+
+
 # Keep the whole design, fly again (the player changes one thing).
 func _on_redesign_pressed() -> void:
 	redesign_button.disabled = true
-	GameState.start_new_attempt()
+	GameState.start_retry()   # UPGRADE_PLAN_V6 B3: the retry depends on the character
 	StageManager.go_to(Data.game_data["stages"]["redesign_to"])
 
 

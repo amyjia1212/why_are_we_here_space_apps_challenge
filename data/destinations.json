@@ -234,17 +234,24 @@
         "marker_color": "#ff9933",
         "marker_radius": 1.3,
         "marker_glow": 2.0,
+        "_survey_readme": "UPGRADE_PLAN_V6 C4 (2026-11-15): three dig sites, three ice samples, one at a time. Walking onto a site reads the ground radar (story.json arrival_screen > survey). Deeper ice = a longer drill hold (fill_seconds); farther sites = a longer run back to the analyzer before the ice turns to gas. text_as = the task uses that task's words; site = the number shown in the task list. Depths, positions, fill_seconds and data_gb: PLACEHOLDER: game-design choice. The idea that radar finds buried ice: NASA MRO SHARAD (see twins in this file).",
         "spots": {
-          "dig": [0, 0, -16],
+          "dig_1": [-6, 0, -8],
+          "dig_2": [10, 0, -16],
+          "dig_3": [-4, 0, -26],
           "analyzer": [4, 0, 1]
         },
         "tasks": [
-          { "id": "reach", "type": "reach", "spot": "dig" },
-          { "id": "drill", "type": "hold", "spot": "dig", "needs_instrument": "ice_drill", "needs_tasks": ["reach"], "missing_finding": "arrival_no_drill", "fill_seconds": 2.0, "green_start": 0.7, "green_end": 0.86 },
-          { "id": "analyze", "type": "send", "spot": "analyzer", "needs_tasks": ["drill"], "data_gb": 25 }
+          { "id": "reach", "type": "reach", "spot": "dig_1" },
+          { "id": "drill_1", "text_as": "drill", "site": 1, "type": "hold", "spot": "dig_1", "needs_instrument": "ice_drill", "needs_tasks": ["reach"], "missing_finding": "arrival_no_drill", "fill_seconds": 1.7, "green_start": 0.74, "green_end": 0.84, "_green_source": "PLACEHOLDER: game-design choice (2026-11-15, team note: the green zone was too easy; was 0.70 to 0.86)" },
+          { "id": "analyze_1", "text_as": "analyze", "site": 1, "type": "send", "spot": "analyzer", "needs_tasks": ["drill_1"], "data_gb": 9 },
+          { "id": "drill_2", "text_as": "drill", "site": 2, "type": "hold", "spot": "dig_2", "needs_instrument": "ice_drill", "needs_tasks": ["analyze_1"], "missing_finding": "arrival_no_drill", "fill_seconds": 2.1, "green_start": 0.74, "green_end": 0.84 },
+          { "id": "analyze_2", "text_as": "analyze", "site": 2, "type": "send", "spot": "analyzer", "needs_tasks": ["drill_2"], "data_gb": 8 },
+          { "id": "drill_3", "text_as": "drill", "site": 3, "type": "hold", "spot": "dig_3", "needs_instrument": "ice_drill", "needs_tasks": ["analyze_2"], "missing_finding": "arrival_no_drill", "fill_seconds": 2.5, "green_start": 0.74, "green_end": 0.84 },
+          { "id": "analyze_3", "text_as": "analyze", "site": 3, "type": "send", "spot": "analyzer", "needs_tasks": ["drill_3"], "data_gb": 8 }
         ],
         "send": { "base_seconds": 3, "max_seconds": 15 },
-        "goals": { "land_safely": "arrive", "sample_ice": ["drill"], "send_data": ["analyze"] },
+        "goals": { "land_safely": "arrive", "sample_ice": ["drill_1", "drill_2", "drill_3"], "send_data": ["analyze_1", "analyze_2", "analyze_3"] },
         "source": "Game-design choice (layout and look). hold, send and data_gb: PLACEHOLDER: game-design choice proposed at Step 11b (2026-11-13), not searched yet, waiting for the team's pass."
       },
       "report": {

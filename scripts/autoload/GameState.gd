@@ -193,6 +193,147 @@ func start_new_attempt() -> void:
 	quick_fixes.clear()
 	weather_wait_cost = 0.0
 	ice_share = 1.0
+	ship_log.clear()   # life on the ship starts again (UPGRADE_PLAN_V6 C2)
+	ice_samples = 0
+
+
+# --- Life on the ship (UPGRADE_PLAN_V6 C2): what the player did on the way ---
+
+# counts: "meals", "drinks", "filters", "trips_failed"; lists: "crew_talks", "stations_learned"
+var ship_log: Dictionary = {}
+var ice_samples: int = 0   # Mars ice samples analyzed this run (UPGRADE_PLAN_V6 C4)
+
+
+func ship_log_add(key: String, id: String = "") -> void:
+	if id == "":
+		ship_log[key] = int(ship_log.get(key, 0)) + 1
+		return
+	var list: Array = ship_log.get(key, [])
+	if not list.has(id):
+		list.append(id)
+	ship_log[key] = list
+
+
+# A life bar ran out: the trip starts again, the design stays.
+func restart_trip() -> void:
+	data_sent = 0.0
+	data_rate_factor = 1.0
+	flight_instruments_off.clear()
+	flight_outcomes.clear()
+	quick_fixes.clear()
+
+
+# --- Retries that fit the character (UPGRADE_PLAN_V6 B3) and "last time" (B4) ---
+
+var last_attempt: Dictionary = {}   # { "choices": {cat: value}, "verdicts": {cat: "good"/"okay"/"bad"}, "missing_key": [...] }
+var retry_mode: String = ""         # "guided" (Scientist: arrows) / "fresh" (start the design again) / ""
+
+
+# Called by the report before "Redesign": remember this run's picks and how each went.
+func save_last_attempt() -> void:
+	var picks: Dictionary = {
+		"rocket": get_launch_vehicle_id(), "orbit": get_orbit_id(), "launch_window": get_launch_window_id(),
+		"instruments": instruments_packed.duplicate(),
+	}
+	for part_id in choices:
+		picks[part_id] = choices[part_id]
+	var verdicts: Dictionary = {}
+	var success: bool = is_mission_success()
+	var failed: Array = get_failed_resources()
+	# The stations to blame: the most blamed choice for each failed resource.
+	var bad: Array = []
+	var blamed_some: Array = []
+	for res_id in failed:
+		var blamed: Dictionary = most_blamed_choice(res_id)
+		var cat: String = blamed_category(blamed)
+		if cat != "":
+			bad.append(cat)
+		for c in picks:
+			if c != "instruments" and choice_blame(c, res_id) > 0.0:
+				blamed_some.append(c)
+	var missing: Array = get_missing_key_instruments()
+	for cat in picks:
+		if cat == "instruments":
+			verdicts[cat] = "bad" if not missing.is_empty() else "good"
+		elif bad.has(cat):
+			verdicts[cat] = "bad"
+		elif not success and blamed_some.has(cat):
+			verdicts[cat] = "okay"
+		else:
+			verdicts[cat] = "good"
+	last_attempt = {"choices": picks, "verdicts": verdicts, "missing_key": missing, "failed": failed}
+
+
+# Which Design Lab station a most_blamed_choice() result belongs to ("" = none).
+func blamed_category(blamed: Dictionary) -> String:
+	if blamed.is_empty():
+		return ""
+	match blamed["kind"]:
+		"rocket":
+			return "rocket"
+		"orbit":
+			return "orbit"
+		"window":
+			return "launch_window"
+		"part":
+			for part_id in choices:
+				if choice_name(part_id, choices[part_id]) == blamed["name"]:
+					return part_id
+	return ""
+
+
+# How much worse this station's pick is for one resource than its best option (0 = best).
+func choice_blame(cat: String, res_id: String) -> float:
+	if not Data.parts.has(cat):
+		return 0.0
+	var more_is_good: bool = get_limits()[res_id]["rule"] == "min"
+	var versions: Dictionary = Data.parts[cat]["versions"]
+	var mine: float = float(versions[choices[cat]]["effects"].get(res_id, 0.0))
+	var worst: float = 0.0
+	for version_id in versions:
+		var other: float = float(versions[version_id]["effects"].get(res_id, 0.0))
+		worst = maxf(worst, (other - mine) if more_is_good else (mine - other))
+	return worst
+
+
+# The option to point the Scientist's arrow at on this station ("" = none):
+# a missing key instrument, or the version that is best for a resource that failed.
+func guide_options(cat: String) -> Array:
+	if retry_mode != "guided" or last_attempt.is_empty():
+		return []
+	if cat == "instruments":
+		return last_attempt.get("missing_key", []).filter(func(id): return not instruments_packed.has(id))
+	if not Data.parts.has(cat) or last_attempt["verdicts"].get(cat, "good") != "bad":
+		return []
+	for res_id in last_attempt.get("failed", []):
+		var more_is_good: bool = get_limits()[res_id]["rule"] == "min"
+		var versions: Dictionary = Data.parts[cat]["versions"]
+		var best_id: String = ""
+		var best_value: float = 0.0
+		for version_id in versions:
+			var value: float = float(versions[version_id]["effects"].get(res_id, 0.0))
+			if best_id == "" or (value > best_value if more_is_good else value < best_value):
+				best_id = version_id
+				best_value = value
+		if best_id != "":
+			return [best_id]
+	return []
+
+
+# "Redesign and fly again", by character: the Scientist keeps the design and is
+# guided; the Janitor and the Student pick everything again.
+func start_retry() -> void:
+	save_last_attempt()
+	start_new_attempt()
+	var mode: String = str(Data.game_data["stages"].get("retry_by_level", {}).get(level, "guided"))
+	retry_mode = mode
+	if mode == "fresh":
+		choices.clear()
+		instruments_packed.clear()
+		instruments_set = false
+		launch_vehicle_id = ""
+		orbit_id = ""
+		launch_window_id = ""
 
 
 # "New mission": forget the whole design and the mission, but keep who
@@ -208,6 +349,8 @@ func start_new_mission() -> void:
 	minigame_scores.clear()
 	cml_events.clear()      # a new mission idea starts at CML 0 again
 	launch_window_id = ""
+	last_attempt.clear()    # "last time" lines are only about the same mission
+	retry_mode = ""
 
 
 # --- The extras (2026-11-14, data/extras.json) --------------------------------

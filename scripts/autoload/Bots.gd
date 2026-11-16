@@ -25,7 +25,8 @@ func _process(delta: float) -> void:
 
 # routes = a list of paths; each path is a list of [x, y, z] points.
 # The staff scenes come from game_data.json "bots" > "staff_scenes".
-func spawn_walkers(parent: Node3D, routes: Array) -> void:
+# crew_ids = real astronauts to walk these routes instead of the staff (UPGRADE_PLAN_V6 C1).
+func spawn_walkers(parent: Node3D, routes: Array, crew_ids: Array = []) -> void:
 	var settings: Dictionary = Data.game_data["bots"]
 	var scenes: Array = settings["staff_scenes"]
 	for i in routes.size():
@@ -34,7 +35,14 @@ func spawn_walkers(parent: Node3D, routes: Array) -> void:
 			path.append(Vector3(point[0], point[1], point[2]))
 		if path.is_empty():
 			continue
-		var person: Node3D = load(scenes[i % scenes.size()]).instantiate()
+		var person: Node3D
+		if not crew_ids.is_empty():
+			person = load("res://scenes/characters/astronaut.tscn").instantiate()
+			var crew_id: String = crew_ids[i % crew_ids.size()]
+			person.set("crew_id", crew_id)
+			person.set_meta("crew_id", crew_id)
+		else:
+			person = load(scenes[i % scenes.size()]).instantiate()
 		parent.add_child(person)
 		person.position = path[0]
 		# Ask the crew (extras, 2026-11-14): a "?" bubble; E next to them asks about the room.
