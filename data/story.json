@@ -1327,7 +1327,10 @@
     "scores_wait": "Waiting for the other players' scores…",
     "team_title": "The crew",
     "team_line": "{name}: build jobs {scores} · problems fixed {fixed} · data {data} Gb",
-    "bot_fixing": "{name} (bot) is fixing a problem nobody took.",
+    "bot_fixing": "{name} (bot) is on the way: {task}",
+    "fixed_by": "{name} fixed it.",
+    "planet_did": "{name} did it: {task}",
+    "planet_missing": "{name} (bot): we can't do \"{task}\". We didn't pack that instrument.",
     "bot_fixed": "{name} (bot) fixed it.",
     "bot_tag": "(bot)"
   },

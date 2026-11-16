@@ -91,8 +91,12 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
   Why: plan DEFAULT; without it one human with three bots faces 4x the problems alone (2026-11-15).
 - **The party leader's game is the boss: it holds GameState, rolls the dice (bot scores, coin flips, a seed for each stage) and moves everyone to the next screen when all people are ready ("Go anyway" for the leader after 20 s). A player who leaves becomes a bot; if the leader leaves, the mission ends for everyone (DEFAULT).**
   Why: MULTIPLAYER_PLAN_V6 section 5 (2026-11-15).
-- **Flight and planet in an online party use the plan's smaller version (B5): each player flies their own ship with their fair share of the problems; at the end of each screen their data, ticked checklist items and problems fixed are added to the team. Launch damage = the average of everyone's launch (DEFAULT). Seeing each other's characters (B6) is not built.**
-  Why: plan section 8 cut list, built fast on 2026-11-15.
+- **One shared ship (2026-11-15, replaces "each player flies their own ship"): the whole party, bots and people, is on the SAME ship working on the SAME tasks. Online, the leader's game runs the ship (problems, life bars, trip progress, bots) and sends it 5 times a second; the others send "I fixed this" / "I refilled this" and the leader does it for everyone. Bots walk the hallway to a problem nobody started after 5 s and fix it there in 10 s; when it is calm they do calm tasks nobody took after 12 s (DEFAULT). Teammates show as their characters with a name tag (B6, on the ship only). Problems x party size on the one ship. A crew talk, ship job or the Clean Room no longer pauses the trip in an online party. Only the leader can skip the trip.**
+  Why: Holden: "the teammates of the user, whether it be bots or an actual player, should all be on the same ship working on the same tasks" (2026-11-15).
+- **One shared planet (2026-11-15): the whole party walks the SAME planet and works on the SAME task list. Online, the leader's game owns the list, the data sent and the ice samples and sends them 5 times a second; the others tell it when they finish a task. Bots take a task nobody is on after 3 s (press 2 s, drill 6 s, send = the mission's send time), walk around near open tasks or the player when there is nothing to do (never stand still), and walk to a task whose instrument was not packed to report it (those tasks fail, as for a player) and go straight on to the next step of a chain they started (drill -> analyze, so the Mars ice is not lost). A teammate's finished task flashes "Nova did it: ...". Bots wear their normal clothes, not space suits (look only).**
+  Why: Holden: "for the planet when collecting data all the players and bots should be on the same planet helping collecting the data" (2026-11-15).
+- **Launch damage = the average of everyone's launch (DEFAULT).**
+  Why: MULTIPLAYER_PLAN_V6 3c (2026-11-15).
 - **Relay: a ~150-line Godot program (relay/relay.gd, run headless) that passes notes and knows nothing about the game. No chat box and no public party list. The internet address waits for the coach (B1); until then the game uses ws://localhost:9080 (serve_relay.ps1).**
   Why: no Node or Python on Holden's PC, Godot runs everywhere; plan sections 4 and 9 (2026-11-15).
 - **Art: the toy-like cast in the cutscene and at NASA. The same characters in PEAK-style suits on the planets.** PEAK inspires the overall feel only; we copy none of its models, places or UI.
@@ -413,6 +417,7 @@ These come from the team's final plan, `PLAN.md` (written 2026-11-11 from the te
 ## 3. Rejected choices
 
 - **Multiplayer on one computer with turns at each minigame (pass the keyboard), and "the host picks the parts, the others watch".** Replaced on 2026-11-15 by MULTIPLAYER_PLAN_V6 (separate computers or bots, everyone votes).
+- **Each player on their own ship in an online party (MULTIPLAYER_PLAN_V6 smaller B5).** Replaced on 2026-11-15 by one shared ship.
 - **Bot scores for show only.** Replaced on 2026-11-15: in a party, bot scores (85-100) count in the team average.
 - **One GO button for the whole team.** Replaced on 2026-11-15: every player must say GO.
 

@@ -20,14 +20,29 @@
     "source": "Game-design choice (Holden's note, 2026-11-15). Amy playtests and tunes it."
   },
   "bots": {
-    "_readme": "What bots do. minigame scores: a random whole number from min to max, new for each minigame (Holden). A bot takes a ship problem nobody has started after take_problem_after_seconds and fixes it in fix_problem_in_seconds (DEFAULT). data_share_min/max = each bot gathers this share of one player's data target during the flight, at a steady pace (DEFAULT, same 85-100% as the minigames).",
+    "_readme": "What bots do. Everyone is on ONE ship (2026-11-15): bots walk there and work at the stations. walk_speed in meters per second; a bot does a calm task nobody took after take_routine_after_seconds, in routine_seconds. On the planet a bot takes a task nobody is on after take_planet_task_after_seconds (a task whose instrument was not packed too: it walks there and tells the team); with nothing to do it wanders (wander_radius meters around an open task spot or the player, pausing wander_pause_min to max seconds) (press_seconds / hold_seconds of work; a send takes the mission's send base_seconds) and goes straight on to the next step of a chain it started. minigame scores: a random whole number from min to max, new for each minigame (Holden). A bot takes a ship problem nobody has started after take_problem_after_seconds and fixes it in fix_problem_in_seconds (DEFAULT). data_share_min/max = each bot gathers this share of one player's data target during the flight, at a steady pace (DEFAULT, same 85-100% as the minigames).",
     "minigame_score_min": 85,
     "minigame_score_max": 100,
     "take_problem_after_seconds": 5,
     "fix_problem_in_seconds": 10,
+    "take_routine_after_seconds": 12,
+    "routine_seconds": 4,
+    "walk_speed": 3.0,
+    "take_planet_task_after_seconds": 3,
+    "wander_radius": 3.0,
+    "wander_pause_min": 1.5,
+    "wander_pause_max": 3.5,
+    "press_seconds": 2,
+    "hold_seconds": 6,
     "data_share_min": 0.85,
     "data_share_max": 1.0,
     "source": "Game-design choice (Holden's note + MULTIPLAYER_PLAN_V6 defaults, 2026-11-15)."
+  },
+  "ship_sync": {
+    "_readme": "The shared ship (2026-11-15). sends_per_second = how often each computer sends where its player stands, and the leader sends the ship (tasks, life bars, trip progress, bots). name_tag_height = meters above a teammate's feet for their name.",
+    "sends_per_second": 5,
+    "name_tag_height": 2.2,
+    "source": "Game-design choice (2026-11-15)."
   },
   "code": {
     "_readme": "Party codes: length letters from letters (no vowels and no look-alike letters, so a code cannot spell a word). The relay makes the codes.",

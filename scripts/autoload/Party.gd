@@ -26,6 +26,8 @@ signal votes_changed(cat: String)
 signal vote_done(cat: String, value, how: String)
 signal go_calls_changed
 signal launch_now
+# The shared ship (flight): ship state, requests and player positions, from any seat.
+signal ship_note(from_seat: int, data: Dictionary)
 
 var mode: String = "solo"
 # One entry per seat: { "kind": "me" / "human" / "bot" / "empty", "name": "", "character": "" }
@@ -119,24 +121,19 @@ func seat_name(seat: int) -> String:
 	return name if name != "" else words["player_n"].format({"n": seat + 1})
 
 
-# Bots that help on MY ship: bots are shared out between the people, seat by seat.
+# Bots that work on MY ship. Everyone shares ONE ship: the bots live on the
+# party leader's computer (bots party: on this computer), so only it moves them.
 func bots_on_my_ship() -> Array:
-	var people: Array = real_humans()
-	var list: Array = []
-	if people.is_empty():
-		return list
-	var bots: Array = bot_seats()
-	for k in bots.size():
-		if people[k % people.size()] == my_seat:
-			list.append(bots[k])
-	return list
+	if not is_party() or not is_leader():
+		return []
+	return bot_seats()
 
 
-# How many times the ship problems on MY ship: all of them with bots, a fair share online.
+# How many times the ship problems: the whole party is on one ship, so all of them.
 func ship_problem_factor() -> int:
 	if not is_party():
 		return 1
-	return int(ceil(scale("ship_problems") / float(maxi(real_humans().size(), 1))))
+	return int(scale("ship_problems"))
 
 
 func add_stat(seat: int, key: String, amount: float = 1.0) -> void:
@@ -330,6 +327,9 @@ func wants_stage(stage_id: String) -> bool:
 
 # What I did on this screen, for the leader to add to the team.
 func my_contrib() -> Dictionary:
+	if is_online() and ["flight", "arrival"].has(StageManager.get_current()):
+		# One shared ship and planet: the leader's game already counted everyone's work.
+		return {"stage": StageManager.get_current(), "data": 0.0, "bot_data": 0.0, "goals": {}, "goal_progress": {}, "damage": {}, "fixed": {}, "bot_seats": {}}
 	return {
 		"stage": StageManager.get_current(),
 		"data": maxf(GameState.data_sent - stage_start_data - bot_data_this_stage, 0.0),
@@ -802,6 +802,9 @@ func request_launch() -> void:
 
 func _on_message(from_seat: int, data: Dictionary) -> void:
 	var t: String = str(data.get("t", ""))
+	if t == "pos" or t.begins_with("ship") or t.begins_with("planet"):
+		ship_note.emit(from_seat, data)   # the ship or planet screen decides what to do with it
+		return
 	if is_leader():
 		match t:
 			"hello":
