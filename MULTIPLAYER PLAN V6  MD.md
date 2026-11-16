@@ -270,7 +270,7 @@ Done when: a problem fixed in one window disappears in the other, and both windo
 
 ---
 
-## 11. Who does what
+## 10. Who does what
 
 | Person | Job |
 |---|---|
@@ -283,7 +283,7 @@ Done when: a problem fixed in one window disappears in the other, and both windo
 
 ---
 
-## 12. Holden's note, and where it is handled
+## 11. Holden's note, and where it is handled
 
 | Note | Where |
 |---|---|
@@ -300,7 +300,7 @@ Done when: a problem fixed in one window disappears in the other, and both windo
 | Everyone must say yes to launch | 3c, A5 |
 | Bots vote with the most-picked option and always say yes | 3e, A4, A5 |
 
-## 13. Questions for the team
+## 12. Questions for the team
 
 1. Should bots help fix ship problems and gather data (my default), or only do the three things in Holden's note?
 2. Is "data to gather" ×2, ×3, ×4 right, or should it grow slower, like the supplies do?

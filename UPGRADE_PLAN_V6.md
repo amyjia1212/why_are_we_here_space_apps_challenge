@@ -347,7 +347,7 @@ and the form.
 
 ---
 
-## 8. Every note, and where it is handled
+## 7. Every note, and where it is handled
 
 | Note from the word dump | Step |
 |---|---|
@@ -371,7 +371,7 @@ and the form.
 | Drill slider harder; explain the ice race first | A6 |
 | "We are headed for ." has no destination | A1 |
 
-## 9. Questions still open for the team
+## 8. Questions still open for the team
 
 1. Who is "Gospel Fita"? Type the right name and Amy finds the NASA page.
 2. Is "back to the start of the trip" the right penalty when a life bar hits zero, or should it be

@@ -11,7 +11,80 @@ Engine: Godot 4, web export. Hackathon: Nov 14–15. Feature freeze: **Sunday No
 
 ---
 
-## 5. Build steps
+## 1. What changes from the old plan
+
+| Topic | Old plan (Nov 11) | New decision (Nov 13) |
+|---|---|---|
+| First screen | Intro cutscene | A start menu comes first |
+| Order of choices | Rocket could come before the mission | **Planet first.** Then briefing, then rocket |
+| Picking things | 2D card menus | 3D rooms you walk around in (the "Choice Room") |
+| Launch | Restyled existing scene | Rebuilt in 3D to match reference 1 |
+| Flight | Automatic, log only, ship archived | **Walkable ship is back** (reference 3), with more tasks. The flight log moves to a screen on the Bridge |
+| Tab key | Raise arm (wrist dashboard) | Opens the mission tablet: mini map + all six resources |
+| Planet camera | Third person (planned) | Third person (must actually be built) |
+| New | | Sound, keybinds, portraits, briefing pages, leaderboard, waypoints, bots |
+
+
+## 2. The three references
+
+The videos are in the reference folder. The stills are named `ref1_…`, `ref2_…`, `ref3_…`. Take the layout and the feel from them. Keep our own art style (`MASTER ART DIRECTION`) and our own theme file.
+
+**Reference 1: the launch (Ms. Libby's "Mission Orbit" game).** We want ours almost exactly like this.
+
+- Screen: a big 3D view on the left (about 70%), a panel on the right.
+- Top-left tiles: MISSION TIME (T-00:20), ALTITUDE, SPEED, STATUS (ON PAD → ASCENT → IN ORBIT → HOLD → SEPARATED).
+- Header chips: rocket name with its success rate, and the launch site. Buttons: "Scrub – back to build" and "Skip".
+- Right panel: GO / NO-GO POLL (rocket, mass vs capacity, target orbit, design check, space weather), each with a green GO or amber CAUTION badge. One warning line under it. A FLIGHT TIMELINE of chips that turn green one by one. A big amber GO FOR LAUNCH button.
+- The scene: the rocket on a pad at dawn next to a white tower, two tall masts, the sea, a low sun, soft floating dust.
+- Countdown: huge numbers in the middle. A timed press near zero shows PERFECT or GOOD in floating text. Smoke builds at the base.
+- Liftoff: the camera follows the rocket up. A caption box in the bottom-left has an amber title and one or two sentences of real science.
+- Climb: the rocket tips over, the sky goes from orange to purple to black. Round buttons appear with a ring that shrinks ("Tap when the ring closes"): THROTTLE DOWN, STAGE, FAIRING, RELEASE.
+- Surprises: "ENGINE OUT!" with a REBALANCE ring. If you miss, "Computer took over" and you lose something. Later a "DEBRIS ALERT" with two buttons, WAIT or RELEASE NOW, and a timer bar.
+- Space: the first stage drops away, the nose cone splits, Earth's curve and thin blue air show below. The spacecraft separates, then "HOLD TO DETUMBLE" (hold until the spin reaches zero), then STABLE.
+
+**Reference 2: building the rocket (same game).** The middle of this screen is what goes on our wall screen.
+
+- Middle: a 3D model you can spin, with three tabs: 3D view, Camera view, **Inside**. Inside makes the shell see-through so you can see the battery, computer, wheels, tanks and instruments.
+- The part you are choosing glows, and a small label points at it ("Launch vehicle: Vega-C").
+- Top: six resource tiles with bars (mass, power, budget, data, comms, lifetime) and goal chips with ticks.
+- Right: the option cards for the current category.
+- Bottom: the RIPPLE EFFECT strip (old value → new value for everything the choice changed), a predicted score, and red "mission blocker" messages.
+- Left: the full loadout list. **We do not copy this part.** It is why the screen feels crowded.
+
+**Reference 3: inside the ship (our own old scene).** This is the base for the flight. Upgrade it.
+
+- First person. A gray hallway with rooms: BRIDGE, SCIENCE ROOM, POWER, COMMS ROOM, LIFE SUPPORT. Orange 3D signs over the doors.
+- Stations are glowing cyan floor pads with floating labels (Air, Water, Food).
+- A red alert at the top ("WATER LEAK! Go to the Water station"). The inner-voice box at the bottom. A controls line at the top. The arm with the wrist button.
+- Problems to fix: some stations say "works in Mars orbit", the Bridge goes nowhere, no timer is shown, the rooms are empty gray boxes.
+
+## 3. New player flow
+
+```
+Start menu
+ → Intro cutscene (exists)
+ → Name
+ → Character Room (3D) → "You're hired" moment
+ → How many players
+ → Your File (who you are, what the job is)
+ → Mission Room (3D): Moon / Mars / Venus        ← planet first
+ → Mission Briefing (what it is for, what success needs, what you have)
+ → Design Rooms (3D): rocket → orbit → spacecraft parts → instruments
+ → Review
+ → Build minigames: Assembly → Hammering → Fueling
+ → Launch (3D, like reference 1)
+ → Flight (walk inside the ship, tasks and emergencies)
+ → Arrival (third person on the planet; Venus stays on the ship)
+ → Return cutscene (slot)
+ → Mission report → Leaderboard
+ → Redesign and fly again / New mission
+```
+
+Update `stages.order` in `data/game_data.json` to match.
+
+---
+
+## 4. Build steps
 
 ### Step 0: Look before you touch (read-only)
 
@@ -98,7 +171,7 @@ Done when: the rocket choice works in the room from start to finish and changes 
 
 ### Phase 4: The launch, like reference 1
 
-**Step 16: Rebuild the launch in 3D.** Follow the reference 1 description in section 3 beat by beat, using the player's own rocket.
+**Step 16: Rebuild the launch in 3D.** Follow the reference 1 description in section 2 beat by beat, using the player's own rocket.
 
 1. Pad at dawn with the go / no-go panel. GO FOR LAUNCH starts it. Scrub goes back to design.
 2. Countdown from 10 with big numbers and the ignition press.
@@ -163,7 +236,7 @@ Every timing window is in data. Skip works after the first launch. Every caption
 
 ---
 
-## 6. If time runs short
+## 5. If time runs short
 
 **Cut in this order:** online multiplayer → bots → third-person camera on the planet → Design Rooms for the part categories (keep the 3D room for character, mission and rocket; show the rest on the wall-screen layout as a flat screen) → launch surprises → extra ship tasks → difficulty music layers.
 
@@ -171,7 +244,7 @@ Every timing window is in data. Skip works after the first launch. Every caption
 
 **Freeze at 2:00 pm Sunday.** After that: web export, one full playthrough per mission, the 30-second video, the submission form.
 
-## 7. Rules that affect this work
+## 6. Rules that affect this work
 
 - **No student voices, names or faces.** Use beep-talk for voices. Use made-up names in the video and on any leaderboard that is shown.
 - **Sound and music must be free to use** (CC0 or made by the team). The team asks before downloading anything. Write down every sound's source so the Head Writer can list it in References.
@@ -179,7 +252,7 @@ Every timing window is in data. Skip works after the first launch. Every caption
 - **Real facts need sources.** Captions, tips and numbers are real with a link, or marked PLACEHOLDER.
 - **It runs in a browser.** Keep models low-poly, one SubViewport for the wall screen, and test the web export at the end of each phase.
 
-## 8. Every note, and where it is handled
+## 7. Every note, and where it is handled
 
 | Note | Step |
 |---|---|
@@ -215,7 +288,7 @@ Every timing window is in data. Skip works after the first launch. Every caption
 | Always 399/1000 | 1 |
 | Flight like reference 3, with more to interact with, walking inside the rocket | 21 |
 
-## 9. Questions for the team
+## 8. Questions for the team
 
 1. Choice Rooms and the ship are first person and the planet is third person. Is that what you want, or third person everywhere?
 2. Ten Design Rooms in a row is a lot of walking. Is 1/2/3 + Enter enough of a shortcut, or should some categories share a room?

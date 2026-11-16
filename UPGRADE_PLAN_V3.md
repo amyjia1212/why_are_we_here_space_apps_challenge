@@ -252,7 +252,7 @@ An honest note for the briefing: no astronaut has been to Mars or Venus. Our cre
 
 ---
 
-## 9. Every note, and where it is handled
+## 8. Every note, and where it is handled
 
 | Note | Step |
 |---|---|
@@ -268,7 +268,7 @@ An honest note for the briefing: no astronaut has been to Mars or Venus. Our cre
 | Earth and Mars outside the window more detailed and realistic | D1 |
 | Press Q for question (lucky peanuts, zero-g plushie) | A2 |
 
-## 10. Questions for the team
+## 9. Questions for the team
 
 1. Is **Backspace** fine for "go back" now that Q means Question?
 2. Should Q pause timers during emergencies (kinder) or not (more tense)?
